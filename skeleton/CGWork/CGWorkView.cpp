@@ -11,7 +11,6 @@ using std::cout;
 using std::endl;
 #include "MaterialDlg.h"
 #include "LightDialog.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE

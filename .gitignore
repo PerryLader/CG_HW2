@@ -1,1 +1,26 @@
 skeleton/CGWork/.vs
+# VSCode settings
+
+
+# Build directories and files
+skeleton/bin/
+skeleton/obj/
+
+# User-specific Visual Studio settings
+*.obj
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+
+
+# Logs and temporary files
+*.log
+
+
+# Windows-specific files
+Thumbs.db
+
+# JetBrains IDE files (if applicable)
+.idea/
