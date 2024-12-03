@@ -1,5 +1,7 @@
 #include "stdafx.h"
+
 #include "iritSkel.h"
+#include "Model.h"
 /*****************************************************************************
 * Skeleton for an interface to a parser to read IRIT data files.			 *
 ******************************************************************************
@@ -8,6 +10,13 @@
 * Written by:  Gershon Elber				Ver 1.0, Feb 2002				 *
 * Minimal changes made by Amit Mano			November 2008					 *
 ******************************************************************************/
+
+
+Model modelGC;
+
+
+
+
 
 IPFreeformConvStateStruct CGSkelFFCState = {
 	FALSE,          /* Talkative */
@@ -121,6 +130,9 @@ bool CGSkelStoreData(IPObjectStruct *PObj)
 	double RGB[3], Transp;
 	IPPolygonStruct *PPolygon;
 	IPVertexStruct *PVertex;
+	RGB[0] = 22;
+	RGB[1] = 22;
+	RGB[2] = 22;
 	const IPAttributeStruct *Attrs =
         AttrTraceAttributes(PObj -> Attr, PObj -> Attr);
 
@@ -132,10 +144,13 @@ bool CGSkelStoreData(IPObjectStruct *PObj)
 	/* You can use IP_IS_POLYGON_OBJ(PObj) and IP_IS_POINTLIST_OBJ(PObj) 
 	   to identify the type of the object*/
 
-	if (CGSkelGetObjectColor(PObj, RGB))
+	if (!CGSkelGetObjectColor(PObj, RGB))
 	{
-		/* color code */
+		AfxMessageBox(_T("No color for the polygon"));
 	}
+
+	modelGC.addPolygon(PObj->U.Pl, RGB);//All the magic;
+
 	if (CGSkelGetObjectTransp(PObj, &Transp))
 	{
 		/* transparency code */
