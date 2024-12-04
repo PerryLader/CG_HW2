@@ -14,6 +14,9 @@
 #include "allocate.h"
 #include "ip_cnvrt.h"
 #include "symb_lib.h"
+#include "Model.h"
+
+
 
 bool CGSkelProcessIritDataFiles(CString &FileNames, int NumFiles);
 void CGSkelDumpOneTraversedObject(IPObjectStruct *PObj, IrtHmgnMatType Mat, void *Data);

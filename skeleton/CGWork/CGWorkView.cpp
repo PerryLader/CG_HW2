@@ -232,13 +232,46 @@ BOOL CCGWorkView::OnEraseBkgnd(CDC* pDC)
 }
 
 
+// The coordinating need to be in screen view
+void DrawLineBresenham(CDC* pDC, int x1, int y1, int x2, int y2, COLORREF color)
+{
+	// Calculate differences
+	int dx = abs(x2 - x1), dy = abs(y2 - y1);
+	int sx = (x1 < x2) ? 1 : -1; // Step for x
+	int sy = (y1 < y2) ? 1 : -1; // Step for y
+	int err = dx - dy;
+
+	while (true)
+	{
+		// Draw the pixel at the current position
+		pDC->SetPixelV(x1, y1, color);
+
+		// Break when we reach the end point
+		if (x1 == x2 && y1 == y2)
+			break;
+
+		// Calculate error and adjust positions
+		int e2 = err * 2;
+		if (e2 > -dy)
+		{
+			err -= dy;
+			x1 += sx;
+		}
+		if (e2 < dx)
+		{
+			err += dx;
+			y1 += sy;
+		}
+	}
+}
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CCGWorkView drawing
 /////////////////////////////////////////////////////////////////////////////
 
 void CCGWorkView::OnDraw(CDC* pDC)
-{
+{	
 	static float theta = 0.0f;
 	CCGWorkDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -251,7 +284,15 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	
 	pDCToUse->FillSolidRect(&r, RGB(255, 255, 0));
 	
-	int numLines = 100;
+
+	int x1 = 200, y1 = 500;
+	int x2 = 1000, y2 = 200;
+
+	// Draw a line between them
+	DrawLineBresenham(pDCToUse, x1, y1,x2, y2, RGB(0, 0, 255));
+
+
+	/*int numLines = 100;
 	double radius = r.right / 3.0;
 	
 	if (r.right > r.bottom) {
@@ -264,7 +305,7 @@ void CCGWorkView::OnDraw(CDC* pDC)
 		
 		pDCToUse->MoveTo(r.right / 2, r.bottom / 2);
 		pDCToUse->LineTo((int)(r.right / 2 + radius*cos(finalTheta)), (int)(r.bottom / 2 + radius*sin(finalTheta)));
-	}	
+	}	*/
 
 	if (pDCToUse != m_pDC) 
 	{

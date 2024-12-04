@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "iritSkel.h"
-#include "Model.h"
+
 /*****************************************************************************
 * Skeleton for an interface to a parser to read IRIT data files.			 *
 ******************************************************************************
@@ -12,11 +12,11 @@
 ******************************************************************************/
 
 
+
+
+
+
 Model modelGC;
-
-
-
-
 
 IPFreeformConvStateStruct CGSkelFFCState = {
 	FALSE,          /* Talkative */
