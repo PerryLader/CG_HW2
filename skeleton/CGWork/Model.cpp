@@ -1,12 +1,16 @@
 #include "Model.h"
-void Model::addPolygon(IPPolygonStruct* p, double color[3])
+void Model::addObj(IPObjectStruct* obj, double color[3])
 {
-	PolygonGC newPoly(color[0], color[1], color[2]);
-	IPVertexStruct* tempVertex = p->PVertex;
-	while (tempVertex)
+	for (ObjectGC temp:m_Objects)
 	{
-		newPoly.addVertex(Vertex(Vector4(tempVertex->Coord[0], tempVertex->Coord[1], tempVertex->Coord[2], 1)));
-		tempVertex = tempVertex->Pnext;
+		if (temp.m_name == obj->ObjName)
+		{
+			temp.addPolygons(obj, color);
+			return;
+		}
 	}
-	m_polygons.push_back(newPoly);
+	//new Obj
+	ObjectGC newObj(std::string(obj->ObjName));
+	newObj.addPolygons(obj, color);
+	m_Objects.push_back(newObj);
 }

@@ -1,6 +1,6 @@
 #include "stdafx.h"
-
 #include "iritSkel.h"
+
 
 /*****************************************************************************
 * Skeleton for an interface to a parser to read IRIT data files.			 *
@@ -16,7 +16,7 @@
 
 
 
-Model modelGC;
+//Model modelGC;
 
 IPFreeformConvStateStruct CGSkelFFCState = {
 	FALSE,          /* Talkative */
@@ -149,7 +149,7 @@ bool CGSkelStoreData(IPObjectStruct *PObj)
 		AfxMessageBox(_T("No color for the polygon"));
 	}
 
-	modelGC.addPolygon(PObj->U.Pl, RGB);//All the magic;
+	//modelGC.addObj(PObj, RGB);//All the magic;
 
 	if (CGSkelGetObjectTransp(PObj, &Transp))
 	{

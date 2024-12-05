@@ -204,6 +204,7 @@
     </ClCompile>
     <ClCompile Include="MaterialDlg.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ObjectGC.cpp" />
     <ClCompile Include="PngWrapper.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -218,6 +219,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
     </ClCompile>
+    <ClCompile Include="Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CGWork.rc" />
@@ -232,6 +234,7 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MaterialDlg.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ObjectGC.h" />
     <ClInclude Include="PngWrapper.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Resource.h" />
@@ -260,6 +263,7 @@
     <ClInclude Include="..\include\triv_lib.h" />
     <ClInclude Include="..\include\trng_lib.h" />
     <ClInclude Include="..\include\user_lib.h" />
+    <ClInclude Include="Vector4.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>

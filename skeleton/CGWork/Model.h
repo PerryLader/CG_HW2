@@ -1,13 +1,12 @@
-#pragma once
-#include "Polygon.h"
-#include "iritprsr.h"
-
+#ifndef	MODEL_H
+#define	MODEL_H
+#include "ObjectGC.h"
 
 class Model
 {
 public:
-	std::vector<PolygonGC> m_polygons;
-
-	void addPolygon(IPPolygonStruct* p, double color[3]);
+	std::vector<ObjectGC> m_Objects;
+	void addObj(IPObjectStruct* obj, double color[3]);
 };
 
+#endif

@@ -52,8 +52,16 @@ const Vector4& PolygonGC::getColor()  {
 }
 
 // Add a vertex
-void PolygonGC::addVertex(const Vertex& vertex) {
-    m_vertices.push_back(vertex);
+void PolygonGC::addVertexs( IPVertexStruct* vertex) {
+    while (vertex)
+    {
+        Vector4 temp = Vector4(vertex->Coord[0],
+            vertex->Coord[1],
+            vertex->Coord[2], 1);
+        m_vertices.push_back(Vertex(temp));
+        vertex = vertex->Pnext;
+    }
+    
     updateBounds();
 }
 

@@ -1,13 +1,9 @@
-#pragma once
+#ifndef	POLYGON_H
+#define	POLYGON_H
 #include "Vertex.h"
-#include <iostream>
-#include <vector>
-#include <limits>
-//#include <windef.h>
-//#include <wingdi.h>
-#include <cfloat>
+#include "iritSkel.h"
 
-#include <algorithm>
+
 
 class PolygonGC {
     std::vector<Vertex> m_vertices; // List of vertices
@@ -30,7 +26,7 @@ public:
     const Vector4& getColor();
 
     // Add a vertex
-    void addVertex(const Vertex& vertex);
+    void addVertexs( IPVertexStruct* vertex);
 
 
 
@@ -46,3 +42,4 @@ public:
     // Print polygon color
     void printColor();
 };
+#endif
