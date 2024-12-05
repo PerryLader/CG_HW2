@@ -33,7 +33,7 @@ void PolygonGC::updateBounds() {
 
 
 // Constructor with a default color
-PolygonGC::PolygonGC(int R = 0, int G = 0, int B = 0) : m_color(R, G, B, 0) {
+PolygonGC::PolygonGC(int R , int G , int B ) : m_color(R, G, B, 0) {
     updateBounds();
 }
 

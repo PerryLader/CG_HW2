@@ -1,7 +1,7 @@
 #ifndef	POLYGON_H
 #define	POLYGON_H
 #include "Vertex.h"
-#include "iritSkel.h"
+#include "iritprsr.h"
 
 
 
@@ -17,7 +17,7 @@ class PolygonGC {
 
 public:
     // Constructor with a default color
-    PolygonGC(int R , int G , int B);
+    PolygonGC(int R=0, int G = 0, int B = 0);
 
     // Set the color of the polygon
     void setColor(const Vector4& newColor);

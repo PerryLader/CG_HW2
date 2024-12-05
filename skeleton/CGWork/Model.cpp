@@ -14,3 +14,11 @@ void Model::addObj(IPObjectStruct* obj, double color[3])
 	newObj.addPolygons(obj, color);
 	m_Objects.push_back(newObj);
 }
+void Model::print()
+{
+	for (ObjectGC temp : m_Objects)
+	{
+		std::cout << "Obj name:" << temp.m_name << std::endl << "Vertexes:"<< std::endl;		
+	}
+	
+}

@@ -10,6 +10,7 @@ public:
 	std::vector<PolygonGC> m_polygons;
 	ObjectGC(std::string name);
 	void addPolygons(IPObjectStruct* obj, double color[3]);
+	void print();
 };
 
 #endif
