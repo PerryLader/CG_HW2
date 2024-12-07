@@ -16,11 +16,10 @@ public:
     Vector4 m_normal;
     Vertex(Vector4 t) :m_point(t), m_normal(Vector4(0, 0, 0, 0)) {}
     void print() {
-        std::cout << "Point: ";
         m_point.print();
-        std::cout << ", Normal: ";
-        m_normal.print();
-        std::cout << std::endl;
+       /* std::cout << ", Normal: ";
+        m_normal.print();*/
+        
     }
 };
 

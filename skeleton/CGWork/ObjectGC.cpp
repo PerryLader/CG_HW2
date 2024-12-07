@@ -11,19 +11,19 @@ void ObjectGC::addPolygons(IPObjectStruct* obj, double color[3])
 	IPPolygonStruct* p= obj->U.Pl;
 	while (p)
 	{
-		PolygonGC newPoly(color[0], color[1], color[2]);
-		newPoly.addVertexs(p->PVertex);
-		
+		PolygonGC* newPoly=new PolygonGC(color[0], color[1], color[2]);
+		newPoly->addVertexs(p->PVertex);
+		this->m_polygons.push_back(newPoly);
 		p = p->Pnext;
 	}
 }
 void ObjectGC::print()
 {
 	int i = 0;
-	for (PolygonGC temp : m_polygons)
-	{
-		std::cout << "Obj name:" << m_name << std::endl << "Polygons:" << std::endl;
-		std::cout << "Polygon[" << i<<"]=";
-		temp.printVertices();
+	for (PolygonGC *temp : m_polygons)
+	{		
+		std::cout << "		Polygon[" << i<<"] vertices:"<<std::endl;
+		temp->printVertices();
+		i++;
 	}
 }

@@ -5,7 +5,7 @@
 class Model
 {
 public:
-	std::vector<ObjectGC> m_Objects;
+	std::vector<ObjectGC*> m_Objects;
 	void addObj(IPObjectStruct* obj, double color[3]);
 	void print();
 };

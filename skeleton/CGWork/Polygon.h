@@ -6,7 +6,7 @@
 
 
 class PolygonGC {
-    std::vector<Vertex> m_vertices; // List of vertices
+    std::vector<Vertex*> m_vertices; // List of vertices
     Vector4 m_color;                // Color of the polygon
     Vector4 m_minBounds;            // Minimum bounds
     Vector4 m_maxBounds;            // Maximum bounds

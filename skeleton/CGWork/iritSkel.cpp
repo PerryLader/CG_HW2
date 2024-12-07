@@ -150,6 +150,7 @@ bool CGSkelStoreData(IPObjectStruct *PObj)
 	}
 
 	modelGC.addObj(PObj, RGB);//All the magic;
+	modelGC.print();
 
 	if (CGSkelGetObjectTransp(PObj, &Transp))
 	{

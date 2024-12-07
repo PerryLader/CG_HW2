@@ -17,8 +17,8 @@ void PolygonGC::updateBounds() {
     m_minBounds = Vector4(FLT_MAX, FLT_MAX, FLT_MAX, 1);
     m_maxBounds = Vector4(-FLT_MAX, -FLT_MAX, -FLT_MAX, 1);
 
-    for (const auto& vertex : m_vertices) {
-        const auto& pos = vertex.m_point; // Assuming Vertex has a `position` member
+    for (Vertex* vertex : m_vertices) {
+        const auto& pos = vertex->m_point; // Assuming Vertex has a `position` member
         m_minBounds.x = std::min(m_minBounds.x, pos.x);
         m_minBounds.y = std::min(m_minBounds.y, pos.y);
         m_minBounds.z = std::min(m_minBounds.z, pos.z);
@@ -55,10 +55,11 @@ const Vector4& PolygonGC::getColor()  {
 void PolygonGC::addVertexs( IPVertexStruct* vertex) {
     while (vertex)
     {
-        Vector4 temp = Vector4(vertex->Coord[0],
+        Vertex* temp = new Vertex(Vector4(
+            vertex->Coord[0],
             vertex->Coord[1],
-            vertex->Coord[2], 1);
-        m_vertices.push_back(Vertex(temp));
+            vertex->Coord[2], 1));
+        m_vertices.push_back(temp);
         vertex = vertex->Pnext;
     }
     
@@ -75,10 +76,10 @@ size_t PolygonGC::vertexCount()  {
 
 // Print all vertices
 void PolygonGC::printVertices() {
-    std::cout << "Polygon vertices:\n";
+   
     for (size_t i = 0; i < m_vertices.size(); ++i) {
-        std::cout << "  Vertex " << i + 1 << ": ";
-        m_vertices[i].print(); // Assuming Vertex has a `print` method
+        std::cout << "                  Vertex["<<i<<"]: ";
+        m_vertices[i]->print(); // Assuming Vertex has a `print` method
         std::cout << "\n";
     }
 }

@@ -151,6 +151,16 @@ int CCGWorkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	InitializeCGWork();
+	if (AllocConsole())
+	{
+		FILE* fp;
+		freopen_s(&fp, "CONOUT$", "w", stdout);
+		freopen_s(&fp, "CONOUT$", "w", stderr);
+		std::cout.clear();
+		std::clog.clear();
+		std::cerr.clear();
+		std::cin.clear();
+	}
 
 	return 0;
 }
