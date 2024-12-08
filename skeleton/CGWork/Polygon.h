@@ -8,7 +8,14 @@
 
 //might be useful
 class BBox {
-    Vector4 m_min_min, m_max_max;
+    Vector4 m_minBounds, m_maxBounds;
+public:
+    BBox() : m_minBounds(), m_maxBounds(){};
+    BBox(const Vector4& minBound, const Vector4& maxBound) : m_minBounds(minBound), m_maxBounds(maxBound) {};
+    void updateBBox(const Vector4& vert);
+    bool bboxCollide(const BBox& bbox) const;
+    static bool bboxCollide(const BBox& bbox1, const BBox& bbox2);
+    void toPrint() const;
 };
 
 //might be useful
@@ -23,8 +30,7 @@ class PolygonGC {
 private:
     std::vector<Vertex*> m_vertices; // List of vertices
     Vector4 m_color;                // Color of the polygon
-    Vector4 m_minBounds;            // Minimum bounds
-    Vector4 m_maxBounds;            // Maximum bounds
+    BBox m_bbox;
     // Update min and max bounds
     void updateBounds(const Vertex& vert);
 
@@ -40,8 +46,11 @@ public:
     // Get the color of the polygon
     const Vector4& getColor();
 
-    // Add a vertex
+    // Add many vertex
     void addVertexs(IPVertexStruct* vertex);
+    
+    // Add a vertex
+    void PolygonGC::addVertex(Vertex* vertex);
 
     // Get the number of vertices
     size_t vertexCount();
@@ -55,7 +64,7 @@ public:
     // Print polygon color
     void printColor();
 
-    void applyTransformation(const Matrix4& transformation);
+    PolygonGC* applyTransformation(const Matrix4& transformation) const;
 
     BBox getBbox();
 };

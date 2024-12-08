@@ -7,39 +7,38 @@
 //      OpenCl??      //
 ////////////////////////
 
+void BBox::toPrint() const{
+    std::cout << "Boudning Box: " << m_minBounds <<", " << m_maxBounds << std::endl;
+}
 
+void BBox::updateBBox(const Vector4& vert) {
+    m_minBounds.x = std::min(m_minBounds.x, vert.x);
+    m_minBounds.y = std::min(m_minBounds.y, vert.y);
+    m_minBounds.z = std::min(m_minBounds.z, vert.z);
+    m_maxBounds.x = std::max(m_maxBounds.x, vert.x);
+    m_maxBounds.y = std::max(m_maxBounds.y, vert.y);
+    m_maxBounds.z = std::max(m_maxBounds.z, vert.z);
+}
+
+bool BBox::bboxCollide(const BBox& bbox) const{
+    return BBox::bboxCollide(*this, bbox);
+}
+bool BBox::bboxCollide(const BBox& bbox1, const BBox& bbox2) {
+}
 // Update min and max bounds
 void PolygonGC::updateBounds(const Vertex& vert) {
-    Vector4 vert_location = vert.location();
-    m_minBounds.x = std::min(m_minBounds.x, vert_location.x);
-    m_minBounds.y = std::min(m_minBounds.y, vert_location.y);
-    m_minBounds.z = std::min(m_minBounds.z, vert_location.z);
-    m_maxBounds.x = std::max(m_maxBounds.x, vert_location.x);
-    m_maxBounds.y = std::max(m_maxBounds.y, vert_location.y);
-    m_maxBounds.z = std::max(m_maxBounds.z, vert_location.z);
+    m_bbox.updateBBox(vert.location());
 }
 
 // reset min and max bounds
 void PolygonGC::resetBounds() {
     if (m_vertices.empty()) {
-        m_minBounds = Vector4();
-        m_maxBounds = Vector4();
+        m_bbox = BBox();
         return;
     }
-    m_minBounds = Vector4(FLT_MAX, FLT_MAX, FLT_MAX, 1);
-    m_maxBounds = Vector4(-FLT_MAX, -FLT_MAX, -FLT_MAX, 1);
-
+    m_bbox = BBox(Vector4(FLT_MAX, FLT_MAX, FLT_MAX, 1), Vector4(-FLT_MAX, -FLT_MAX, -FLT_MAX, 1));
     for (Vertex* vertex : m_vertices) {
-        const auto& pos = vertex->m_point; // Assuming Vertex has a `position` member
-        m_minBounds.x = std::min(m_minBounds.x, pos.x);
-        m_minBounds.y = std::min(m_minBounds.y, pos.y);
-        m_minBounds.z = std::min(m_minBounds.z, pos.z);
-        //m_minBounds.w = min(m_minBounds.w, pos.w);
-
-        m_maxBounds.x = std::max(m_maxBounds.x, pos.x);
-        m_maxBounds.y = std::max(m_maxBounds.y, pos.y);
-        m_maxBounds.z = std::max(m_maxBounds.z, pos.z);
-        // m_maxBounds.w = max(m_maxBounds.w, pos.w);
+        m_bbox.updateBBox(vertex->location());
     }
 }
 
@@ -77,6 +76,14 @@ void PolygonGC::addVertexs(IPVertexStruct* vertex) {
     }
 }
 
+void PolygonGC::addVertex(Vertex* vertex) {
+    if (vertex)
+    {
+        m_vertices.push_back(vertex);
+        updateBounds(*vertex);
+    }
+}
+
 // Get the number of vertices
 size_t PolygonGC::vertexCount() {
     return m_vertices.size();
@@ -95,9 +102,7 @@ void PolygonGC::printVertices() {
 
 // Print bounds
 void PolygonGC::printBounds() {
-    std::cout << "Bounds:\n";
-    std::cout << "  Min: "; m_minBounds.print(); std::cout << "\n";
-    std::cout << "  Max: "; m_maxBounds.print(); std::cout << "\n";
+    m_bbox.toPrint();
 }
 
 // Print polygon color
@@ -108,10 +113,12 @@ void PolygonGC::printColor() {
 }
 
 // Function to apply a transformation matrix to all vertices
-void PolygonGC::applyTransformation(const Matrix4& transformation) {
+PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
+    PolygonGC* newPoly = new PolygonGC(this->m_color.x , this->m_color.y, this->m_color.z);
     for (auto& vertex : m_vertices) {
-    //    vertex = transformation * vertex;
+       // newPoly->addVertex(transformation * vertex);
     }
+    return newPoly;
 }
 
 // get polygon Bbox

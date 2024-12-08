@@ -23,18 +23,17 @@ public:
         return m_point;
     }
 
-    // Overload multiplication operator to accept matrix operation
-    Vertex operator*(const Matrix4& mat) const {
-        Vertex res = Vertex(mat * m_point);
-        //.m_normal *= mat;
-        return res;
-    }
-
     // Overload compound assignment operator for matrix multiplication
     Vertex& operator*=(const Matrix4& mat) {
         m_point = mat * m_point;
         m_normal = mat * m_normal;
         return *this;
+    }
+    // Overload multiplication operator to accept matrix operation
+    friend Vertex operator*(const Matrix4& mat, const Vertex& vert) {
+        Vertex res = Vertex(mat * vert.m_point);
+        res.m_normal = mat * res.m_normal;
+        return res;
     }
 };
 
