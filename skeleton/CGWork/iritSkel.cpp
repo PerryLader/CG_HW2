@@ -10,8 +10,12 @@
 * Minimal changes made by Amit Mano			November 2008					 *
 ******************************************************************************/
 
+
+//Shalom My name is Shachar
+
 class SavingModel {
 public:
+	int x;
 	// Public method to access the single instance
 	static SavingModel& getInstance() {
 		static SavingModel instance; // Guaranteed to be destroyed and instantiated on first use
