@@ -1,4 +1,3 @@
-#pragma once
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
@@ -8,9 +7,10 @@
 #include "Vector4.h"
 
 class Matrix4 {
-private:
-    std::array<std::array<float, 4>, 4> m;
+
+    
 public:
+    std::array<std::array<float, 4>, 4> m;
     // Constructor
     Matrix4();
     // Constructor that takes 16 doubles

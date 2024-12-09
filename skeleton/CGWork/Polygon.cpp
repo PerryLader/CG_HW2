@@ -1,11 +1,12 @@
 #include "Polygon.h"
 
-////////////////////////
-//  do youw want us   //
-//   to implement     //
-//  matrix ops using  //
-//      OpenCl??      //
-////////////////////////
+/////////////////////////////
+//  do youw want us        //
+//   to implement          //
+//  matrix ops using       //
+//      OpenCl??answer     //
+// yes my man!BJ also?     //
+/////////////////////////////
 
 void BBox::toPrint() const{
     std::cout << "Boudning Box: " << m_minBounds <<", " << m_maxBounds << std::endl;
@@ -134,4 +135,16 @@ PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
 // get polygon Bbox
 BBox PolygonGC::getBbox() {
     return BBox();
+}
+
+Vertex PolygonGC::getNormal()
+{
+    if (m_vertices.size() < 3)
+    {
+        throw std::runtime_error("whaht the hell just happend?is it polygon with less then 2 vertices???hemmm?");
+    }
+    Vector4 vec1 = m_vertices[1]->m_point - m_vertices[0]->m_point;
+    Vector4 vec2 = m_vertices[2]->m_point - m_vertices[0]->m_point;
+    return Vertex(vec1.cross(vec2));
+
 }

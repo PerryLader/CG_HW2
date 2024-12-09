@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
-
+//#include "Matrix4.h"
 class Vector4 {
 public:
     float x, y, z, w;
@@ -76,6 +76,9 @@ public:
 
     // Overload stream extraction operator for string input
     friend std::istringstream& operator>>(std::istringstream& iss, Vector4& vec);
+
+   // Vector4 mult(const Matrix4& vec) const;
+
 };
 
 #endif // VECTOR4_H
