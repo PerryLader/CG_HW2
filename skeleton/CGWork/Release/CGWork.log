@@ -9,18 +9,18 @@
   Matrix4.cpp
   Model.cpp
   ObjectGC.cpp
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\ObjectGC.cpp(19,65): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\ObjectGC.cpp(19,55): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\ObjectGC.cpp(19,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\ObjectGC.cpp(15,18): warning C4101: 'tempVertex': unreferenced local variable
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\ObjectGC.cpp(19,65): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\ObjectGC.cpp(19,55): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\ObjectGC.cpp(19,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\ObjectGC.cpp(15,18): warning C4101: 'tempVertex': unreferenced local variable
   PngWrapper.cpp
   Polygon.cpp
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(48,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(48,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(48,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(73,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(72,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(71,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(48,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(48,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(48,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(73,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(72,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(71,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
   Vector4.cpp
   Generating Code...
   libpng.lib(png.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
@@ -36,4 +36,4 @@ zlib.lib(inflate.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inf
 zlib.lib(inftrees.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inftrees.obj)' or at ''; linking object as if no debug info
 zlib.lib(trees.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(trees.obj)' or at ''; linking object as if no debug info
 zlib.lib(zutil.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(zutil.obj)' or at ''; linking object as if no debug info
-  CGWork.vcxproj -> C:\Users\shach\source\repos\CG_HW2\skeleton\bin\Release\CGWork.exe
+  CGWork.vcxproj -> C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\bin\Release\CGWork.exe
