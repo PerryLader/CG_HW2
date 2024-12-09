@@ -55,7 +55,7 @@ public:
     float length() const;
 
     // Normalize
-    Vector4 getNormalized() const;
+    Vector4 normalized() const;
 
     // Static functions for common vectors
     static Vector4 zero();

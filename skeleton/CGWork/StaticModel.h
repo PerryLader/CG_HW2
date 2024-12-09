@@ -7,10 +7,10 @@
 class StaticModel : public Model {
 public:
     // Constructor
-    StaticModel(const Geometry& T);
+    StaticModel(Geometry* T);
 
     // Destructor
-    ~StaticModel();
+    ~StaticModel() override;
     // Override the draw function
     void draw(Renderer& r) override;
     // Override the print function

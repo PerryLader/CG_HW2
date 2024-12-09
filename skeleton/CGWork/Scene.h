@@ -13,10 +13,11 @@ public:
     Scene();
 
     // Function to add a model to the scene
-    void addModel(const Model& model);
+    void addModel(Model* model);
 
+    void addModels(const std::vector<Model*>& models);
     // Function to add a camera to the scene
-    void addCamera(const Camera& camera);
+    void addCamera(Camera* camera);
 
     // Function to set the transformation matrix
     void setTransformation(const Matrix4& transformation);
@@ -24,11 +25,13 @@ public:
     // Function to render the scene
     void render() const;
 
+    void print() const;
+
 private:
-    std::vector<Model> models;
-    std::vector<Camera> cameras;
-    Renderer renderer;
-    Matrix4 transformation;
+    std::vector<Model*> m_models;
+    std::vector<Camera*> m_cameras;
+    Renderer* m_renderer;
+    Matrix4 m_transformation;
 };
 
 #endif // SCENE_H

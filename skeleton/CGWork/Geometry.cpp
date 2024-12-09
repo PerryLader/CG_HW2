@@ -2,26 +2,21 @@
 
 Geometry::Geometry(std::string name) : m_name(name) {}
 
-BBox Geometry::getBBox() {
+// Destructor
+Geometry::~Geometry() {
+	for (PolygonGC* polygon : m_polygons) {
+		delete polygon;
+	}
+	m_polygons.clear();
+}
+
+BBox Geometry::getBBox() const{
 	return BBox();
 }
 std::string Geometry::getName() {
 	return this->m_name;
 }
 
-void Geometry::addPolygons(IPObjectStruct* obj, double color[3])
-{
-	//PolygonGC newPoly(color[0], color[1], color[2]);
-	IPVertexStruct* tempVertex;
-	IPPolygonStruct* p = obj->U.Pl;
-	while (p)
-	{
-		PolygonGC* newPoly = new PolygonGC(color[0], color[1], color[2]);
-		newPoly->addVertexs(p->PVertex);
-		this->m_polygons.push_back(newPoly);
-		p = p->Pnext;
-	}
-}
 void Geometry::addPolygon(PolygonGC* poli)
 {
 	this->m_polygons.push_back(poli);
@@ -34,7 +29,7 @@ Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
 	return res;
 }
 
-void Geometry::print()
+void Geometry::print() const
 {
 	int i = 0;
 	for (PolygonGC* temp : m_polygons)

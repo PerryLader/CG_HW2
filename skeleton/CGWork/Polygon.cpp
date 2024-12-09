@@ -24,6 +24,7 @@ bool BBox::bboxCollide(const BBox& bbox) const{
     return BBox::bboxCollide(*this, bbox);
 }
 bool BBox::bboxCollide(const BBox& bbox1, const BBox& bbox2) {
+    return false;
 }
 // Update min and max bounds
 void PolygonGC::updateBounds(const Vertex& vert) {
@@ -47,6 +48,14 @@ void PolygonGC::resetBounds() {
 PolygonGC::PolygonGC(int R, int G, int B) : m_color(R, G, B, 0) {
     resetBounds();
 }
+
+PolygonGC::~PolygonGC(){
+    for (Vertex* vert : m_vertices) {
+        delete vert;
+    }
+    m_vertices.clear();
+}
+
 
 // Set the color of the polygon
 void PolygonGC::setColor(const Vector4& newColor) {
@@ -115,8 +124,9 @@ void PolygonGC::printColor() {
 // Function to apply a transformation matrix to all vertices
 PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
     PolygonGC* newPoly = new PolygonGC(this->m_color.x , this->m_color.y, this->m_color.z);
-    for (auto& vertex : m_vertices) {
-       // newPoly->addVertex(transformation * vertex);
+    for (const Vertex* vertex : m_vertices) {
+       // Vertex* newVertex = new Vertex(transformation * vertex);
+       // newPoly->addVertex(newVertex);
     }
     return newPoly;
 }

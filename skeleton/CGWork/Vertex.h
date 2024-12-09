@@ -9,7 +9,9 @@ public:
     Vector4 m_normal;
 
     // Constructor
-    Vertex(Vector4 t) : m_point(t), m_normal(Vector4(0, 0, 0, 0)) {}
+    Vertex(Vector4 p) : m_point(p), m_normal(Vector4(0, 0, 0, 0)) {}
+    // Constructor
+    Vertex(Vector4 p, Vector4 n) : m_point(p), m_normal(n) {}
 
     // Print function
     void print() {

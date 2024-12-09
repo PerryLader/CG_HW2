@@ -15,7 +15,7 @@
 
 
 #include "Light.h"
-#include "Model.h"
+#include "Scene.h"
 
 
 class CCGWorkView : public CView
@@ -32,7 +32,7 @@ public:
 public:
 
 private:
-	Model m_modelGC;
+	Scene m_scene;
 
 	int m_nAxis;				// Axis of Action, X Y or Z
 	int m_nAction;				// Rotate, Translate, Scale

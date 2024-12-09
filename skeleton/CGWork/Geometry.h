@@ -10,11 +10,11 @@ private:
 public:
 	std::string getName();
 	Geometry(std::string name);
-	BBox getBBox();
-	void addPolygons(IPObjectStruct* obj, double color[3]);
+	BBox getBBox() const;
 	void Geometry::addPolygon(PolygonGC* poli);
 	Geometry* applyTransformation(const Matrix4& tMat) const;
-	void print();
+	void print() const;
+	~Geometry();
 };
 
 #endif

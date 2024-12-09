@@ -364,8 +364,11 @@ void CCGWorkView::OnFileLoad()
 	if (dlg.DoModal() == IDOK) {
 		m_strItdFileName = dlg.GetPathName();		// Full path and filename
 		PngWrapper p;
-		CGSkelProcessIritDataFilesWithContext(m_strItdFileName, 1, m_modelGC);
-		m_modelGC.print();
+		std::vector<Model*> container;
+		if(CGSkelProcessIritDataFilesToContainer(m_strItdFileName, 1, container)){
+			m_scene.addModels(container);
+			m_scene.print();
+		}
 		Invalidate();	// force a WM_PAINT for drawing.
 	}
 

@@ -133,7 +133,7 @@ float Vector4::length() const {
 }
 
 // Normalize
-Vector4 Vector4::getNormalized() const {
+Vector4 Vector4::normalized() const {
     float len = length();
     if (len > 0) {
         return Vector4(x / len, y / len, z / len, w / len);

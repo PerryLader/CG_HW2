@@ -33,39 +33,29 @@ private:
     BBox m_bbox;
     // Update min and max bounds
     void updateBounds(const Vertex& vert);
-
     void resetBounds();
 
 public:
     // Constructor with a default color
     PolygonGC(int R = 0, int G = 0, int B = 0);
-
     // Set the color of the polygon
     void setColor(const Vector4& newColor);
-
     // Get the color of the polygon
     const Vector4& getColor();
-
     // Add many vertex
     void addVertexs(IPVertexStruct* vertex);
-    
     // Add a vertex
     void PolygonGC::addVertex(Vertex* vertex);
-
     // Get the number of vertices
     size_t vertexCount();
-
     // Print all vertices
     void printVertices();
-
     // Print bounds
     void printBounds();
-
     // Print polygon color
     void printColor();
-
     PolygonGC* applyTransformation(const Matrix4& transformation) const;
-
     BBox getBbox();
+    ~PolygonGC();
 };
 #endif

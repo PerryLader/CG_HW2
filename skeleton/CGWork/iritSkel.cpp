@@ -20,31 +20,41 @@ public:
 		static SavingModel instance; // Guaranteed to be destroyed and instantiated on first use
 		return instance;
 	}
-
+	static bool pushGeom(Geometry* Geom) {
+		if(Geom && getInstance().m_models){
+			StaticModel* model = new StaticModel(Geom);
+			getInstance().m_models->push_back(model);
+			return true;
+		}
+		return false;
+	}
 	// Delete copy constructor and assignment operator to prevent copying
 	SavingModel(const SavingModel&) = delete;
 	SavingModel& operator=(const SavingModel&) = delete;
 
 	// Method to set the Model pointer
-	void set(Model* m_model) {
-		this->m_model = m_model;
+	void set(std::vector<Model*>* container) {
+		this->m_models = container;
 	}
 	// Method to clear the Model pointer
-	void clear() {
-		this->m_model = nullptr;
+	void handle_missuse(bool insertion_flag) const{
+		if (insertion_flag)
+			return;
+		for (Model* model : *m_models) {
+			delete model;
+		}
+		m_models->clear();
 	}
-	// Method to get the Model pointer
-	Model* getModel() const {
-		return m_model;
+	void release() {
+		this->m_models = nullptr;
 	}
 
 private:
 	// Private constructor to prevent direct instantiation
-	SavingModel() : m_model(nullptr) {
+	SavingModel() : m_models(nullptr) {
 	}
-
 	// Pointer to the Model object
-	Model* m_model;
+	std::vector<Model*>* m_models;
 };
 
 
@@ -81,10 +91,11 @@ IPFreeformConvStateStruct CGSkelFFCState = {
 *   bool:		false - fail, true - success.                                *
 *****************************************************************************/
 
-bool CGSkelProcessIritDataFilesWithContext(CString& FileNames, int NumFiles, Model& modelGC) {
-	SavingModel::getInstance().set(&modelGC);
-	bool res = CGSkelProcessIritDataFiles(FileNames, NumFiles);
-	SavingModel::getInstance().clear();
+bool CGSkelProcessIritDataFilesToContainer(CString& FileNames, int NumFiles, std::vector<Model*>& Container) {
+	SavingModel::getInstance().set(&Container);
+	bool res;
+	SavingModel::getInstance().handle_missuse(res = CGSkelProcessIritDataFiles(FileNames, NumFiles));
+	SavingModel::getInstance().release();
 	return res;
 }
 
@@ -156,9 +167,13 @@ void CGSkelDumpOneTraversedObject(IPObjectStruct* PObj,
 	else
 		PObjs = PObj;
 
-	for (PObj = PObjs; PObj != NULL; PObj = PObj->Pnext)
-		if (!CGSkelStoreData(PObj, SavingModel::getInstance().getModel()))
+	for (PObj = PObjs; PObj != NULL; PObj = PObj->Pnext){
+		Geometry* PGeom = nullptr;
+		if (!CGSkelStoreData(PObj, &PGeom))
 			exit(1);
+		else
+			SavingModel::pushGeom(PGeom);
+	}
 }
 
 /*****************************************************************************
@@ -166,15 +181,15 @@ void CGSkelDumpOneTraversedObject(IPObjectStruct* PObj,
 *   Store the data from given geometry object in model.						 *
 *                                                                            *
 * PARAMETERS:                                                                *
-*   PObj:       Object to store.                                             *
-*   Model:      Model Object.												 *
+*   PObj_src:       Object to store.                                             *
+*   PGeom_dest:      Model Object.												 *
 *                                                                            *
 * RETURN VALUE:                                                              *
 *   bool:		false - fail, true - success.                                *
 *****************************************************************************/
-bool CGSkelStoreData(IPObjectStruct* PObj, Model* storingModel)
+bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 {
-	if (!PObj)
+	if (!PObj_src)
 		return false;
 	int i;
 	const char* Str;
@@ -185,29 +200,37 @@ bool CGSkelStoreData(IPObjectStruct* PObj, Model* storingModel)
 	RGB[1] = 22;
 	RGB[2] = 22;
 	const IPAttributeStruct* Attrs =
-		AttrTraceAttributes(PObj->Attr, PObj->Attr);
-	if (PObj->ObjType != IP_OBJ_POLY) {
+		AttrTraceAttributes(PObj_src->Attr, PObj_src->Attr);
+	if (PObj_src->ObjType != IP_OBJ_POLY) {
 		AfxMessageBox(_T("Non polygonal object detected and ignored"));
 		return true;
 	}
 
 	/* You can use IP_IS_POLYGON_OBJ(PObj) and IP_IS_POINTLIST_OBJ(PObj)
 	   to identify the type of the object*/
+	if (!IP_IS_POLYGON_OBJ(PObj_src)) {
+		AfxMessageBox(_T("Non polygonal object detected and ignored"));
+		return true;
+	}
 
-	if (!CGSkelGetObjectColor(PObj, RGB))
+	Geometry* shape= new Geometry(PObj_src->ObjName);
+	
+
+	if (!CGSkelGetObjectColor(PObj_src, RGB))
 	{
 		AfxMessageBox(_T("No color for the polygon"));
 	}
 
-	if (CGSkelGetObjectTransp(PObj, &Transp))
+
+	if (CGSkelGetObjectTransp(PObj_src, &Transp))
 	{
 		/* transparency code */
 	}
-	if ((Str = CGSkelGetObjectTexture(PObj)) != NULL)
+	if ((Str = CGSkelGetObjectTexture(PObj_src)) != NULL)
 	{
 		/* volumetric texture code */
 	}
-	if ((Str = CGSkelGetObjectPTexture(PObj)) != NULL)
+	if ((Str = CGSkelGetObjectPTexture(PObj_src)) != NULL)
 	{
 		/* parametric texture code */
 	}
@@ -219,7 +242,7 @@ bool CGSkelStoreData(IPObjectStruct* PObj, Model* storingModel)
 			Attrs = AttrTraceAttributes(Attrs, NULL);
 		}
 	}
-	for (PPolygon = PObj->U.Pl; PPolygon != NULL; PPolygon = PPolygon->Pnext)
+	for (PPolygon = PObj_src->U.Pl; PPolygon != NULL; PPolygon = PPolygon->Pnext)
 	{
 		if (PPolygon->PVertex == NULL) {
 			AfxMessageBox(_T("Dump: Attemp to dump empty polygon"));
@@ -230,25 +253,37 @@ bool CGSkelStoreData(IPObjectStruct* PObj, Model* storingModel)
 		for (PVertex = PPolygon->PVertex->Pnext, i = 1;
 			PVertex != PPolygon->PVertex && PVertex != NULL;
 			PVertex = PVertex->Pnext, i++);
+
 		/* use if(IP_HAS_PLANE_POLY(PPolygon)) to know whether a normal is defined for the polygon
 		   access the normal by the first 3 components of PPolygon->Plane */
 		PVertex = PPolygon->PVertex;
+		PolygonGC* newPoly = new PolygonGC(RGB[0], RGB[1], RGB[2]);
 		do {			     /* Assume at least one edge in polygon! */
 			/* code handeling all vertex/normal/texture coords */
+			Vertex* newVert;
 			if (IP_HAS_NORMAL_VRTX(PVertex))
 			{
-				int x = 0;
-				++x;
+				newVert = new Vertex(Vector4(PVertex->Coord[0],
+											 PVertex->Coord[1],
+										 	 PVertex->Coord[2],1)
+									,Vector4(PVertex->Normal[0],
+											 PVertex->Normal[1],
+											 PVertex->Normal[2],1));
+			}
+			else {
+				newVert = new Vertex(Vector4(PVertex->Coord[0],
+											 PVertex->Coord[1],
+											 PVertex->Coord[2], 1));
 			}
 
-
+			newPoly->addVertex(newVert);
 			PVertex = PVertex->Pnext;
 		} while (PVertex != PPolygon->PVertex && PVertex != NULL);
 		/* Close the polygon. */
+		shape->addPolygon(newPoly);
 	}
 	/* Close the object. */
-	if (storingModel)
-		storingModel->addObj(PObj, RGB);//All the magic;
+	*PGeom_dest = shape;
 	return true;
 }
 
