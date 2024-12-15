@@ -1,6 +1,6 @@
 #ifndef	MODEL_H
 #define	MODEL_H
-#include "ObjectGC.h"
+
 #include "Geometry.h"
 #include "Renderer.h"
 #include <vector>

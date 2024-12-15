@@ -206,8 +206,6 @@
     </ClCompile>
     <ClCompile Include="MaterialDlg.cpp" />
     <ClCompile Include="Matrix4.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="ObjectGC.cpp" />
     <ClCompile Include="PngWrapper.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -243,7 +241,6 @@
     <ClInclude Include="MaterialDlg.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="ObjectGC.h" />
     <ClInclude Include="PngWrapper.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Renderer.h" />
