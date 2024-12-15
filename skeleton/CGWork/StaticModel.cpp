@@ -11,9 +11,9 @@ StaticModel::~StaticModel(){
 }
 
 void StaticModel::draw(Renderer& r) {
-    if(T)
-        Geometry* transfromedGeometry = T->applyTransformation(mTransform);
-    //r.addModel(transfromedGeometry);
+    if (T) {
+        r.addModel(this);
+    }
 }
 
 // Override the print function

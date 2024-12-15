@@ -14,6 +14,12 @@ protected:
 	Matrix4 mTransform;
 public:
 	virtual ~Model() { delete T; T = nullptr; };
+	Matrix4 getModelTransformation() const{
+		return mTransform;
+	}
+	Geometry* applyTransformation(const Matrix4& mTransform) const {
+		return T->applyTransformation(mTransform);
+	}
 	void virtual print() = 0;
 	//std::vector<ObjectGC*> m_Objects;
 	//void addObj(IPObjectStruct* obj, double color[3]);

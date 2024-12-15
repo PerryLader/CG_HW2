@@ -1,6 +1,8 @@
 #ifndef	GEOMETRY_H
 #define	GEOMETRY_H
 #include "Polygon.h"
+#include <vector>
+#include <string>
 
 class Geometry
 {
@@ -13,6 +15,9 @@ public:
 	BBox getBBox() const;
 	void Geometry::addPolygon(PolygonGC* poli);
 	Geometry* applyTransformation(const Matrix4& tMat) const;
+	std::vector<Line>* getEdges() const;
+	void backFaceCulling();
+	void clip();
 	void print() const;
 	~Geometry();
 };

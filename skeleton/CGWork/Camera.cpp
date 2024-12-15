@@ -25,19 +25,19 @@ const Matrix4& Camera::getProjectionMatrix() const {
 }
 
 // Function to set the camera using LookAt
-void Camera::lookAt(const Vector4& eye, const Vector4& target, const Vector4& up) {
-    Vector4 zAxis = (eye - target).normalized();
-    Vector4 xAxis = up.cross(zAxis).normalized();
-    Vector4 yAxis = zAxis.cross(xAxis);
+void Camera::lookAt(const Vector4& eye, const Vector4& target, const Vector4& up){
+    const Vector4 zAxis = (eye - target).normalized();
+    const Vector4 xAxis = Vector4::cross(up, zAxis).normalized();
+    const Vector4 yAxis = Vector4::cross(zAxis,xAxis);
 
-    Matrix4 orientation(
+    const Matrix4 orientation(
         xAxis.x, xAxis.y, xAxis.z, 0,
         yAxis.x, yAxis.y, yAxis.z, 0,
         zAxis.x, zAxis.y, zAxis.z, 0,
         0, 0, 0, 1
     );
 
-    Matrix4 translation(
+    const Matrix4 translation(
         1, 0, 0, -eye.x,
         0, 1, 0, -eye.y,
         0, 0, 1, -eye.z,
@@ -59,7 +59,7 @@ void Camera::setOrthogonal(float left, float right, float bottom, float top, flo
 
 // Function to set perspective projection
 void Camera::setPerspective(float fovY, float aspect, float near, float far) {
-    float tanHalfFovY = tan(fovY / 2);
+    const float tanHalfFovY = tan(fovY / 2);
     projectionMatrix = Matrix4(
         1 / (aspect * tanHalfFovY), 0, 0, 0,
         0, 1 / tanHalfFovY, 0, 0,

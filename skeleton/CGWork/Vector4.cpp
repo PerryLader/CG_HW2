@@ -113,16 +113,16 @@ Vector4 Vector4::translate(const Vector4& vec, float tx, float ty, float tz) {
 }
 
 // Dot product
-float Vector4::dot(const Vector4& other) const {
-    return x * other.x + y * other.y + z * other.z + w * other.w;
+float Vector4::dot(const Vector4& v1, const Vector4& v2){
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
 // Cross product (only makes sense for 3D vectors, so we ignore w)
-Vector4 Vector4::cross(const Vector4& other) const {
+Vector4 Vector4::cross(const Vector4& v1, const Vector4& v2){
     return Vector4(
-        y * other.z - z * other.y,
-        z * other.x - x * other.z,
-        x * other.y - y * other.x,
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x,
         1.0f
     );
 }
@@ -194,3 +194,12 @@ std::istringstream& operator>>(std::istringstream& iss, Vector4& vec) {
     }
     return iss;
 }
+
+//Vector4 Vector4::mult(const Matrix4& matrix) const {
+//    return Vector4(
+//        matrix.m[0][0] * x + matrix.m[1][0] * y + matrix.m[2][0] * z + matrix.m[3][0] * w,
+//        matrix.m[0][1] * x + matrix.m[1][1] * y + matrix.m[2][1] * z + matrix.m[3][1] * w,
+//        matrix.m[0][2] * x + matrix.m[1][2] * y + matrix.m[2][2] * z + matrix.m[3][2] * w,
+//        matrix.m[0][3] * x + matrix.m[1][3] * y + matrix.m[2][3] * z + matrix.m[3][3] * w
+//    );
+//}

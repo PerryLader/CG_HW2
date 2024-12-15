@@ -18,10 +18,6 @@ public:
     void addModels(const std::vector<Model*>& models);
     // Function to add a camera to the scene
     void addCamera(Camera* camera);
-
-    // Function to set the transformation matrix
-    void setTransformation(const Matrix4& transformation);
-
     // Function to render the scene
     void render() const;
 
@@ -31,7 +27,6 @@ private:
     std::vector<Model*> m_models;
     std::vector<Camera*> m_cameras;
     Renderer* m_renderer;
-    Matrix4 m_transformation;
 };
 
 #endif // SCENE_H

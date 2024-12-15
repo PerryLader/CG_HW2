@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
-
+//#include "Matrix4.h"
 class Vector4 {
 public:
     float x, y, z, w;
@@ -46,10 +46,10 @@ public:
     static Vector4 translate(const Vector4& vec, float tx, float ty, float tz);
 
     // Dot product
-    float dot(const Vector4& other) const;
+    static float dot(const Vector4& v1, const Vector4& v2);
 
     // Cross product (only makes sense for 3D vectors, so we ignore w)
-    Vector4 cross(const Vector4& other) const;
+    static Vector4 cross(const Vector4& v1, const Vector4& v2);
 
     // Magnitude
     float length() const;
@@ -76,6 +76,9 @@ public:
 
     // Overload stream extraction operator for string input
     friend std::istringstream& operator>>(std::istringstream& iss, Vector4& vec);
+
+   // Vector4 mult(const Matrix4& vec) const;
+
 };
 
 #endif // VECTOR4_H

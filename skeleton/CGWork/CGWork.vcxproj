@@ -194,6 +194,7 @@
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="iritSkel.cpp" />
     <ClCompile Include="LightDialog.cpp" />
+    <ClCompile Include="Line.cpp" />
     <ClCompile Include="MainFrm.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -206,6 +207,7 @@
     </ClCompile>
     <ClCompile Include="MaterialDlg.cpp" />
     <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="NoShadeShader.cpp" />
     <ClCompile Include="PngWrapper.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -237,15 +239,18 @@
     <ClInclude Include="iritSkel.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightDialog.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MaterialDlg.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="NoShadeShader.h" />
     <ClInclude Include="PngWrapper.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="StaticModel.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="..\include\allocate.h" />

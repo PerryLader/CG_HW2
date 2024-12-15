@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 // Constructor
-Scene::Scene() : m_transformation(Matrix4::identity()) {}
+Scene::Scene() {}
 
 // Function to add a model to the scene
 void Scene::addModel(Model* model) {
@@ -17,15 +17,10 @@ void Scene::addCamera(Camera* camera) {
     m_cameras.push_back(camera);
 }
 
-// Function to set the transformation matrix
-void Scene::setTransformation(const Matrix4& transformation) {
-    this->m_transformation = transformation;
-}
-
 // Function to render the scene
 void Scene::render() const {
+    m_renderer->render();
 }
-
 
 void Scene::print() const {
     std::cout << "Scene:" << std::endl;

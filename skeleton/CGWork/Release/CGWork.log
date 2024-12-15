@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  CGWork.cpp
   CGWorkView.cpp
   iritSkel.cpp
@@ -16,6 +17,37 @@ C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(274,50): warning
   Scene.cpp
   StaticModel.cpp
   Vector4.cpp
+=======
+﻿  CGWorkView.cpp
+  Geometry.cpp
+  iritSkel.cpp
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(260,59): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(260,51): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(260,43): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(268,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(267,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(266,50): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(271,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(270,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(269,36): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(276,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(275,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(274,50): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+  Line.cpp
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Line.cpp(16,21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  Polygon.cpp
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(48,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(48,56): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(48,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(81,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(80,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(79,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(126,88): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(126,71): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp(126,53): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+  Scene.cpp
+  StaticModel.cpp
+>>>>>>> 56b3cf3f68388f9bd98e9d405b74bad373772add
   Generating Code...
   libpng.lib(png.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'msvcrtd.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
@@ -30,4 +62,4 @@ zlib.lib(inflate.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inf
 zlib.lib(inftrees.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inftrees.obj)' or at ''; linking object as if no debug info
 zlib.lib(trees.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(trees.obj)' or at ''; linking object as if no debug info
 zlib.lib(zutil.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(zutil.obj)' or at ''; linking object as if no debug info
-  CGWork.vcxproj -> C:\Users\shach\source\repos\CG_HW2\skeleton\bin\Release\CGWork.exe
+  CGWork.vcxproj -> C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\bin\Release\CGWork.exe

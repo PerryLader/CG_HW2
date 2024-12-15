@@ -1,10 +1,12 @@
 #ifndef	POLYGON_H
 #define	POLYGON_H
 #include <vector>
+#include <set>
 #include "Vertex.h"
 #include "Vector4.h"
 #include "Matrix4.h"
 #include "iritprsr.h"
+#include "Line.h"
 
 //might be useful
 class BBox {
@@ -19,12 +21,7 @@ public:
 };
 
 //might be useful
-class Line {
-    Vertex m_a, m_b;
-public:
-    //create a line from a to b
-    Line(const Vertex& a, const Vertex& b) : m_a(a), m_b(b) {};
-};
+
 
 class PolygonGC {
 private:
@@ -32,10 +29,13 @@ private:
     Vector4 m_color;                // Color of the polygon
     BBox m_bbox;
     // Update min and max bounds
+    
     void updateBounds(const Vertex& vert);
     void resetBounds();
 
 public:
+
+    Vector4 getNormal();
     // Constructor with a default color
     PolygonGC(int R = 0, int G = 0, int B = 0);
     // Set the color of the polygon
@@ -54,6 +54,9 @@ public:
     void printBounds();
     // Print polygon color
     void printColor();
+
+    void clip();
+    bool isBehindCamera();
     PolygonGC* applyTransformation(const Matrix4& transformation) const;
     BBox getBbox();
     ~PolygonGC();
