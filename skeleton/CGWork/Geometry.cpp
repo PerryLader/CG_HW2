@@ -21,6 +21,7 @@ void Geometry::addPolygon(PolygonGC* poli)
 {
 	this->m_polygons.push_back(poli);
 }
+
 Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
 	Geometry* res = new Geometry(m_name);
 	for (const auto& poly : m_polygons) {
@@ -31,12 +32,13 @@ Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
 std::vector<Line>* Geometry::getEdges() const {
 	std::vector<Line>* res = new std::vector<Line>;
 	for (const auto& poly : m_polygons) {
-		const std::vector<Line>* edges = poly.getEdges();
+		const std::vector<Line>* edges = poly->getEdges();
 		res->insert(res->end(), edges->begin(), edges->end());
 		delete edges;
 	}
 	return res;
 }
+
 void Geometry::backFaceCulling() {
     const Vector4 camera_vec = Vector4::unitZ();
 	for (auto it = m_polygons.begin(); it != m_polygons.end(); ) {
@@ -49,7 +51,6 @@ void Geometry::backFaceCulling() {
 			it++;
 	}
 }
-
 void Geometry::clip() {
 	for (PolygonGC* temp : m_polygons)
 		temp->clip();

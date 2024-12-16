@@ -17,13 +17,13 @@ public:
 	Matrix4 getModelTransformation() const{
 		return mTransform;
 	}
+	void modifiyTransformation(const Matrix4& tMat){
+		mTransform = mTransform*tMat;
+	}
 	Geometry* applyTransformation(const Matrix4& mTransform) const {
 		return T->applyTransformation(mTransform);
 	}
 	void virtual print() = 0;
-	//std::vector<ObjectGC*> m_Objects;
-	//void addObj(IPObjectStruct* obj, double color[3]);
-	//void print();
 };
 
 #endif
