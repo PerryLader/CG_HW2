@@ -19,7 +19,8 @@ public:
     // Function to add a camera to the scene
     void addCamera(Camera* camera);
     // Function to render the scene
-    void render() const;
+    void render(int width, int height) const;
+    float* getBuffer();
 
     void print() const;
 

@@ -1,8 +1,10 @@
 #include "Renderer.h"
 #include <cstring> // For memset
+#include <iostream>
+#include <algorithm> // For std::sort
 
-Renderer::Renderer(int width, int height) {
-    createBuffers(width, height);
+Renderer::Renderer():m_Buffer(nullptr),m_models_to_render(),m_ZBuffer(nullptr),m_shader(nullptr){
+   
 }
 
 Renderer::~Renderer() {
@@ -14,9 +16,6 @@ void Renderer::addModel(const Model* geoModel) {
     m_models_to_render.push_back(geoModel);
 }
 
-#include "Renderer.h"
-#include <iostream>
-#include <algorithm> // For std::sort
 
 void Renderer::render(const Camera* camera, int width, int height) {
     createBuffers(width, height);
@@ -37,7 +36,7 @@ void Renderer::render(const Camera* camera, int width, int height) {
         transformedGeometries.push_back(transformedGeometry);
     }
 
-    // Quantitative Visibility (Appel's algorithm)
+   
     std::vector<Line> edges;
     for (const auto& geom : transformedGeometries) {
         const std::vector<Line>* geomEdges = geom->getEdges();
@@ -55,9 +54,9 @@ void Renderer::render(const Camera* camera, int width, int height) {
    
 
     // Render visible edges
-    for (const auto& edge : edges) {
+    for ( Line& edge : edges) {
        // if (edge.isVisible()) {
-            edge.draw();
+            edge.draw(m_Buffer,width);
        // }
     }
 
@@ -77,11 +76,13 @@ void Renderer::clear() {
     m_Buffer = nullptr;
     m_ZBuffer = nullptr;
 }
-
+float* Renderer::getBuffer() {
+    return m_Buffer;
+}
 void Renderer::createBuffers(int width, int height) {
     clear();
-    m_Buffer = new float[3 * width * height]; // RGB buffer
+    m_Buffer = new float[4 * width * height]; // RGB buffer
     m_ZBuffer = new float[width * height]; // Z-buffer
-    std::memset(m_Buffer, 0, sizeof(float) * 3 * width * height);
+    std::memset(m_Buffer, 0, sizeof(float) * 4 * width * height);
     std::memset(m_ZBuffer, 0, sizeof(float) * width * height);
 }

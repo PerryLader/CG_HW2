@@ -11,16 +11,17 @@
 class Renderer
 {
 public:
-    Renderer(int width, int height);
+    Renderer();
     ~Renderer();
     void addModel(const Model* model);
+    float* getBuffer();
     void render(const Camera* camera, int width, int height);
     void clear();
 
 private:
     float* m_Buffer; // RGB by width by height;
     float* m_ZBuffer; // width by height;
-    Shader* shader;
+    Shader* m_shader;
     std::vector<const Model*> m_models_to_render;
     void createBuffers(int width, int height);
 };

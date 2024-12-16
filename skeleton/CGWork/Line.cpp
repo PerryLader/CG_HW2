@@ -4,7 +4,7 @@
 
 
 
-Line::Line(const Vertex& a, const Vertex& b) : m_a(a), m_b(b) {}
+Line::Line(const Vertex& a, const Vertex& b, ColorGC color) : m_a(a), m_b(b),m_color(color) {}
 
 // Calculate the direction vector of the line
 Vertex Line::direction() const {
@@ -75,6 +75,51 @@ bool Line::findIntersection(const Line& line1, const Line& line2, Vertex& interV
     }
 
     return false; // No intersection within segments
+}
+
+//void Line::DrawLineBresenham( pDC, int x1, int y1, int x2, int y2, COLORREF color)
+//{
+//
+//}
+
+void Line::draw(float* m_Buffer,int width)
+{
+    // Calculate differences
+    int x1 = m_a.m_point.x;
+    int x2 = m_b.m_point.x;
+    int y1 = m_a.m_point.y;
+    int y2 = m_b.m_point.y;
+
+
+    int dx = abs(x2 - x1), dy = abs(y2 - y1);
+    int sx = (x1 < x2) ? 1 : -1; // Step for x
+    int sy = (y1 < y2) ? 1 : -1; // Step for y
+    int err = dx - dy;
+    int color = m_color.getRGBA();
+
+    while (true)
+    {
+        // Draw the pixel at the current position
+        m_Buffer[y1 * width + x1] = color;
+        //pDC->SetPixelV(x1, y1, color);
+
+        // Break when we reach the end point
+        if (x1 == x2 && y1 == y2)
+            break;
+
+        // Calculate error and adjust positions
+        int e2 = err * 2;
+        if (e2 > -dy)
+        {
+            err -= dy;
+            x1 += sx;
+        }
+        if (e2 < dx)
+        {
+            err += dx;
+            y1 += sy;
+        }
+    }
 }
 
 // Print the line

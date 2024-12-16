@@ -7,7 +7,7 @@
 #include "Matrix4.h"
 #include "iritprsr.h"
 #include "Line.h"
-
+#include "ColorGC.h"
 //might be useful
 class BBox {
     Vector4 m_minBounds, m_maxBounds;
@@ -26,8 +26,7 @@ public:
 class PolygonGC {
 private:
     std::vector<Vertex*> m_vertices; // List of vertices
-    Vector4 m_color;                // Color of the polygon
-    Vector4 m_nomal;                // Color of the polygon
+    ColorGC m_color;                // Color of the polygon
     BBox m_bbox;
     // Update min and max bounds
     bool m_hasNormal;
@@ -36,18 +35,23 @@ private:
 
 public:
     // Constructor with a default color
-    PolygonGC(int R = 0, int G = 0, int B = 0);
-    PolygonGC(const Vector4& normal, int R = 0, int G = 0, int B = 0);
-
-    bool hasNormal() const;
-    Vector4 getNormal() const;
-    void calculateNormal();
-
-    void setColor(const Vector4& newColor);
-    const Vector4& getColor() const;
-
-    void addVertexs(IPVertexStruct* vertex);     // Add many vertex with geershon struct unsupported not recommended
-    void PolygonGC::addVertex(Vertex* vertex);   // Adds vertex
+    PolygonGC(ColorGC color);
+    // Set the color of the polygon
+    void setColor(const ColorGC& newColor);
+    // Get the color of the polygon
+    const ColorGC& getColor();
+    // Add many vertex
+    void addVertexs(IPVertexStruct* vertex);
+    // Add a vertex
+    void PolygonGC::addVertex(Vertex* vertex);
+    // Get the number of vertices
+    size_t vertexCount();
+    // Print all vertices
+    void printVertices();
+    // Print bounds
+    void printBounds();
+    // Print polygon color
+    void printColor();
 
     void clip();
     bool isBehindCamera() const;

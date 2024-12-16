@@ -52,7 +52,7 @@ BBox m_bbox;
 bool m_hasNormal;
 
 // Constructor with a default color
-PolygonGC::PolygonGC(int R, int G, int B) : m_color(R, G, B, 0), m_hasNormal(false){
+PolygonGC::PolygonGC(ColorGC color) : m_color(color), m_hasNormal(false){
     resetBounds();
 }
 PolygonGC::PolygonGC(const Vector4& normal,int R = 0, int G = 0, int B = 0) : m_color(R, G, B, 0),m_nomal(normal),m_hasNormal(true){
@@ -68,16 +68,12 @@ PolygonGC::~PolygonGC(){
 }
 
 // Set the color of the polygon
-void PolygonGC::setColor(const Vector4& newColor) {
-    if (newColor.x < 0 || newColor.x>255 ||
-        newColor.y < 0 || newColor.y>255 ||
-        newColor.z < 0 || newColor.z>255)
-        throw;
+void PolygonGC::setColor(const ColorGC& newColor) {   
     m_color = newColor;
 }
 
 // Get the color of the polygon
-const Vector4& PolygonGC::getColor() const{
+const ColorGC& PolygonGC::getColor() {
     return m_color;
 }
 
@@ -172,7 +168,7 @@ void PolygonGC::clip(){
 }
 // Function to apply a transformation matrix to all vertices
 PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
-    PolygonGC* newPoly = new PolygonGC(this->m_color.x , this->m_color.y, this->m_color.z);
+    PolygonGC* newPoly = new PolygonGC(this->m_color);
     for (const Vertex* vertex : m_vertices) {
        // Vertex* newVertex = new Vertex(transformation * vertex);
        // newPoly->addVertex(newVertex);

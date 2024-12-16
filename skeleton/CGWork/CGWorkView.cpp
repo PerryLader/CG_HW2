@@ -21,7 +21,7 @@ static char THIS_FILE[] = __FILE__;
 #include "PngWrapper.h"
 #include "iritSkel.h"
 
-
+#include <algorithm>
 // For Status Bar access
 #include "MainFrm.h"
 
@@ -243,37 +243,7 @@ BOOL CCGWorkView::OnEraseBkgnd(CDC* pDC)
 
 
 // The coordinating need to be in screen view
-void DrawLineBresenham(CDC* pDC, int x1, int y1, int x2, int y2, COLORREF color)
-{
-	// Calculate differences
-	int dx = abs(x2 - x1), dy = abs(y2 - y1);
-	int sx = (x1 < x2) ? 1 : -1; // Step for x
-	int sy = (y1 < y2) ? 1 : -1; // Step for y
-	int err = dx - dy;
 
-	while (true)
-	{
-		// Draw the pixel at the current position
-		pDC->SetPixelV(x1, y1, color);
-
-		// Break when we reach the end point
-		if (x1 == x2 && y1 == y2)
-			break;
-
-		// Calculate error and adjust positions
-		int e2 = err * 2;
-		if (e2 > -dy)
-		{
-			err -= dy;
-			x1 += sx;
-		}
-		if (e2 < dx)
-		{
-			err += dx;
-			y1 += sy;
-		}
-	}
-}
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -287,43 +257,75 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
+
+	// Get client rectangle dimensions
 	CRect r;
-
 	GetClientRect(&r);
-	CDC* pDCToUse = m_pDbDC; /*m_pDC*/
 
-	pDCToUse->FillSolidRect(&r, RGB(255, 255, 0));
+	// Get the width and height of the rendering area
+	int width = r.Width();
+	int height = r.Height();
 
-
-	int x1 = 200, y1 = 500;
-	int x2 = 1000, y2 = 200;
-
-	// Draw a line between them
-	DrawLineBresenham(pDCToUse, x1, y1, x2, y2, RGB(0, 0, 255));
-
-
-	/*int numLines = 100;
-	double radius = r.right / 3.0;
-
-	if (r.right > r.bottom) {
-		radius = r.bottom / 3.0;
+	// Retrieve the buffer from getBuffer()
+	m_scene.render(width, height);
+	float* buffer=m_scene.getBuffer();
+	if (!buffer) {
+		// If the buffer is null, fill the screen with a fallback color
+		pDC->FillSolidRect(&r, RGB(0, 0, 0)); // Black background
+		return;
 	}
 
-	for (int i = 0; i < numLines; ++i)
-	{
-		double finalTheta = 2 * M_PI / numLines*i + theta*M_PI/180.0f;
+	// Create a DIB section to render the pixel data
+	BITMAPINFO bmi;
+	ZeroMemory(&bmi, sizeof(BITMAPINFO));
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmi.bmiHeader.biWidth = width;
+	bmi.bmiHeader.biHeight = -height; // Negative to make the image top-down
+	bmi.bmiHeader.biPlanes = 1;
+	bmi.bmiHeader.biBitCount = 32;    // 32 bits for RGBA (8 bits per channel)
+	bmi.bmiHeader.biCompression = BI_RGB;
 
-		pDCToUse->MoveTo(r.right / 2, r.bottom / 2);
-		pDCToUse->LineTo((int)(r.right / 2 + radius*cos(finalTheta)), (int)(r.bottom / 2 + radius*sin(finalTheta)));
-	}	*/
-
-	if (pDCToUse != m_pDC)
-	{
-		m_pDC->BitBlt(r.left, r.top, r.Width(), r.Height(), pDCToUse, r.left, r.top, SRCCOPY);
+	// Allocate pixel data buffer
+	void* dibPixels = nullptr;
+	HBITMAP hBitmap = CreateDIBSection(pDC->GetSafeHdc(), &bmi, DIB_RGB_COLORS, &dibPixels, nullptr, 0);
+	if (!hBitmap || !dibPixels) {
+		// If DIB section creation fails, use a fallback rendering
+		pDC->FillSolidRect(&r, RGB(255, 0, 0)); // Red error background
+		return;
 	}
 
-	theta += 5;
+	// Convert the float buffer to 32-bit packed ARGB and store in the DIB section
+	uint32_t* dibBuffer = (uint32_t*)dibPixels; // DIB buffer as 32-bit ARGB values
+	for (int y = 0; y < height; ++y) {
+		for (int x = 0; x < width; ++x) {
+			int index = (y * width + x) * 4; // Index in the float buffer (RGBA)
+
+			// Convert float values (0.0 to 1.0) to 8-bit integers (0 to 255)
+			uint8_t r = static_cast<uint8_t>(std::clamp(buffer[index] * 255.0f, 0.0f, 255.0f));
+			uint8_t g = static_cast<uint8_t>(std::clamp(buffer[index + 1] * 255.0f, 0.0f, 255.0f));
+			uint8_t b = static_cast<uint8_t>(std::clamp(buffer[index + 2] * 255.0f, 0.0f, 255.0f));
+			uint8_t a = static_cast<uint8_t>(std::clamp(buffer[index + 3] * 255.0f, 0.0f, 255.0f)); // Alpha
+
+			// Pack into 32-bit ARGB (Windows uses BGRA order in memory)
+			dibBuffer[y * width + x] = (a << 24) | (r << 16) | (g << 8) | b;
+		}
+	}
+
+	// Render the DIB section to the screen
+	CDC memDC;
+	memDC.CreateCompatibleDC(pDC);
+	HBITMAP hOldBitmap = (HBITMAP)memDC.SelectObject(hBitmap);
+
+	// Copy the DIB section to the display context
+	pDC->BitBlt(0, 0, width, height, &memDC, 0, 0, SRCCOPY);
+
+	// Cleanup
+	memDC.SelectObject(hOldBitmap);
+	DeleteObject(hBitmap);
+
+	theta += 5; // Update theta if used for animations
 }
+
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -547,3 +549,7 @@ void CCGWorkView::OnTimer(UINT_PTR nIDEvent)
 	if (nIDEvent == 1)
 		Invalidate();
 }
+
+
+
+
