@@ -407,9 +407,6 @@ void CCGWorkView::OnUpdateViewPerspective(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(m_nView == ID_VIEW_PERSPECTIVE);
 }
 
-
-
-
 // ACTION HANDLERS ///////////////////////////////////////////
 
 void CCGWorkView::OnActionRotate()
@@ -454,6 +451,7 @@ void CCGWorkView::OnUpdateActionScale(CCmdUI* pCmdUI)
 void CCGWorkView::OnAxisX()
 {
 	m_nAxis = ID_AXIS_X;
+	
 }
 
 // Gets called when windows has to repaint either the X button or the Axis pop up menu.

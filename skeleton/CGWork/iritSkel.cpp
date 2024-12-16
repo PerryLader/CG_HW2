@@ -249,15 +249,21 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 			return false;
 		}
 
-		/* Count number of vertices. */
-		for (PVertex = PPolygon->PVertex->Pnext, i = 1;
-			PVertex != PPolygon->PVertex && PVertex != NULL;
-			PVertex = PVertex->Pnext, i++);
+		///* Count number of vertices. */
+		//for (PVertex = PPolygon->PVertex->Pnext, i = 1;
+		//	PVertex != PPolygon->PVertex && PVertex != NULL;
+		//	PVertex = PVertex->Pnext, i++);
 
 		/* use if(IP_HAS_PLANE_POLY(PPolygon)) to know whether a normal is defined for the polygon
 		   access the normal by the first 3 components of PPolygon->Plane */
 		PVertex = PPolygon->PVertex;
-		PolygonGC* newPoly = new PolygonGC(RGB[0], RGB[1], RGB[2]);
+		PolygonGC* newPoly;
+		if (IP_HAS_PLANE_POLY(PPolygon)) {
+			const Vector4 polygon_normal = Vector4(PPolygon->Plane[0], PPolygon->Plane[1], PPolygon->Plane[2], 1);
+			newPoly = new PolygonGC(polygon_normal, RGB[0], RGB[1], RGB[2]);
+		}
+		else
+			newPoly = new PolygonGC(RGB[0], RGB[1], RGB[2]);
 		do {			     /* Assume at least one edge in polygon! */
 			/* code handeling all vertex/normal/texture coords */
 			Vertex* newVert;

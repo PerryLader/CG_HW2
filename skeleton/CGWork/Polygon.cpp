@@ -30,7 +30,7 @@ bool BBox::bboxCollide(const BBox& bbox1, const BBox& bbox2) {
 }
 // Update min and max bounds
 void PolygonGC::updateBounds(const Vertex& vert) {
-    m_bbox.updateBBox(vert.location());
+    m_bbox.updateBBox(vert.loc());
 }
 
 // reset min and max bounds
@@ -41,15 +41,24 @@ void PolygonGC::resetBounds() {
     }
     m_bbox = BBox(Vector4(FLT_MAX, FLT_MAX, FLT_MAX, 1), Vector4(-FLT_MAX, -FLT_MAX, -FLT_MAX, 1));
     for (Vertex* vertex : m_vertices) {
-        m_bbox.updateBBox(vertex->location());
+        m_bbox.updateBBox(vertex->loc());
     }
 }
-
+std::vector<Vertex*> m_vertices; // List of vertices
+Vector4 m_color;                // Color of the polygon
+Vector4 m_nomal;                // Color of the polygon
+BBox m_bbox;
+// Update min and max bounds
+bool m_hasNormal;
 
 // Constructor with a default color
-PolygonGC::PolygonGC(int R, int G, int B) : m_color(R, G, B, 0) {
+PolygonGC::PolygonGC(int R, int G, int B) : m_color(R, G, B, 0), m_hasNormal(false){
     resetBounds();
 }
+PolygonGC::PolygonGC(const Vector4& normal,int R = 0, int G = 0, int B = 0) : m_color(R, G, B, 0),m_nomal(normal),m_hasNormal(true){
+    resetBounds();
+}
+
 
 PolygonGC::~PolygonGC(){
     for (Vertex* vert : m_vertices) {
@@ -57,7 +66,6 @@ PolygonGC::~PolygonGC(){
     }
     m_vertices.clear();
 }
-
 
 // Set the color of the polygon
 void PolygonGC::setColor(const Vector4& newColor) {
@@ -69,7 +77,7 @@ void PolygonGC::setColor(const Vector4& newColor) {
 }
 
 // Get the color of the polygon
-const Vector4& PolygonGC::getColor() {
+const Vector4& PolygonGC::getColor() const{
     return m_color;
 }
 
@@ -96,34 +104,34 @@ void PolygonGC::addVertex(Vertex* vertex) {
 }
 
 // Get the number of vertices
-size_t PolygonGC::vertexCount() {
+size_t PolygonGC::vertexCount() const{
     return m_vertices.size();
 }
 
 
 // Print all vertices
-void PolygonGC::printVertices() {
+void PolygonGC::printVertices() const{
 
     for (size_t i = 0; i < m_vertices.size(); ++i) {
         std::cout << "                  Vertex[" << i << "]: ";
-        m_vertices[i]->print(); // Assuming Vertex has a `print` method
+        m_vertices.at(i)->print();
         std::cout << "\n";
     }
 }
 
 // Print bounds
-void PolygonGC::printBounds() {
+void PolygonGC::printBounds() const{
     m_bbox.toPrint();
 }
 
-bool PolygonGC::isBehindCamera(){
+bool PolygonGC::isBehindCamera() const{
     for (size_t i = 0; i < m_vertices.size(); ++i)
-        if (m_vertices[i]->location().z > 0)
+        if (m_vertices[i]->loc().z > 0)
             return false;
     return true;
 }
 // Print polygon color
-void PolygonGC::printColor() {
+void PolygonGC::printColor() const{
     std::cout << "Polygon color: implement mme!!!!! ";
     // m_color;
     std::cout << "\n";
@@ -171,18 +179,26 @@ PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
 }
 
 // get polygon Bbox
-BBox PolygonGC::getBbox() {
+BBox PolygonGC::getBbox() const{
     return BBox();
 }
 
-Vector4 PolygonGC::getNormal()
+Vector4 PolygonGC::getNormal() const
 {
+    return m_nomal;
+}
+
+bool PolygonGC::hasNormal() const{
+    return m_hasNormal;
+}
+
+void PolygonGC::calculateNormal() {
     if (m_vertices.size() < 3)
     {
         throw std::runtime_error("whaht the hell just happend?is it polygon with less then 2 vertices???hemmm?");
     }
-    Vector4 vec1 = m_vertices[1]->m_point - m_vertices[0]->m_point;
-    Vector4 vec2 = m_vertices[2]->m_point - m_vertices[0]->m_point;
-    return Vector4::cross(vec1,vec2);
+    const Vector4 vec1 = m_vertices.at(1)->loc() - m_vertices.at(0)->loc();
+    const Vector4 vec2 = m_vertices.at(2)->loc() - m_vertices.at(1)->loc();
+    m_nomal = Vector4::cross(vec1, vec2);
 
 }

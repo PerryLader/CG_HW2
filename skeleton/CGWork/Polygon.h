@@ -27,38 +27,38 @@ class PolygonGC {
 private:
     std::vector<Vertex*> m_vertices; // List of vertices
     Vector4 m_color;                // Color of the polygon
+    Vector4 m_nomal;                // Color of the polygon
     BBox m_bbox;
     // Update min and max bounds
-    
+    bool m_hasNormal;
     void updateBounds(const Vertex& vert);
     void resetBounds();
 
 public:
-
-    Vector4 getNormal();
     // Constructor with a default color
     PolygonGC(int R = 0, int G = 0, int B = 0);
-    // Set the color of the polygon
+    PolygonGC(const Vector4& normal, int R = 0, int G = 0, int B = 0);
+
+    bool hasNormal() const;
+    Vector4 getNormal() const;
+    void calculateNormal();
+
     void setColor(const Vector4& newColor);
-    // Get the color of the polygon
-    const Vector4& getColor();
-    // Add many vertex
-    void addVertexs(IPVertexStruct* vertex);
-    // Add a vertex
-    void PolygonGC::addVertex(Vertex* vertex);
-    // Get the number of vertices
-    size_t vertexCount();
-    // Print all vertices
-    void printVertices();
-    // Print bounds
-    void printBounds();
-    // Print polygon color
-    void printColor();
+    const Vector4& getColor() const;
+
+    void addVertexs(IPVertexStruct* vertex);     // Add many vertex with geershon struct unsupported not recommended
+    void PolygonGC::addVertex(Vertex* vertex);   // Adds vertex
 
     void clip();
-    bool isBehindCamera();
+    bool isBehindCamera() const;
+
+    size_t vertexCount() const;
+    void printVertices() const;
+    void printBounds() const;
+    void printColor() const;
+
     PolygonGC* applyTransformation(const Matrix4& transformation) const;
-    BBox getBbox();
+    BBox getBbox() const;
     ~PolygonGC();
 };
 #endif

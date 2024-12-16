@@ -4,27 +4,36 @@
 #include "Vector4.h"
 
 class Vertex {
-public:
+private:
     Vector4 m_point;
     Vector4 m_normal;
+    bool m_hasNormal;
+public:
 
     // Constructor
-    Vertex(Vector4 p) : m_point(p), m_normal(Vector4(0, 0, 0, 0)) {}
+    Vertex(Vector4 p) : m_point(p), m_normal(Vector4(0, 0, 0, 1)), m_hasNormal(false) {}
     // Constructor
-    Vertex(Vector4 p, Vector4 n) : m_point(p), m_normal(n) {}
+    Vertex(Vector4 p, Vector4 n) : m_point(p), m_normal(n), m_hasNormal(true) {}
 
     // Print function
     void print() {
-        m_point.print();
-        // std::cout << ", Normal: ";
-        // m_normal.print();
+        std::cout << "Vertex Located at: " << m_point << ", with normal at: " << m_normal << std::endl;
     }
 
-    // Get location
-    Vector4 location() const {
+    Vector4 loc() const    // Get location
+    {
         return m_point;
     }
-
+    
+    Vector4 normal() const {
+        return m_normal;
+    }
+    bool hasNormal() const {
+        return m_hasNormal;
+    }
+    void calculateNormal() const {
+        //how?
+    }
     bool isInsideClipVolume() {
         return m_point.x >= -m_point.w && m_point.x <= m_point.w &&
             m_point.y >= -m_point.w && m_point.y <= m_point.w &&
