@@ -28,6 +28,7 @@ void Renderer::render(const Camera* camera, int width, int height) {
     for (const auto& model : m_models_to_render) {
         const Matrix4 transformation = model->getModelTransformation() * viewProjectionMatrix;
         Geometry* transformedGeometry = model->applyTransformation(transformation);
+
         // Clipping
         transformedGeometry->clip();
         // Backface culling
@@ -44,16 +45,20 @@ void Renderer::render(const Camera* camera, int width, int height) {
         delete geomEdges;
     }
 
-    // Compute visibility for each edge
+#ifdef APPLE_ALGO
     for (auto& edge : edges) {
         edge.computeQuantitativeVisibility(transformedGeometries);
     }
+#endif // APPLE_ALGO
+
+    // Compute visibility for each edge
+   
 
     // Render visible edges
     for (const auto& edge : edges) {
-        if (edge.isVisible()) {
+       // if (edge.isVisible()) {
             edge.draw();
-        }
+       // }
     }
 
     // Present the buffer (this is just an example, actual implementation may vary)

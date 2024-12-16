@@ -136,6 +136,7 @@ void PolygonGC::printColor() const{
     // m_color;
     std::cout << "\n";
 }
+
 void PolygonGC::clip(){
     std::set<Vertex*> outscopeVertices;
     std::vector<Vertex*> inscopeVertices;
@@ -153,6 +154,7 @@ void PolygonGC::clip(){
         }
         else if (v1Inside && !v2Inside) {
             // v1 is inside, v2 is outside, add intersection point
+
             inscopeVertices.push_back(intersectClipVolume(v1, v2));
             outscopeVertices.insert(v2);
         }
