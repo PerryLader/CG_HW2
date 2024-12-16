@@ -11,7 +11,6 @@ using std::cout;
 using std::endl;
 #include "MaterialDlg.h"
 #include "LightDialog.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -21,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #include "PngWrapper.h"
 #include "iritSkel.h"
 
-#include <algorithm>
+
 // For Status Bar access
 #include "MainFrm.h"
 
@@ -69,10 +68,10 @@ END_MESSAGE_MAP()
 
 // A patch to fix GLaux disappearance from VS2005 to VS2008
 void auxSolidCone(GLdouble radius, GLdouble height) {
-	GLUquadric* quad = gluNewQuadric();
-	gluQuadricDrawStyle(quad, GLU_FILL);
-	gluCylinder(quad, radius, 0.0, height, 20, 20);
-	gluDeleteQuadric(quad);
+        GLUquadric *quad = gluNewQuadric();
+        gluQuadricDrawStyle(quad, GLU_FILL);
+        gluCylinder(quad, radius, 0.0, height, 20, 20);
+        gluDeleteQuadric(quad);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -83,7 +82,7 @@ CCGWorkView::CCGWorkView()
 	// Set default values
 	m_nAxis = ID_AXIS_X;
 	m_nAction = ID_ACTION_ROTATE;
-	m_nView = ID_VIEW_ORTHOGRAPHIC;
+	m_nView = ID_VIEW_ORTHOGRAPHIC;	
 	m_bIsPerspective = false;
 
 	m_nLightShading = ID_LIGHT_SHADING_FLAT;
@@ -94,7 +93,7 @@ CCGWorkView::CCGWorkView()
 	m_nMaterialCosineFactor = 32;
 
 	//init the first light to be enabled
-	m_lights[LIGHT_ID_1].enabled = true;
+	m_lights[LIGHT_ID_1].enabled=true;
 	m_pDbBitMap = NULL;
 	m_pDbDC = NULL;
 }
@@ -145,22 +144,12 @@ BOOL CCGWorkView::PreCreateWindow(CREATESTRUCT& cs)
 
 
 
-int CCGWorkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+int CCGWorkView::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
 	if (CView::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
 	InitializeCGWork();
-	if (AllocConsole())
-	{
-		FILE* fp;
-		freopen_s(&fp, "CONOUT$", "w", stdout);
-		freopen_s(&fp, "CONOUT$", "w", stderr);
-		std::cout.clear();
-		std::clog.clear();
-		std::cerr.clear();
-		std::cin.clear();
-	}
 
 	return 0;
 }
@@ -170,8 +159,8 @@ int CCGWorkView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 BOOL CCGWorkView::InitializeCGWork()
 {
 	m_pDC = new CClientDC(this);
-
-	if (NULL == m_pDC) { // failure to get DC
+	
+	if ( NULL == m_pDC ) { // failure to get DC
 		::AfxMessageBox(CString("Couldn't get a valid DC."));
 		return FALSE;
 	}
@@ -181,7 +170,7 @@ BOOL CCGWorkView::InitializeCGWork()
 	m_pDbDC = new CDC();
 	m_pDbDC->CreateCompatibleDC(m_pDC);
 	SetTimer(1, 1, NULL);
-	m_pDbBitMap = CreateCompatibleBitmap(m_pDC->m_hDC, r.right, r.bottom);
+	m_pDbBitMap = CreateCompatibleBitmap(m_pDC->m_hDC, r.right, r.bottom);	
 	m_pDbDC->SelectObject(m_pDbBitMap);
 	return TRUE;
 }
@@ -191,11 +180,11 @@ BOOL CCGWorkView::InitializeCGWork()
 // CCGWorkView message handlers
 
 
-void CCGWorkView::OnSize(UINT nType, int cx, int cy)
+void CCGWorkView::OnSize(UINT nType, int cx, int cy) 
 {
 	CView::OnSize(nType, cx, cy);
 
-	if (0 >= cx || 0 >= cy) {
+	if ( 0 >= cx || 0 >= cy ) {
 		return;
 	}
 
@@ -205,19 +194,19 @@ void CCGWorkView::OnSize(UINT nType, int cx, int cy)
 
 	// compute the aspect ratio
 	// this will keep all dimension scales equal
-	m_AspectRatio = (GLdouble)m_WindowWidth / (GLdouble)m_WindowHeight;
+	m_AspectRatio = (GLdouble)m_WindowWidth/(GLdouble)m_WindowHeight;
 
 	CRect r;
 	GetClientRect(&r);
 	DeleteObject(m_pDbBitMap);
-	m_pDbBitMap = CreateCompatibleBitmap(m_pDC->m_hDC, r.right, r.bottom);
+    	m_pDbBitMap = CreateCompatibleBitmap(m_pDC->m_hDC, r.right, r.bottom);	
 	m_pDbDC->SelectObject(m_pDbBitMap);
 }
 
 
 BOOL CCGWorkView::SetupViewingFrustum(void)
 {
-	return TRUE;
+    return TRUE;
 }
 
 
@@ -232,17 +221,14 @@ BOOL CCGWorkView::SetupViewingOrthoConstAspect(void)
 
 
 
-BOOL CCGWorkView::OnEraseBkgnd(CDC* pDC)
+BOOL CCGWorkView::OnEraseBkgnd(CDC* pDC) 
 {
 	// Windows will clear the window with the background color every time your window 
 	// is redrawn, and then CGWork will clear the viewport with its own background color.
 
-
+	
 	return true;
 }
-
-
-// The coordinating need to be in screen view
 
 
 
@@ -256,84 +242,47 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	CCGWorkDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
-		return;
-
-	// Get client rectangle dimensions
+	    return;
 	CRect r;
+
 	GetClientRect(&r);
-
-	// Get the width and height of the rendering area
-	int width = r.Width();
-	int height = r.Height();
-
-	// Retrieve the buffer from getBuffer()
-	m_scene.render(width, height);
-	float* buffer=m_scene.getBuffer();
-
+	CDC *pDCToUse = /*m_pDC*/m_pDbDC;
 	
-
-	// Create a DIB section to render the pixel data
-	BITMAPINFO bmi;
-	ZeroMemory(&bmi, sizeof(BITMAPINFO));
-	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-	bmi.bmiHeader.biWidth = width;
-	bmi.bmiHeader.biHeight = -height; // Negative to make the image top-down
-	bmi.bmiHeader.biPlanes = 1;
-	bmi.bmiHeader.biBitCount = 32;    // 32 bits for RGBA (8 bits per channel)
-	bmi.bmiHeader.biCompression = BI_RGB;
-
-	// Allocate pixel data buffer
-	void* dibPixels = nullptr;
-	HBITMAP hBitmap = CreateDIBSection(pDC->GetSafeHdc(), &bmi, DIB_RGB_COLORS, &dibPixels, nullptr, 0);
-	if (!hBitmap || !dibPixels) {
-		// If DIB section creation fails, use a fallback rendering
-		pDC->FillSolidRect(&r, RGB(255, 0, 0)); // Red error background
-		return;
+	pDCToUse->FillSolidRect(&r, RGB(255, 255, 0));
+	
+	int numLines = 100;
+	double radius = r.right / 3.0;
+	
+	if (r.right > r.bottom) {
+		radius = r.bottom / 3.0;
 	}
+	
+	for (int i = 0; i < numLines; ++i)
+	{
+		double finalTheta = 2 * M_PI / numLines*i + theta*M_PI/180.0f;
+		
+		pDCToUse->MoveTo(r.right / 2, r.bottom / 2);
+		pDCToUse->LineTo((int)(r.right / 2 + radius*cos(finalTheta)), (int)(r.bottom / 2 + radius*sin(finalTheta)));
+	}	
 
-	// Convert the float buffer to 32-bit packed ARGB and store in the DIB section
-	uint32_t* dibBuffer = (uint32_t*)dibPixels; // DIB buffer as 32-bit ARGB values
-	for (int y = 0; y < height; ++y) {
-		for (int x = 0; x < width; ++x) {
-			int index = (y * width + x) * 4; // Index in the float buffer (RGBA)
-
-			// Convert float values (0.0 to 1.0) to 8-bit integers (0 to 255)
-			uint8_t r = static_cast<uint8_t>(buffer[index] );
-			uint8_t g = static_cast<uint8_t>(buffer[index + 1] );
-			uint8_t b = static_cast<uint8_t>(buffer[index + 2] );
-			uint8_t a = static_cast<uint8_t>(buffer[index + 3] ); // Alpha
-
-			// Pack into 32-bit ARGB (Windows uses BGRA order in memory)
-			dibBuffer[y * width + x] = (a << 24) | (r << 16) | (g << 8) | b;
-		}
+	if (pDCToUse != m_pDC) 
+	{
+		m_pDC->BitBlt(r.left, r.top, r.Width(), r.Height(), pDCToUse, r.left, r.top, SRCCOPY);
 	}
-
-	// Render the DIB section to the screen
-	CDC memDC;
-	memDC.CreateCompatibleDC(pDC);
-	HBITMAP hOldBitmap = (HBITMAP)memDC.SelectObject(hBitmap);
-
-	// Copy the DIB section to the display context
-	pDC->BitBlt(0, 0, width, height, &memDC, 0, 0, SRCCOPY);
-
-	// Cleanup
-	memDC.SelectObject(hOldBitmap);
-	DeleteObject(hBitmap);
-
-	theta += 5; // Update theta if used for animations
+	
+	theta += 5;	
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////
 // CCGWorkView CGWork Finishing and clearing...
 
-void CCGWorkView::OnDestroy()
+void CCGWorkView::OnDestroy() 
 {
 	CView::OnDestroy();
 
 	// delete the DC
-	if (m_pDC) {
+	if ( m_pDC ) {
 		delete m_pDC;
 	}
 
@@ -354,22 +303,21 @@ void CCGWorkView::RenderScene() {
 }
 
 
-void CCGWorkView::OnFileLoad()
+void CCGWorkView::OnFileLoad() 
 {
-	TCHAR szFilters[] = _T("IRIT Data Files (*.itd)|*.itd|All Files (*.*)|*.*||");
+	TCHAR szFilters[] = _T ("IRIT Data Files (*.itd)|*.itd|All Files (*.*)|*.*||");
 
-	CFileDialog dlg(TRUE, _T("itd"), _T("*.itd"), OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
+	CFileDialog dlg(TRUE, _T("itd"), _T("*.itd"), OFN_FILEMUSTEXIST | OFN_HIDEREADONLY ,szFilters);
 
-	if (dlg.DoModal() == IDOK) {
+	if (dlg.DoModal () == IDOK) {
 		m_strItdFileName = dlg.GetPathName();		// Full path and filename
 		PngWrapper p;
-		std::vector<Model*> container;
-		if(CGSkelProcessIritDataFilesToContainer(m_strItdFileName, 1, container)){
-			m_scene.addModels(container);
-			m_scene.print();
-		}
+		CGSkelProcessIritDataFiles(m_strItdFileName, 1);
+		// Open the file and read it.
+		// Your code here...
+
 		Invalidate();	// force a WM_PAINT for drawing.
-	}
+	} 
 
 }
 
@@ -382,58 +330,61 @@ void CCGWorkView::OnFileLoad()
 // Note: that all the following Message Handlers act in a similar way.
 // Each control or command has two functions associated with it.
 
-void CCGWorkView::OnViewOrthographic()
+void CCGWorkView::OnViewOrthographic() 
 {
 	m_nView = ID_VIEW_ORTHOGRAPHIC;
 	m_bIsPerspective = false;
 	Invalidate();		// redraw using the new view.
 }
 
-void CCGWorkView::OnUpdateViewOrthographic(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateViewOrthographic(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nView == ID_VIEW_ORTHOGRAPHIC);
 }
 
-void CCGWorkView::OnViewPerspective()
+void CCGWorkView::OnViewPerspective() 
 {
 	m_nView = ID_VIEW_PERSPECTIVE;
 	m_bIsPerspective = true;
 	Invalidate();
 }
 
-void CCGWorkView::OnUpdateViewPerspective(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateViewPerspective(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nView == ID_VIEW_PERSPECTIVE);
 }
 
+
+
+
 // ACTION HANDLERS ///////////////////////////////////////////
 
-void CCGWorkView::OnActionRotate()
+void CCGWorkView::OnActionRotate() 
 {
 	m_nAction = ID_ACTION_ROTATE;
 }
 
-void CCGWorkView::OnUpdateActionRotate(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateActionRotate(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nAction == ID_ACTION_ROTATE);
 }
 
-void CCGWorkView::OnActionTranslate()
+void CCGWorkView::OnActionTranslate() 
 {
 	m_nAction = ID_ACTION_TRANSLATE;
 }
 
-void CCGWorkView::OnUpdateActionTranslate(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateActionTranslate(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nAction == ID_ACTION_TRANSLATE);
 }
 
-void CCGWorkView::OnActionScale()
+void CCGWorkView::OnActionScale() 
 {
 	m_nAction = ID_ACTION_SCALE;
 }
 
-void CCGWorkView::OnUpdateActionScale(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateActionScale(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nAction == ID_ACTION_SCALE);
 }
@@ -447,39 +398,38 @@ void CCGWorkView::OnUpdateActionScale(CCmdUI* pCmdUI)
 // Gets calles when the X button is pressed or when the Axis->X menu is selected.
 // The only thing we do here is set the ChildView member variable m_nAxis to the 
 // selected axis.
-void CCGWorkView::OnAxisX()
+void CCGWorkView::OnAxisX() 
 {
 	m_nAxis = ID_AXIS_X;
-	
 }
 
 // Gets called when windows has to repaint either the X button or the Axis pop up menu.
 // The control is responsible for its redrawing.
 // It sets itself disabled when the action is a Scale action.
 // It sets itself Checked if the current axis is the X axis.
-void CCGWorkView::OnUpdateAxisX(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateAxisX(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nAxis == ID_AXIS_X);
 }
 
 
-void CCGWorkView::OnAxisY()
+void CCGWorkView::OnAxisY() 
 {
 	m_nAxis = ID_AXIS_Y;
 }
 
-void CCGWorkView::OnUpdateAxisY(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateAxisY(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nAxis == ID_AXIS_Y);
 }
 
 
-void CCGWorkView::OnAxisZ()
+void CCGWorkView::OnAxisZ() 
 {
 	m_nAxis = ID_AXIS_Z;
 }
 
-void CCGWorkView::OnUpdateAxisZ(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateAxisZ(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nAxis == ID_AXIS_Z);
 }
@@ -495,47 +445,47 @@ void CCGWorkView::OnUpdateAxisZ(CCmdUI* pCmdUI)
 
 // LIGHT SHADING HANDLERS ///////////////////////////////////////////
 
-void CCGWorkView::OnLightShadingFlat()
+void CCGWorkView::OnLightShadingFlat() 
 {
 	m_nLightShading = ID_LIGHT_SHADING_FLAT;
 }
 
-void CCGWorkView::OnUpdateLightShadingFlat(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateLightShadingFlat(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nLightShading == ID_LIGHT_SHADING_FLAT);
 }
 
 
-void CCGWorkView::OnLightShadingGouraud()
+void CCGWorkView::OnLightShadingGouraud() 
 {
 	m_nLightShading = ID_LIGHT_SHADING_GOURAUD;
 }
 
-void CCGWorkView::OnUpdateLightShadingGouraud(CCmdUI* pCmdUI)
+void CCGWorkView::OnUpdateLightShadingGouraud(CCmdUI* pCmdUI) 
 {
 	pCmdUI->SetCheck(m_nLightShading == ID_LIGHT_SHADING_GOURAUD);
 }
 
 // LIGHT SETUP HANDLER ///////////////////////////////////////////
 
-void CCGWorkView::OnLightConstants()
+void CCGWorkView::OnLightConstants() 
 {
 	CLightDialog dlg;
 
-	for (int id = LIGHT_ID_1; id < MAX_LIGHT; id++)
-	{
-		dlg.SetDialogData((LightID)id, m_lights[id]);
+	for (int id=LIGHT_ID_1;id<MAX_LIGHT;id++)
+	{	    
+	    dlg.SetDialogData((LightID)id,m_lights[id]);
 	}
-	dlg.SetDialogData(LIGHT_ID_AMBIENT, m_ambientLight);
+	dlg.SetDialogData(LIGHT_ID_AMBIENT,m_ambientLight);
 
-	if (dlg.DoModal() == IDOK)
+	if (dlg.DoModal() == IDOK) 
 	{
-		for (int id = LIGHT_ID_1; id < MAX_LIGHT; id++)
-		{
-			m_lights[id] = dlg.GetDialogData((LightID)id);
-		}
-		m_ambientLight = dlg.GetDialogData(LIGHT_ID_AMBIENT);
-	}
+	    for (int id=LIGHT_ID_1;id<MAX_LIGHT;id++)
+	    {
+		m_lights[id] = dlg.GetDialogData((LightID)id);
+	    }
+	    m_ambientLight = dlg.GetDialogData(LIGHT_ID_AMBIENT);
+	}	
 	Invalidate();
 }
 
@@ -546,7 +496,3 @@ void CCGWorkView::OnTimer(UINT_PTR nIDEvent)
 	if (nIDEvent == 1)
 		Invalidate();
 }
-
-
-
-

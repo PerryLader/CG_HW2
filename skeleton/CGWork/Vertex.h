@@ -1,62 +1,61 @@
-#ifndef	VERTEX_H
-#define	VERTEX_H
-#include "Matrix4.h"
-#include "Vector4.h"
+#pragma once
+#include <cmath>
+#include <iostream>
 
-class Vertex {
-private:
-    Vector4 m_point;
-    Vector4 m_normal;
-    bool m_hasNormal;
+
+class Vector4 {
 public:
+    float x, y, z, w;
 
-    // Constructor
-    Vertex(Vector4 p) : m_point(p), m_normal(Vector4(0, 0, 0, 1)), m_hasNormal(false) {}
-    // Constructor
-    Vertex(Vector4 p, Vector4 n) : m_point(p), m_normal(n), m_hasNormal(true) {}
-
-    // Print function
-    void print() {
-        std::cout << "Vertex Located at: " << m_point << ", with normal at: " << m_normal << std::endl;
+    Vector4(float x = 0, float y = 0, float z = 0, float w = 0)
+        : x(x), y(y), z(z), w(w) {
     }
 
-    Vector4 loc() const    // Get location
-    {
-        return m_point;
-    }
-    
-    Vector4 normal() const {
-        return m_normal;
-    }
-    bool hasNormal() const {
-        return m_hasNormal;
-    }
-    void calculateNormal() const {
-        //how?
-    }
-    bool isInsideClipVolume() {
-        return m_point.x >= -m_point.w && m_point.x <= m_point.w &&
-            m_point.y >= -m_point.w && m_point.y <= m_point.w &&
-            m_point.z >= -m_point.w && m_point.z <= m_point.w;
+    // Addition
+    Vector4 operator+(const Vector4& other) const {
+        return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
     }
 
-    // Overload compound assignment operator for matrix multiplication
-    Vertex& operator*=(const Matrix4& mat) {
-        m_point = mat * m_point;
-        m_normal = mat * m_normal;
-        return *this;
+    // Subtraction
+    Vector4 operator-(const Vector4& other) const {
+        return Vector4(x - other.x, y - other.y, z - other.z, w - other.w);
     }
-    // Overload multiplication operator to accept matrix operation
-    friend Vertex operator*(const Matrix4& mat, const Vertex& vert) {
-        Vertex res = Vertex(mat * vert.m_point);
-        res.m_normal = mat * res.m_normal;
-        return res;
+
+    // Dot product
+    float dot(const Vector4& other) const {
+        return x * other.x + y * other.y + z * other.z + w * other.w;
+    }
+
+    // Magnitude
+    float length() const {
+        return std::sqrt(x * x + y * y + z * z + w * w);
+    }
+
+    // Normalize
+    Vector4 getNormalized() const {
+        float mag = length();
+        return mag == 0 ? Vector4() : Vector4(x / mag, y / mag, z / mag, w / mag);
+    }
+
+    // Print
+    void print() const {
+        std::cout << "(" << x << ", " << y << ", " << z << ", " << w << ")";
     }
 };
 
-static Vertex* intersectClipVolume(const Vertex* v1, const Vertex* v2) {
-    // Calculate intersection point (simplified example)
-    return new Vertex(Vector4::unitX());
-}
+class Vertex
+{
+public:
+    Vector4 m_point;
+    Vector4 m_normal;
+	Vertex(Vector4 t):m_point(t),m_normal(Vector4(0,0,0,0)){}
+    void print() {
+        std::cout << "Point: ";
+        m_point.print();  
+        std::cout << ", Normal: ";
+        m_normal.print(); 
+        std::cout << std::endl;
+    }
+};
 
-#endif // VERTEX_H
+
