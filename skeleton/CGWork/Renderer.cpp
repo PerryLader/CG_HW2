@@ -57,7 +57,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     // Render visible edges
     for ( Line& edge : edges) {
        // if (edge.isVisible()) {
-            edge.draw(m_Buffer,width);
+            edge.draw(m_Buffer,width,height);
        // }
     }
 
@@ -84,7 +84,8 @@ void Renderer::createBuffers(const ColorGC& bg_color, int width, int height) {
     clear();
     m_Buffer = new float[sizeof(ColorGC) * width * height]; // RGB buffer
     m_ZBuffer = new float[width * height]; // Z-buffer
-    std::memset(m_Buffer, bg_color.getRGBA(), sizeof(float) * 4 * width * height);
+    int x = bg_color.getRGBA();
+    std::memset(m_Buffer,255, sizeof(ColorGC) *  width * height);
     std::memset(m_ZBuffer, 0, sizeof(float) * width * height);
 }
 //

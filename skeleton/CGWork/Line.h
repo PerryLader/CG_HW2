@@ -20,7 +20,7 @@ public:
     // Check if two lines intersect, and return the intersection point if they do
     static bool findIntersection(const Line& line1, const Line& line2, Vertex& interVertex);
 
-    void draw(float* m_Buffer, int width);
+    void draw(float* m_Buffer, int width, int hight);
     // Print the line
     void print();
 //private:

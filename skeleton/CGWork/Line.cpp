@@ -82,13 +82,15 @@ bool Line::findIntersection(const Line& line1, const Line& line2, Vertex& interV
 //
 //}
 
-void Line::draw(float* m_Buffer,int width)
+void Line::draw(float* m_Buffer,int width,int hight)
 {
     // Calculate differences
-    int x1 = m_a.x;
-    int x2 = m_b.x;
-    int y1 = m_a.y;
-    int y2 = m_b.y;
+    int halfWidth = width / 2;
+    int halfhight = hight / 2;
+    int x1 = (m_a.x * halfWidth) + halfWidth;
+    int x2 = (m_b.x * halfWidth) + halfWidth;
+    int y1 = (m_a.y*halfhight)+halfhight;
+    int y2 = (m_b.y * halfhight) + halfhight;
 
 
     int dx = abs(x2 - x1), dy = abs(y2 - y1);
@@ -99,8 +101,9 @@ void Line::draw(float* m_Buffer,int width)
 
     while (true)
     {
+        int xx = (y1 * width) + x1;
         // Draw the pixel at the current position
-        m_Buffer[y1 * width + x1] = color;
+        m_Buffer[(y1 * width) + x1] = color;
         //pDC->SetPixelV(x1, y1, color);
 
         // Break when we reach the end point
