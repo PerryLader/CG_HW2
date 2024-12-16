@@ -1,23 +1,29 @@
-#pragma once
-#include "Polygon.h"
-#include "iritprsr.h"
-#define WINDOWS_IGNORE_PACKING_MISMATCH
+#ifndef	MODEL_H
+#define	MODEL_H
 
+#include "Geometry.h"
+//#include "Renderer.h"
+#include <vector>
 
 class Model
 {
+protected:
+	Model(Geometry* T) : T(T) , mTransform(Matrix4::identity()){};
+	void virtual draw(/*Renderer& r*/) = 0;
+	Geometry* T;
+	Matrix4 mTransform;
 public:
-	std::vector<PolygonGC> m_polygons;
-
-	void addPolygon(IPPolygonStruct* p, double color[3])
-	{
-		PolygonGC newPoly(color[0], color[1], color[2]);
-		IPVertexStruct *tempVertex = p->PVertex;
-		while (tempVertex)
-		{
-			newPoly.addVertex(Vertex(Vector4(tempVertex->Coord[0], tempVertex->Coord[1], tempVertex->Coord[2], 1)));
-			tempVertex = tempVertex->Pnext;
-		}
+	virtual ~Model() { delete T; T = nullptr; };
+	Matrix4 getModelTransformation() const{
+		return mTransform;
 	}
+	void modifiyTransformation(const Matrix4& tMat){
+		mTransform = mTransform*tMat;
+	}
+	Geometry* applyTransformation(const Matrix4& mTransform) const {
+		return T->applyTransformation(mTransform);
+	}
+	void virtual print() = 0;
 };
 
+#endif

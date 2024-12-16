@@ -1,4 +1,43 @@
-﻿  StdAfx.cpp
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\atlmfc\include\afx.h(24,1): error C1189: #error:  Building MFC application with /MD[d] (CRT dll version) requires MFC shared dll version. Please #define _AFXDLL or do not use /MD[d]
-  (compiling source file 'StdAfx.cpp')
-  
+﻿  CGWork.cpp
+  CGWorkView.cpp
+  Camera.cpp
+  ColorGC.cpp
+  Geometry.cpp
+  Line.cpp
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Line.cpp(88,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Line.cpp(89,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Line.cpp(90,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Line.cpp(91,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Line.cpp(103,37): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Renderer.cpp
+  Scene.cpp
+  StaticModel.cpp
+  iritSkel.cpp
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(262,100): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(262,80): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(262,60): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(274,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(273,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(272,50): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(277,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(276,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(275,36): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(282,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(281,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(280,50): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp(194,6): warning C4101: 'i': unreferenced local variable
+  Generating Code...
+  libpng.lib(png.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'msvcrtd.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  Finished generating code
+zlib.lib(adler32.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(adler32.obj)' or at ''; linking object as if no debug info
+zlib.lib(compress.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(compress.obj)' or at ''; linking object as if no debug info
+zlib.lib(crc32.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(crc32.obj)' or at ''; linking object as if no debug info
+zlib.lib(deflate.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(deflate.obj)' or at ''; linking object as if no debug info
+zlib.lib(inffast.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inffast.obj)' or at ''; linking object as if no debug info
+zlib.lib(inflate.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inflate.obj)' or at ''; linking object as if no debug info
+zlib.lib(inftrees.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inftrees.obj)' or at ''; linking object as if no debug info
+zlib.lib(trees.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(trees.obj)' or at ''; linking object as if no debug info
+zlib.lib(zutil.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(zutil.obj)' or at ''; linking object as if no debug info
+  CGWork.vcxproj -> C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\bin\Release\CGWork.exe

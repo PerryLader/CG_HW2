@@ -15,6 +15,8 @@
 
 
 #include "Light.h"
+#include "Scene.h"
+
 
 class CCGWorkView : public CView
 {
@@ -22,19 +24,21 @@ protected: // create from serialization only
 	CCGWorkView();
 	DECLARE_DYNCREATE(CCGWorkView)
 
-// Attributes
+	// Attributes
 public:
 	CCGWorkDoc* GetDocument();
 
-// Operations
+	// Operations
 public:
 
 private:
+	Scene m_scene;
+
 	int m_nAxis;				// Axis of Action, X Y or Z
 	int m_nAction;				// Rotate, Translate, Scale
 	int m_nView;				// Orthographic, perspective
 	bool m_bIsPerspective;			// is the view perspective
-	
+
 	CString m_strItdFileName;		// file name of IRIT data
 
 	int m_nLightShading;			// shading: Flat, Gouraud.
@@ -48,13 +52,13 @@ private:
 	LightParams m_ambientLight;		//ambient light (only RGB is used)
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCGWorkView)
-	public:
+	// Overrides
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CCGWorkView)
+public:
 	virtual void OnDraw(CDC* pDC);  // overridden to draw this view
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	protected:
+protected:
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -74,7 +78,7 @@ protected:
 
 
 	HGLRC    m_hRC;			// holds the Rendering Context
-	CDC*     m_pDC;			// holds the Device Context
+	CDC* m_pDC;			// holds the Device Context
 	int m_WindowWidth;		// hold the windows width
 	int m_WindowHeight;		// hold the windows height
 	double m_AspectRatio;		// hold the fixed Aspect Ration
@@ -82,7 +86,7 @@ protected:
 	HBITMAP m_pDbBitMap;
 	CDC* m_pDbDC;
 
-// Generated message map functions
+	// Generated message map functions
 protected:
 	//{{AFX_MSG(CCGWorkView)
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
@@ -119,7 +123,9 @@ public:
 
 #ifndef _DEBUG  // debug version in CGWorkView.cpp
 inline CCGWorkDoc* CCGWorkView::GetDocument()
-   { return (CCGWorkDoc*)m_pDocument; }
+{
+	return (CCGWorkDoc*)m_pDocument;
+}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
