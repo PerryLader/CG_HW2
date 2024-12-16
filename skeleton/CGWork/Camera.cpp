@@ -2,7 +2,11 @@
 #include <cmath>
 
 // Constructor
-Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {}
+Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
+    setOrthogonal(-2, 2, -2, 2, 0, 3);
+    lookAt(Vector4(0, 0, 2, 1), Vector4(0, 0, 0, 1), Vector4(0, 1, 0, 1));
+    
+}
 
 // Function to set the view transformation matrix
 void Camera::setViewMatrix(const Matrix4& viewMatrix) {

@@ -12,7 +12,7 @@ public:
     // Destructor
     ~StaticModel() override;
     // Override the draw function
-    void draw(Renderer& r) override;
+    void draw(/*Renderer& r*/) override;
     // Override the print function
     void print() override;
 };

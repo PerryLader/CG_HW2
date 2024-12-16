@@ -269,11 +269,8 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	// Retrieve the buffer from getBuffer()
 	m_scene.render(width, height);
 	float* buffer=m_scene.getBuffer();
-	if (!buffer) {
-		// If the buffer is null, fill the screen with a fallback color
-		pDC->FillSolidRect(&r, RGB(0, 0, 0)); // Black background
-		return;
-	}
+
+	
 
 	// Create a DIB section to render the pixel data
 	BITMAPINFO bmi;
@@ -301,10 +298,10 @@ void CCGWorkView::OnDraw(CDC* pDC)
 			int index = (y * width + x) * 4; // Index in the float buffer (RGBA)
 
 			// Convert float values (0.0 to 1.0) to 8-bit integers (0 to 255)
-			uint8_t r = static_cast<uint8_t>(std::clamp(buffer[index] * 255.0f, 0.0f, 255.0f));
-			uint8_t g = static_cast<uint8_t>(std::clamp(buffer[index + 1] * 255.0f, 0.0f, 255.0f));
-			uint8_t b = static_cast<uint8_t>(std::clamp(buffer[index + 2] * 255.0f, 0.0f, 255.0f));
-			uint8_t a = static_cast<uint8_t>(std::clamp(buffer[index + 3] * 255.0f, 0.0f, 255.0f)); // Alpha
+			uint8_t r = static_cast<uint8_t>(buffer[index] );
+			uint8_t g = static_cast<uint8_t>(buffer[index + 1] );
+			uint8_t b = static_cast<uint8_t>(buffer[index + 2] );
+			uint8_t a = static_cast<uint8_t>(buffer[index + 3] ); // Alpha
 
 			// Pack into 32-bit ARGB (Windows uses BGRA order in memory)
 			dibBuffer[y * width + x] = (a << 24) | (r << 16) | (g << 8) | b;

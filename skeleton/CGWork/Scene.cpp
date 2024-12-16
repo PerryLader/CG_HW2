@@ -1,9 +1,11 @@
 #include "Scene.h"
 
 // Constructor
-Scene::Scene() {
+Scene::Scene():m_renderer(new Renderer()) {
     Camera* cam = new Camera();
     m_cameras.push_back(cam);
+
+
 
 }
 
@@ -23,7 +25,7 @@ void Scene::addCamera(Camera* camera) {
 
 // Function to render the scene
 void Scene::render(int width, int height) const {
-    m_renderer->render(m_cameras[0], width, height);//default camera
+    m_renderer->render(m_cameras[0], width, height, m_models, ColorGC(255.0,200.0,0.0));//default camera
 }
 float* Scene::getBuffer() {
     return m_renderer->getBuffer();

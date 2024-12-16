@@ -13,6 +13,7 @@ public:
     // Constructors
     ColorGC();
     ColorGC(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255);
+    ColorGC(double r, double g, double b, double a = 255);
 
     ColorGC(uint32_t rgba);
 
@@ -29,7 +30,7 @@ public:
     void setAlpha(uint8_t a);
 
     // Get the entire RGBA value
-    uint32_t getRGBA() ;
+    uint32_t getRGBA() const;
 
     // Set the entire RGBA value
     void setRGBA(uint32_t rgba);

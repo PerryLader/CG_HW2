@@ -44,18 +44,12 @@ void PolygonGC::resetBounds() {
         m_bbox.updateBBox(vertex->loc());
     }
 }
-std::vector<Vertex*> m_vertices; // List of vertices
-Vector4 m_color;                // Color of the polygon
-Vector4 m_nomal;                // Color of the polygon
-BBox m_bbox;
-// Update min and max bounds
-bool m_hasNormal;
 
 // Constructor with a default color
 PolygonGC::PolygonGC(ColorGC color) : m_color(color), m_hasNormal(false){
     resetBounds();
 }
-PolygonGC::PolygonGC(const Vector4& normal,int R = 0, int G = 0, int B = 0) : m_color(R, G, B, 0),m_nomal(normal),m_hasNormal(true){
+PolygonGC::PolygonGC(const Vector4& normal,ColorGC color) : m_color(color),m_nomal(normal),m_hasNormal(true){
     resetBounds();
 }
 
@@ -73,7 +67,8 @@ void PolygonGC::setColor(const ColorGC& newColor) {
 }
 
 // Get the color of the polygon
-const ColorGC& PolygonGC::getColor() {
+const ColorGC& PolygonGC::getColor() const
+{
     return m_color;
 }
 
@@ -170,10 +165,20 @@ void PolygonGC::clip(){
 PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
     PolygonGC* newPoly = new PolygonGC(this->m_color);
     for (const Vertex* vertex : m_vertices) {
-       // Vertex* newVertex = new Vertex(transformation * vertex);
-       // newPoly->addVertex(newVertex);
+       Vertex* newVertex = new Vertex(transformation * vertex->loc() , transformation * vertex->normal());
+       newPoly->addVertex(newVertex);
     }
     return newPoly;
+}
+
+std::vector<Line>* PolygonGC::getEdges() const {
+    std::vector<Line>* edges = new std::vector<Line>();
+    for (size_t i = 0; i < m_vertices.size(); ++i) {
+        Vertex* v1 = m_vertices[i];
+        Vertex* v2 = m_vertices[(i + 1) % m_vertices.size()];
+        edges->push_back(Line(*v1, *v2, m_color));
+    }
+    return edges;
 }
 
 // get polygon Bbox

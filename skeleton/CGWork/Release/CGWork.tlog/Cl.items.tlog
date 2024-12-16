@@ -1,26 +1,8 @@
-<<<<<<< HEAD
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Camera.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\Camera.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\CGWork.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\CGWork.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\CGWorkDoc.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\CGWorkDoc.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\CGWorkView.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\CGWorkView.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Geometry.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\Geometry.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\iritSkel.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\LightDialog.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\LightDialog.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\MainFrm.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\MainFrm.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\MaterialDlg.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\MaterialDlg.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\Matrix4.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\PngWrapper.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\PngWrapper.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\Polygon.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Renderer.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\Renderer.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Scene.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\Scene.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\StaticModel.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\StaticModel.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\StdAfx.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\StdAfx.obj
-C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Vector4.cpp;C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Release\Vector4.obj
-=======
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Camera.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\Camera.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\CGWork.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\CGWork.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\CGWorkDoc.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\CGWorkDoc.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\CGWorkView.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\CGWorkView.obj
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\ColorGC.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\ColorGC.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Geometry.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\Geometry.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\iritSkel.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\iritSkel.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\LightDialog.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\LightDialog.obj
@@ -28,6 +10,7 @@ C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\MainFrm.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\MainFrm.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\MaterialDlg.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\MaterialDlg.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Matrix4.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\Matrix4.obj
+C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\NoShadeShader.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\NoShadeShader.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\PngWrapper.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\PngWrapper.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Polygon.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\Polygon.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Renderer.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\Renderer.obj
@@ -35,4 +18,3 @@ C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\StaticModel.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\StaticModel.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\StdAfx.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\StdAfx.obj
 C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Vector4.cpp;C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\CGWork\Release\Vector4.obj
->>>>>>> 56b3cf3f68388f9bd98e9d405b74bad373772add

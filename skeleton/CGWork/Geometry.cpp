@@ -59,7 +59,7 @@ void Geometry::clip() {
 void Geometry::print() const
 {
 	int i = 0;
-	for (PolygonGC* temp : m_polygons)
+	for (const PolygonGC* temp : m_polygons)
 	{
 		std::cout << "		Polygon[" << i << "] vertices:" << std::endl;
 		temp->printVertices();

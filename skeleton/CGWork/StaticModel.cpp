@@ -10,9 +10,9 @@ StaticModel::StaticModel(Geometry* T) : Model(T){
 StaticModel::~StaticModel(){
 }
 
-void StaticModel::draw(Renderer& r) {
+void StaticModel::draw(/*Renderer& r*/) {
     if (T) {
-        r.addModel(this);
+      //  r.addModel(this);
     }
 }
 

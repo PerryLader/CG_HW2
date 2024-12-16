@@ -28,29 +28,29 @@ private:
     std::vector<Vertex*> m_vertices; // List of vertices
     ColorGC m_color;                // Color of the polygon
     BBox m_bbox;
+    Vector4 m_nomal;
     // Update min and max bounds
     bool m_hasNormal;
     void updateBounds(const Vertex& vert);
     void resetBounds();
-
 public:
     // Constructor with a default color
     PolygonGC(ColorGC color);
-    // Set the color of the polygon
+    PolygonGC(const Vector4& normal, ColorGC color);
+    
+    bool hasNormal() const;
+    Vector4 getNormal() const;
+    void calculateNormal();
+   
     void setColor(const ColorGC& newColor);
-    // Get the color of the polygon
-    const ColorGC& getColor();
-    // Add many vertex
-    void addVertexs(IPVertexStruct* vertex);
-    // Add a vertex
-    void PolygonGC::addVertex(Vertex* vertex);
-    // Get the number of vertices
+    const ColorGC& getColor() const;
+    
+    void addVertexs(IPVertexStruct* vertex);     // Add many vertex with geershon struct unsupported not recommended
+    void PolygonGC::addVertex(Vertex* vertex);   // Adds vertex
+    
     size_t vertexCount();
-    // Print all vertices
     void printVertices();
-    // Print bounds
     void printBounds();
-    // Print polygon color
     void printColor();
 
     void clip();
@@ -62,6 +62,7 @@ public:
     void printColor() const;
 
     PolygonGC* applyTransformation(const Matrix4& transformation) const;
+    std::vector<Line>* getEdges() const;
     BBox getBbox() const;
     ~PolygonGC();
 };

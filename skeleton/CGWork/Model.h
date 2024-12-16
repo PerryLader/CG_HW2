@@ -2,14 +2,14 @@
 #define	MODEL_H
 
 #include "Geometry.h"
-#include "Renderer.h"
+//#include "Renderer.h"
 #include <vector>
 
 class Model
 {
 protected:
 	Model(Geometry* T) : T(T) , mTransform(Matrix4::identity()){};
-	void virtual draw(Renderer& r) = 0;
+	void virtual draw(/*Renderer& r*/) = 0;
 	Geometry* T;
 	Matrix4 mTransform;
 public:
