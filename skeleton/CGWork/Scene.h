@@ -20,7 +20,7 @@ public:
     void addCamera(Camera* camera);
     // Function to render the scene
     void render(int width, int height) const;
-    float* getBuffer();
+    uint32_t* getBuffer();
 
     void print() const;
 

@@ -14,12 +14,12 @@ public:
     Renderer();
     ~Renderer();
    // void addModel(Model* model);
-    float* getBuffer();
+    uint32_t* getBuffer();
     void render(const Camera* camera, int width, int height,const std::vector<Model*> m_models, const ColorGC& bgColor);
     void clear();
 
 private:
-    float* m_Buffer; // RGB by width by height;
+    uint32_t* m_Buffer; // RGB by width by height;
     float* m_ZBuffer; // width by height;
     Shader* m_shader;
   //  std::vector<Model*> m_models_to_render;

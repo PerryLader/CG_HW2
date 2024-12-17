@@ -82,7 +82,7 @@ bool Line::findIntersection(const Line& line1, const Line& line2, Vertex& interV
 //
 //}
 
-void Line::draw(float* m_Buffer,int width,int hight)
+void Line::draw(uint32_t* m_Buffer,int width,int hight)
 {
     // Calculate differences
     int halfWidth = width / 2;
@@ -97,15 +97,15 @@ void Line::draw(float* m_Buffer,int width,int hight)
     int sx = (x1 < x2) ? 1 : -1; // Step for x
     int sy = (y1 < y2) ? 1 : -1; // Step for y
     int err = dx - dy;
-    int color = m_color.getRGBA();
+    uint32_t color = m_color.getARGB();
 
     while (true)
     {
-        int xx = (y1 * width) + x1;
-        // Draw the pixel at the current position
+        //for debugging
+        uint32_t* final = m_Buffer + ( ((y1 * width) + x1));
+        
         m_Buffer[(y1 * width) + x1] = color;
-        //pDC->SetPixelV(x1, y1, color);
-
+        
         // Break when we reach the end point
         if (x1 == x2 && y1 == y2)
             break;

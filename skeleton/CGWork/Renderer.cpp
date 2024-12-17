@@ -77,15 +77,14 @@ void Renderer::clear() {
     m_Buffer = nullptr;
     m_ZBuffer = nullptr;
 }
-float* Renderer::getBuffer() {
+uint32_t* Renderer::getBuffer() {
     return m_Buffer;
 }
 void Renderer::createBuffers(const ColorGC& bg_color, int width, int height) {
     clear();
-    m_Buffer = new float[sizeof(ColorGC) * width * height]; // RGB buffer
+    m_Buffer = new uint32_t[width * height]; // RGB buffer
     m_ZBuffer = new float[width * height]; // Z-buffer
-    int x = bg_color.getRGBA();
-    std::memset(m_Buffer,255, sizeof(ColorGC) *  width * height);
+    std::memset(m_Buffer,100, sizeof(uint32_t) *  width * height);
     std::memset(m_ZBuffer, 0, sizeof(float) * width * height);
 }
 //

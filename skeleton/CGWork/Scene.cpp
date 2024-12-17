@@ -27,7 +27,7 @@ void Scene::addCamera(Camera* camera) {
 void Scene::render(int width, int height) const {
     m_renderer->render(m_cameras[0], width, height, m_models, ColorGC(255.0,200.0,0.0));//default camera
 }
-float* Scene::getBuffer() {
+uint32_t* Scene::getBuffer() {
     return m_renderer->getBuffer();
 }
 

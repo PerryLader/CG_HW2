@@ -196,9 +196,9 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 	double RGB[3], Transp;
 	IPPolygonStruct* PPolygon;
 	IPVertexStruct* PVertex;
-	RGB[0] = 22;
-	RGB[1] = 22;
-	RGB[2] = 22;
+	RGB[0] = 100;//default value
+	RGB[1] = 22;//default value
+	RGB[2] = 222;//default value
 	const IPAttributeStruct* Attrs =
 		AttrTraceAttributes(PObj_src->Attr, PObj_src->Attr);
 	if (PObj_src->ObjType != IP_OBJ_POLY) {
@@ -214,11 +214,24 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 	}
 
 	Geometry* shape= new Geometry(PObj_src->ObjName);
-	
 
+
+	//bgra argb
+	//a is blue
+	uint8_t red =255;//green
+	uint8_t green =165;//red
+	uint8_t blue =0;//a
 	if (!CGSkelGetObjectColor(PObj_src, RGB))
 	{
 		AfxMessageBox(_T("No color for the polygon"));
+	}
+	else
+	{
+		
+		//NORMOLAZING
+		 red = static_cast<uint8_t>(RGB[0] * 255.0);
+		 green = static_cast<uint8_t>(RGB[1] * 255.0);
+		 blue = static_cast<uint8_t>(RGB[2] * 255.0);
 	}
 
 
@@ -260,10 +273,10 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 		PolygonGC* newPoly;
 		if (IP_HAS_PLANE_POLY(PPolygon)) {
 			const Vector4 polygon_normal = Vector4(PPolygon->Plane[0], PPolygon->Plane[1], PPolygon->Plane[2], 1);
-			newPoly = new PolygonGC(polygon_normal, ColorGC(RGB[0], RGB[1], RGB[2]));
+			newPoly = new PolygonGC(polygon_normal, ColorGC(red, green, blue));
 		}
 		else
-			newPoly = new PolygonGC(ColorGC(RGB[0], RGB[1], RGB[2]));
+			newPoly = new PolygonGC(ColorGC(red, green, blue));
 		do {			     /* Assume at least one edge in polygon! */
 			/* code handeling all vertex/normal/texture coords */
 			Vertex* newVert;

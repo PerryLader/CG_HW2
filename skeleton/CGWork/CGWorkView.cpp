@@ -244,6 +244,19 @@ BOOL CCGWorkView::OnEraseBkgnd(CDC* pDC)
 
 // The coordinating need to be in screen view
 
+#include <cstdint>
+
+// Function to convert RGBA to BGRA
+uint32_t RGBAtoBGRA(uint32_t rgba) {
+	uint8_t r = (rgba >> 24) & 0xFF; // Extract Red
+	uint8_t g = (rgba >> 16) & 0xFF; // Extract Green
+	uint8_t b = (rgba >> 8) & 0xFF; // Extract Blue
+	uint8_t a = rgba & 0xFF;         // Extract Alpha
+
+	// Pack it as BGRA
+	uint32_t bgra = (b << 24) | (g << 16) | (r << 8) | a;
+	return bgra;
+}
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -268,7 +281,7 @@ void CCGWorkView::OnDraw(CDC* pDC)
 
 	// Retrieve the buffer from getBuffer()
 	m_scene.render(width, height);
-	float* buffer=m_scene.getBuffer();
+	uint32_t* buffer=m_scene.getBuffer();
 
 	
 
@@ -295,16 +308,22 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	uint32_t* dibBuffer = (uint32_t*)dibPixels; // DIB buffer as 32-bit ARGB values
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
-			int index = (y * width + x) * 4; // Index in the float buffer (RGBA)
+			//int index = (y * width + x); // Index in the float buffer (RGBA)
 
 			// Convert float values (0.0 to 1.0) to 8-bit integers (0 to 255)
-			uint8_t r = static_cast<uint8_t>(buffer[index] );
-			uint8_t g = static_cast<uint8_t>(buffer[index + 1] );
-			uint8_t b = static_cast<uint8_t>(buffer[index + 2] );
-			uint8_t a = static_cast<uint8_t>(buffer[index + 3] ); // Alpha
+			//uint8_t r = static_cast<uint8_t>(buffer[index] );
+			//uint8_t g = static_cast<uint8_t>(buffer[index + 1] );
+			//uint8_t b = static_cast<uint8_t>(buffer[index + 2] );
+			//uint8_t a = static_cast<uint8_t>(buffer[index + 3] ); // Alpha
 
 			// Pack into 32-bit ARGB (Windows uses BGRA order in memory)
-			dibBuffer[y * width + x] = (a << 24) | (r << 16) | (g << 8) | b;
+			uint32_t* final = buffer + (((y* width) + x));
+			uint32_t t = buffer[y * width + x];
+			if (t != 0x64646464)
+			{
+				int x = 5;
+			}
+			dibBuffer[y * width + x] = /*(a << 24) | (r << 16) | (g << 8) | b;*/ buffer[y * width + x];
 		}
 	}
 
