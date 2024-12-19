@@ -26,7 +26,7 @@ public:
     void lookAt(const Vector3& eye, const Vector3& target, const Vector3& up);
 
     // Function to set orthogonal projection
-    void setOrthogonal(float left, float right, float bottom, float top, float near, float far);
+    void setOrthogonal(const Vector3& LBN, const Vector3& RTF, float theta, float phi);
 
     // Function to set perspective projection
     void setPerspective(float fovY, float aspect, float near, float far);

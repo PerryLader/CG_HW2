@@ -10,7 +10,7 @@ public:
 
     // Constructor to create a line from vertex a to vertex b
     Line(const Vertex& a, const Vertex& b, ColorGC color);
-
+    Line(const Vector3& a, const Vector3& b, ColorGC color);
     // Calculate the direction vector of the line
     Vector3 direction()const;
 

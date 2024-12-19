@@ -5,7 +5,7 @@
 
 
 Line::Line(const Vertex& a, const Vertex& b, ColorGC color) : m_a(a.loc()), m_b(b.loc()),m_color(color) {}
-
+Line::Line(const Vector3& a, const Vector3& b, ColorGC color): m_a(a), m_b(b), m_color(color) {}
 // Calculate the direction vector of the line
 Vector3 Line::direction() const {
     return (m_b - m_a).normalized();
@@ -104,7 +104,8 @@ void Line::draw(uint32_t* m_Buffer,int width,int hight)
         //for debugging
         uint32_t* final = m_Buffer + ( ((y1 * width) + x1));
         
-        m_Buffer[(y1 * width) + x1] = color;
+        if ((y1 * width) + x1 < width * hight && (y1 * width) + x1 >= 0)
+            m_Buffer[(y1 * width) + x1] = color;
         
         // Break when we reach the end point
         if (x1 == x2 && y1 == y2)

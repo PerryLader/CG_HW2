@@ -3,8 +3,8 @@
 
 // Constructor
 Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
-    setOrthogonal(-2, 2, -2, 2, 0, 3);
-    lookAt(Vector3(0, 0, 2), Vector3(0, 0, 0), Vector3(0, 1, 0));
+    setOrthogonal(Vector3(-1,-1,0), Vector3(1, 1, 2), 60, 45);
+    lookAt(Vector3(0, 0, -3), Vector3(0, 0, 0), Vector3(0,1,0));
     
 }
 
@@ -29,10 +29,10 @@ const Matrix4& Camera::getProjectionMatrix() const {
 }
 
 // Function to set the camera using LookAt
-void Camera::lookAt(const Vector3& eye, const Vector3& target, const Vector3& up){
+void Camera::lookAt(const Vector3& eye, const Vector3& target, const Vector3& up) {
     const Vector3 zAxis = (eye - target).normalized();
     const Vector3 xAxis = Vector3::cross(up, zAxis).normalized();
-    const Vector3 yAxis = Vector3::cross(zAxis,xAxis);
+    const Vector3 yAxis = Vector3::cross(zAxis, xAxis);
 
     const Matrix4 orientation(
         xAxis.x, xAxis.y, xAxis.z, 0,
@@ -41,17 +41,18 @@ void Camera::lookAt(const Vector3& eye, const Vector3& target, const Vector3& up
         0, 0, 0, 1
     );
 
-    viewMatrix = orientation * Matrix4::translate(-eye);
+    const Matrix4 translation = Matrix4::translate(-eye);
+
+    viewMatrix = orientation * translation;
 }
 
 // Function to set orthogonal projection
-void Camera::setOrthogonal(float left, float right, float bottom, float top, float near, float far) {
-    projectionMatrix = Matrix4(
-        2 / (right - left), 0, 0, -(right + left) / (right - left),
-        0, 2 / (top - bottom), 0, -(top + bottom) / (top - bottom),
-        0, 0, -2 / (far - near), -(far + near) / (far - near),
-        0, 0, 0, 1
-    );
+void Camera::setOrthogonal(const Vector3& LBN, const Vector3& RTF,float theta, float phi) {
+    const Vector3 translationVector = Vector3::scaling(LBN+RTF, -0.5, -0.5, 0.5);
+    const Vector3 scaleVector = Vector3(2/(RTF.x - LBN.x), 2/(RTF.y - LBN.y), 2/(LBN.z - RTF.z));
+    const Matrix4 Morth = Matrix4(Vector4::unitX(), Vector4::unitY(), Vector4::zero(), Vector4::unitW());
+    const Matrix4 Hshear = Matrix4(Vector4::unitX(), Vector4::unitY(), Vector4(-1/tan(theta), -1 / tan(phi), 1, 0), Vector4::unitW());
+    projectionMatrix = Morth * Matrix4::scaling(scaleVector) * Matrix4::translate(translationVector)*Hshear;
 }
 
 // Function to set perspective projection
