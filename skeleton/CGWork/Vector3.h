@@ -67,6 +67,8 @@ public:
     // Print
     void print() const;
 
+    friend Vector3 operator-(const Vector3& vec);
+
     // Overload stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Vector3& vec);
 

@@ -5,14 +5,14 @@
 
 class Line {
 public:
-    Vector4 m_a, m_b;
+    Vector3 m_a, m_b;
     ColorGC m_color;
 
     // Constructor to create a line from vertex a to vertex b
     Line(const Vertex& a, const Vertex& b, ColorGC color);
 
     // Calculate the direction vector of the line
-    Vector4 direction()const;
+    Vector3 direction()const;
 
     // Calculate the length of the line
     float length()const;

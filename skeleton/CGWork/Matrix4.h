@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <array>
-#include "Vector3.h"
+#include "Vector4.h"
 
 class Matrix4 {
 
@@ -54,10 +54,10 @@ public:
     static Matrix4 rotationZ(float angle);
 
     // Scaling matrix
-    static Matrix4 scaling(const Vector4& vec);
+    static Matrix4 scaling(const Vector3& vec);
 
     // Translation matrix
-    static Matrix4 translate(const Vector4& vec);
+    static Matrix4 translate(const Vector3& vec);
 
     // Identity matrix
     static Matrix4 identity();

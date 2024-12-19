@@ -7,7 +7,7 @@
 Line::Line(const Vertex& a, const Vertex& b, ColorGC color) : m_a(a.loc()), m_b(b.loc()),m_color(color) {}
 
 // Calculate the direction vector of the line
-Vector4 Line::direction() const {
+Vector3 Line::direction() const {
     return (m_b - m_a).normalized();
 }
 
@@ -128,7 +128,7 @@ void Line::draw(uint32_t* m_Buffer,int width,int hight)
 // Print the line
 void Line::print() {
     std::cout << "Line[";
-    std::cout << "(" << m_a.x << ", " << m_a.y << ", " << m_a.z << ", " << m_a.w << ")" <<
-        " -> (" << m_b.x << ", " << m_b.y << ", " << m_b.z << ", " << m_b.w << ")" << "]";
+    std::cout << "(" << m_a << ")" <<
+        " -> (" << m_b << ")" << "]";
 
 }

@@ -165,7 +165,8 @@ void PolygonGC::clip(){
 PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
     PolygonGC* newPoly = new PolygonGC(this->m_color);
     for (const Vertex* vertex : m_vertices) {
-       Vertex* newVertex = new Vertex(transformation * vertex->loc() , transformation * vertex->normal());
+       Vertex* newVertex = new Vertex((transformation * Vector4::extendOne(vertex->loc())).toVector3(),
+           (transformation * Vector4::extendOne(vertex->normal())).toVector3());
        newPoly->addVertex(newVertex);
     }
     return newPoly;

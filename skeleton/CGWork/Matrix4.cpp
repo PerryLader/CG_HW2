@@ -23,11 +23,11 @@ Matrix4::Matrix4(double m00, double m01, double m02, double m03,
     m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
 }
 
-Matrix4::Matrix4(const Vector3& v1, const Vector3& v2, const Vector3& v3, const Vector3& v4){
-    m[0][0] = v1.x; m[0][1] = v2.x; m[0][2] = v3.x; m[0][3] = v4.x;
-    m[1][0] = v1.z; m[1][1] = v2.y; m[1][2] = v3.y; m[1][3] = v4.y;
-    m[2][0] = v1.y; m[2][1] = v2.z; m[2][2] = v3.z; m[2][3] = v4.z;
-    m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
+Matrix4::Matrix4(const Vector4& v1, const Vector4& v2, const Vector4& v3, const Vector4& v4){
+    m[0][0] = v1.getX(); m[0][1] = v2.getX(); m[0][2] = v3.getX(); m[0][3] = v4.getX();
+    m[1][0] = v1.getY(); m[1][1] = v2.getY(); m[1][2] = v3.getY(); m[1][3] = v4.getY();
+    m[2][0] = v1.getZ(); m[2][1] = v2.getZ(); m[2][2] = v3.getZ(); m[2][3] = v4.getZ();
+    m[3][0] = v1.getW(); m[3][1] = v2.getW(); m[3][2] = v3.getW(); m[3][3] = v4.getW();
 }
 // Addition
 Matrix4 Matrix4::operator+(const Matrix4& other) const {
@@ -127,10 +127,10 @@ Matrix4 Matrix4::operator*(const Matrix4& other) const {
 // Multiplication with Vector4
 Vector4 Matrix4::operator*(const Vector4& vec) const {
     return Vector4(
-        m[0][0] * vec.x + m[0][1] * vec.y + m[0][2] * vec.z + m[0][3] * vec.w,
-        m[1][0] * vec.x + m[1][1] * vec.y + m[1][2] * vec.z + m[1][3] * vec.w,
-        m[2][0] * vec.x + m[2][1] * vec.y + m[2][2] * vec.z + m[2][3] * vec.w,
-        m[3][0] * vec.x + m[3][1] * vec.y + m[3][2] * vec.z + m[3][3] * vec.w
+        m[0][0] * vec.getX() + m[0][1] * vec.getY() + m[0][2] * vec.getZ() + m[0][3] * vec.getW(),
+        m[1][0] * vec.getX() + m[1][1] * vec.getY() + m[1][2] * vec.getZ() + m[1][3] * vec.getW(),
+        m[2][0] * vec.getX() + m[2][1] * vec.getY() + m[2][2] * vec.getZ() + m[2][3] * vec.getW(),
+        m[3][0] * vec.getX() + m[3][1] * vec.getY() + m[3][2] * vec.getZ() + m[3][3] * vec.getW()
     );
 }
 
@@ -334,7 +334,7 @@ Matrix4 Matrix4::rotationZ(float angle) {
 }
 
 // Scaling matrix
-Matrix4 Matrix4::scaling(const Vector4& vec) {
+Matrix4 Matrix4::scaling(const Vector3& vec) {
     Matrix4 result = identity();
     result.m[0][0] = vec.x;
     result.m[1][1] = vec.y;
@@ -343,7 +343,7 @@ Matrix4 Matrix4::scaling(const Vector4& vec) {
 }
 
 // Translation matrix
-Matrix4 Matrix4::translate(const Vector4& vec) {
+Matrix4 Matrix4::translate(const Vector3& vec) {
     Matrix4 result = identity();
     result.m[0][3] = vec.x;
     result.m[1][3] = vec.y;

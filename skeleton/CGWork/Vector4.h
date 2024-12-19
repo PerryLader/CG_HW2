@@ -26,6 +26,8 @@ public:
     void setZ(float z) { vec.z = z; } 
     void setW(float w) { this->w = w; }
 
+    Vector3 toVector3();
+
     // Static functions for common vectors
     static Vector4 zero();
     static Vector4 one();
@@ -33,6 +35,9 @@ public:
     static Vector4 unitY();
     static Vector4 unitZ();
     static Vector4 unitW();
+    static Vector4 extendOne(const Vector3& vec);
+    static Vector4 extendZero(const Vector3& vec);
+
 
     // Print
     void print() const;

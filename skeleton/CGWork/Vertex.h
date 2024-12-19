@@ -5,27 +5,27 @@
 
 class Vertex {
 private:
-    Vector4 m_point;
-    Vector4 m_normal;
+    Vector3 m_point;
+    Vector3 m_normal;
     bool m_hasNormal;
 public:
 
     // Constructor
-    Vertex(Vector4 p) : m_point(p), m_normal(Vector4(0, 0, 0, 1)), m_hasNormal(false) {}
+    Vertex(Vector3 p) : m_point(p), m_normal(Vector3(0, 0, 0)), m_hasNormal(false) {}
     // Constructor
-    Vertex(Vector4 p, Vector4 n) : m_point(p), m_normal(n), m_hasNormal(true) {}
+    Vertex(Vector3 p, Vector3 n) : m_point(p), m_normal(n), m_hasNormal(true) {}
 
     // Print function
     void print() {
         std::cout << "Vertex Located at: " << m_point << ", with normal at: " << m_normal << std::endl;
     }
 
-    Vector4 loc() const    // Get location
+    Vector3 loc() const    // Get location
     {
         return m_point;
     }
     
-    Vector4 normal() const {
+    Vector3 normal() const {
         return m_normal;
     }
     bool hasNormal() const {
@@ -35,28 +35,29 @@ public:
         //how?
     }
     bool isInsideClipVolume() {
-        return m_point.x >= -m_point.w && m_point.x <= m_point.w &&
-            m_point.y >= -m_point.w && m_point.y <= m_point.w &&
-            m_point.z >= -m_point.w && m_point.z <= m_point.w;
+        return m_point.x >= -1 && m_point.x <= 1 &&
+            m_point.y >= -1 && m_point.y <= 1 &&
+            m_point.z >= -1 && m_point.z <= 1;
     }
 
     // Overload compound assignment operator for matrix multiplication
     Vertex& operator*=(const Matrix4& mat) {
-        m_point = mat * m_point;
-        m_normal = mat * m_normal;
+        m_point = (mat * Vector4::extendOne(m_point)).toVector3();
+        m_normal = (mat * Vector4::extendOne(m_normal)).toVector3();
         return *this;
     }
     // Overload multiplication operator to accept matrix operation
     friend Vertex operator*(const Matrix4& mat, const Vertex& vert) {
-        Vertex res = Vertex(mat * vert.m_point);
-        res.m_normal = mat * res.m_normal;
+        Vertex res = Vertex((mat * Vector4::extendOne(vert.m_point)).toVector3());
+        res.m_normal = (mat * Vector4::extendOne(res.m_normal)).toVector3();
         return res;
     }
 };
 
 static Vertex* intersectClipVolume(const Vertex* v1, const Vertex* v2) {
+    //todo!!!
     // Calculate intersection point (simplified example)
-    return new Vertex(Vector4::unitX());
+    return new Vertex(Vector3::unitX());
 }
 
 #endif // VERTEX_H

@@ -23,7 +23,7 @@ public:
     const Matrix4& getProjectionMatrix() const;
 
     // Function to set the camera using LookAt
-    void lookAt(const Vector4& eye, const Vector4& target, const Vector4& up);
+    void lookAt(const Vector3& eye, const Vector3& target, const Vector3& up);
 
     // Function to set orthogonal projection
     void setOrthogonal(float left, float right, float bottom, float top, float near, float far);

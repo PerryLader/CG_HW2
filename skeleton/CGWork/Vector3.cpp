@@ -136,11 +136,6 @@ Vector3 Vector3::zero() {
     return Vector3(0, 0, 0);
 }
 
-// Static functions for common vectors
-Vector3 Vector3::zero() {
-    return Vector3(0, 0, 0);
-}
-
 Vector3 Vector3::one() {
     return Vector3(1, 1, 1);
 }
@@ -165,7 +160,6 @@ void Vector3::print() const {
 Vector3 operator-(const Vector3& vec) {
     return Vector3(-vec.x, -vec.y, -vec.z);
 }
-
 // Overload stream insertion operator
 std::ostream& operator<<(std::ostream& os, const Vector3& vec) {
     os << "(" << vec.x << ", " << vec.y << ", " << vec.z << ")";

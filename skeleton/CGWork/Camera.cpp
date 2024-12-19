@@ -4,7 +4,7 @@
 // Constructor
 Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
     setOrthogonal(-2, 2, -2, 2, 0, 3);
-    lookAt(Vector4(0, 0, 2, 1), Vector4(0, 0, 0, 1), Vector4(0, 1, 0, 1));
+    lookAt(Vector3(0, 0, 2), Vector3(0, 0, 0), Vector3(0, 1, 0));
     
 }
 
@@ -29,10 +29,10 @@ const Matrix4& Camera::getProjectionMatrix() const {
 }
 
 // Function to set the camera using LookAt
-void Camera::lookAt(const Vector4& eye, const Vector4& target, const Vector4& up){
-    const Vector4 zAxis = (eye - target).normalized();
-    const Vector4 xAxis = Vector4::cross(up, zAxis).normalized();
-    const Vector4 yAxis = Vector4::cross(zAxis,xAxis);
+void Camera::lookAt(const Vector3& eye, const Vector3& target, const Vector3& up){
+    const Vector3 zAxis = (eye - target).normalized();
+    const Vector3 xAxis = Vector3::cross(up, zAxis).normalized();
+    const Vector3 yAxis = Vector3::cross(zAxis,xAxis);
 
     const Matrix4 orientation(
         xAxis.x, xAxis.y, xAxis.z, 0,
