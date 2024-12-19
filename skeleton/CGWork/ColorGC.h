@@ -38,6 +38,5 @@ public:
     // Convert to string in hexadecimal format
     std::string toHex() ;
 
-
 };
 

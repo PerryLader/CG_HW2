@@ -77,6 +77,14 @@ public:
 
     // Overload stream extraction operator for string input
     friend std::istringstream& operator>>(std::istringstream& iss, Vector3& vec);
+
+    // Access operator for reading and writing
+    float& operator[](std::size_t index);
+
+    // Access operator for reading only
+    const float& operator[](std::size_t index) const;
+    
+    bool operator==(const Vector3& other) const;
 };
 
 #endif // VECTOR3_H
