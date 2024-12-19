@@ -41,14 +41,7 @@ void Camera::lookAt(const Vector4& eye, const Vector4& target, const Vector4& up
         0, 0, 0, 1
     );
 
-    const Matrix4 translation(
-        1, 0, 0, -eye.x,
-        0, 1, 0, -eye.y,
-        0, 0, 1, -eye.z,
-        0, 0, 0, 1
-    );
-
-    viewMatrix = orientation * translation;
+    viewMatrix = orientation * Matrix4::translate(-eye);
 }
 
 // Function to set orthogonal projection

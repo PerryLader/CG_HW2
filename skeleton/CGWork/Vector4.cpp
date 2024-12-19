@@ -1,93 +1,70 @@
 #include "Vector4.h"
 
 // Constructor
-Vector4::Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
+Vector4::Vector4(float x, float y, float z, float w) : vec(x,y,z), w(w) {}
+Vector4::Vector4(const Vector3& vec, float w) : vec(vec), w(w) {}
 
 // Addition
 Vector4 Vector4::operator+(const Vector4& other) const {
-    return Vector4(x + other.x, y + other.y, z + other.z, w + other.w);
+    return Vector4(((vec * w) + (other.vec * other.w)), 1.0);
 }
 
 // Subtraction
 Vector4 Vector4::operator-(const Vector4& other) const {
-    return Vector4(x - other.x, y - other.y, z - other.z, w - other.w);
+    Vector4(((vec * w) - (other.vec * other.w)), 1.0);
 }
 
 // Scaling
 Vector4 Vector4::operator*(const float scalar) const {
-    return Vector4(x * scalar, y * scalar, z * scalar, w * scalar);
+    return Vector4(vec*scalar, w);
 }
 
 // Division
 Vector4 Vector4::operator/(const float scalar) const {
-    return Vector4(x / scalar, y / scalar, z / scalar, w / scalar);
+    return Vector4(vec*scalar, w);
 }
 
 // Compound assignment operators
 Vector4& Vector4::operator+=(const Vector4& other) {
-    x += other.x;
-    y += other.y;
-    z += other.z;
-    w += other.w;
+    *this = *this + other;
     return *this;
 }
 
 Vector4& Vector4::operator-=(const Vector4& other) {
-    x -= other.x;
-    y -= other.y;
-    z -= other.z;
-    w -= other.w;
+    *this = *this - other;
     return *this;
 }
 
 Vector4& Vector4::operator*=(const float scalar) {
-    x *= scalar;
-    y *= scalar;
-    z *= scalar;
-    w *= scalar;
+    vec *= scalar;
     return *this;
 }
 
 Vector4& Vector4::operator/=(const float scalar) {
-    x /= scalar;
-    y /= scalar;
-    z /= scalar;
-    w /= scalar;
+    vec /= scalar;
     return *this;
 }
 
 // Rotation around the X-axis
 Vector4 Vector4::rotationX(const Vector4& vec, float angle) {
-    float c = std::cos(angle);
-    float s = std::sin(angle);
     return Vector4(
-        vec.x,
-        vec.y * c - vec.z * s,
-        vec.y * s + vec.z * c,
+        Vector3::rotationX(vec.vec,angle),
         vec.w
     );
 }
 
 // Rotation around the Y-axis
 Vector4 Vector4::rotationY(const Vector4& vec, float angle) {
-    float c = std::cos(angle);
-    float s = std::sin(angle);
     return Vector4(
-        vec.x * c + vec.z * s,
-        vec.y,
-        -vec.x * s + vec.z * c,
+        Vector3::rotationY(vec.vec, angle),
         vec.w
     );
 }
 
 // Rotation around the Z-axis
 Vector4 Vector4::rotationZ(const Vector4& vec, float angle) {
-    float c = std::cos(angle);
-    float s = std::sin(angle);
     return Vector4(
-        vec.x * c - vec.y * s,
-        vec.x * s + vec.y * c,
-        vec.z,
+        Vector3::rotationZ(vec.vec, angle),
         vec.w
     );
 }
@@ -95,9 +72,7 @@ Vector4 Vector4::rotationZ(const Vector4& vec, float angle) {
 // Scaling
 Vector4 Vector4::scaling(const Vector4& vec, float sx, float sy, float sz) {
     return Vector4(
-        vec.x * sx,
-        vec.y * sy,
-        vec.z * sz,
+        Vector3::scaling(vec.vec, sx, sy, sz),
         vec.w
     );
 }
@@ -105,20 +80,18 @@ Vector4 Vector4::scaling(const Vector4& vec, float sx, float sy, float sz) {
 // Translation
 Vector4 Vector4::translate(const Vector4& vec, float tx, float ty, float tz) {
     return Vector4(
-        vec.x + tx,
-        vec.y + ty,
-        vec.z + tz,
+        Vector3::translate(vec.vec, sx, sy, sz),
         vec.w
     );
 }
 
 // Dot product
-float Vector4::dot(const Vector4& v1, const Vector4& v2){
+float Vector4::dot(const Vector4& v1, const Vector4& v2) {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
 // Cross product (only makes sense for 3D vectors, so we ignore w)
-Vector4 Vector4::cross(const Vector4& v1, const Vector4& v2){
+Vector4 Vector4::cross(const Vector4& v1, const Vector4& v2) {
     return Vector4(
         v1.y * v2.z - v1.z * v2.y,
         v1.z * v2.x - v1.x * v2.z,
@@ -171,6 +144,10 @@ void Vector4::print() const {
     std::cout << "(" << x << ", " << y << ", " << z << ", " << w << ")" << std::endl;
 }
 
+Vector4 operator-(const Vector4& vec) {
+    return Vector4(-vec.x, -vec.y, -vec.z, vec.w);
+}
+
 // Overload stream insertion operator
 std::ostream& operator<<(std::ostream& os, const Vector4& vec) {
     os << "(" << vec.x << ", " << vec.y << ", " << vec.z << ", " << vec.w << ")";
@@ -194,12 +171,3 @@ std::istringstream& operator>>(std::istringstream& iss, Vector4& vec) {
     }
     return iss;
 }
-
-//Vector4 Vector4::mult(const Matrix4& matrix) const {
-//    return Vector4(
-//        matrix.m[0][0] * x + matrix.m[1][0] * y + matrix.m[2][0] * z + matrix.m[3][0] * w,
-//        matrix.m[0][1] * x + matrix.m[1][1] * y + matrix.m[2][1] * z + matrix.m[3][1] * w,
-//        matrix.m[0][2] * x + matrix.m[1][2] * y + matrix.m[2][2] * z + matrix.m[3][2] * w,
-//        matrix.m[0][3] * x + matrix.m[1][3] * y + matrix.m[2][3] * z + matrix.m[3][3] * w
-//    );
-//}

@@ -1,16 +1,30 @@
 #ifndef VECTOR4_H
 #define VECTOR4_H
 
+#include "Vector3.h"
 #include <iostream>
 #include <sstream>
 #include <cmath>
 //#include "Matrix4.h"
 class Vector4 {
+private:
+    Vector3 vec;
+    float w;
 public:
-    float x, y, z, w;
-
     // Constructor
     Vector4(float x = 0, float y = 0, float z = 0, float w = 1);
+    Vector4(const Vector3& vec, float w);
+
+    // Getters 
+    float getX() const { return vec.x; }
+    float getY() const { return vec.y; } 
+    float getZ() const { return vec.z; } 
+    float getW() const { return w; }
+    // Setters 
+    void setX(float x) { vec.x = x; } 
+    void setY(float y) { vec.y = y; } 
+    void setZ(float z) { vec.z = z; } 
+    void setW(float w) { this->w = w; }
 
     // Addition
     Vector4 operator+(const Vector4& other) const;
@@ -68,6 +82,8 @@ public:
     // Print
     void print() const;
 
+
+    friend Vector4& operator-(const Vector4& vec1);
     // Overload stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Vector4& vec);
 

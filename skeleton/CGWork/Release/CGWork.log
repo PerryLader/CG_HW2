@@ -1,1 +1,138 @@
-﻿  CGWork.vcxproj -> C:\Users\perry\Desktop\Semester G\Calculated Graphics\hw2\CG_HW2\skeleton\bin\Release\CGWork.exe
+﻿  StdAfx.cpp
+  Camera.cpp
+  CGWork.cpp
+  CGWorkDoc.cpp
+  CGWorkView.cpp
+  ColorGC.cpp
+  Geometry.cpp
+  iritSkel.cpp
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(275,100): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(275,80): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(275,60): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(287,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(286,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(285,50): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(290,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(289,30): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(288,36): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(295,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(294,29): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(293,50): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\iritSkel.cpp(194,6): warning C4101: 'i': unreferenced local variable
+  LightDialog.cpp
+  Line.cpp
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Line.cpp(90,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Line.cpp(91,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Line.cpp(92,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Line.cpp(93,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  MainFrm.cpp
+  MaterialDlg.cpp
+  Matrix4.cpp
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,15): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,15): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,15): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,15): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,15): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,30): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,30): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,30): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,30): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,30): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,45): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,45): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,45): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,45): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,45): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,60): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,60): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,60): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,60): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(20,60): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,15): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,15): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,15): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,15): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,15): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,30): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,30): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,30): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,30): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,30): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,45): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,45): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,45): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,45): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,45): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,60): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,60): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,60): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,60): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(21,60): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,15): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,15): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,15): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,15): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,15): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,30): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,30): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,30): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,30): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,30): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,45): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,45): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,45): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,45): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,45): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,60): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,60): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,60): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,60): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(22,60): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,15): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,15): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,15): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,15): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,15): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,30): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,30): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,30): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,30): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,30): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,45): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,45): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,45): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,45): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,45): warning C4244:         ]
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,60): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,60): warning C4244:         with
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,60): warning C4244:         [
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,60): warning C4244:             _Ty=float
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Matrix4.cpp(23,60): warning C4244:         ]
+  NoShadeShader.cpp
+  PngWrapper.cpp
+  Polygon.cpp
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(82,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(81,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Polygon.cpp(80,28): warning C4244: 'argument': conversion from 'IrtRType' to 'float', possible loss of data
+  Renderer.cpp
+  Scene.cpp
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Scene.cpp(28,83): warning C4244: 'argument': conversion from 'double' to 'uint8_t', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Scene.cpp(28,77): warning C4244: 'argument': conversion from 'double' to 'uint8_t', possible loss of data
+C:\Users\shach\source\repos\CG_HW2\skeleton\CGWork\Scene.cpp(28,71): warning C4244: 'argument': conversion from 'double' to 'uint8_t', possible loss of data
+  StaticModel.cpp
+  Vector4.cpp
+  Generating Code...
+  libpng.lib(png.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'msvcrtd.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  Finished generating code
+zlib.lib(adler32.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(adler32.obj)' or at ''; linking object as if no debug info
+zlib.lib(compress.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(compress.obj)' or at ''; linking object as if no debug info
+zlib.lib(crc32.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(crc32.obj)' or at ''; linking object as if no debug info
+zlib.lib(deflate.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(deflate.obj)' or at ''; linking object as if no debug info
+zlib.lib(inffast.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inffast.obj)' or at ''; linking object as if no debug info
+zlib.lib(inflate.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inflate.obj)' or at ''; linking object as if no debug info
+zlib.lib(inftrees.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(inftrees.obj)' or at ''; linking object as if no debug info
+zlib.lib(trees.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(trees.obj)' or at ''; linking object as if no debug info
+zlib.lib(zutil.obj) : warning LNK4099: PDB '' was not found with 'zlib.lib(zutil.obj)' or at ''; linking object as if no debug info
+  CGWork.vcxproj -> C:\Users\shach\source\repos\CG_HW2\skeleton\bin\Release\CGWork.exe

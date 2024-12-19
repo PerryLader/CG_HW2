@@ -19,6 +19,8 @@ public:
             double m20, double m21, double m22, double m23,
             double m30, double m31, double m32, double m33);
 
+    Matrix4(const Vector4& v1, const Vector4& v2, const Vector4& v3, const Vector4& v4);
+
     // Addition
     Matrix4 operator+(const Matrix4& other) const;
 
@@ -52,10 +54,10 @@ public:
     static Matrix4 rotationZ(float angle);
 
     // Scaling matrix
-    static Matrix4 scaling(float sx, float sy, float sz);
+    static Matrix4 scaling(const Vector4& vec);
 
     // Translation matrix
-    static Matrix4 translate(float tx, float ty, float tz);
+    static Matrix4 translate(const Vector4& vec);
 
     // Identity matrix
     static Matrix4 identity();

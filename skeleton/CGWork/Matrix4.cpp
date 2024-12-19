@@ -23,6 +23,12 @@ Matrix4::Matrix4(double m00, double m01, double m02, double m03,
     m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
 }
 
+Matrix4::Matrix4(const Vector4& v1, const Vector4& v2, const Vector4& v3, const Vector4& v4){
+    m[0][0] = v1.x / v1.w; m[0][1] = v2.x / v2.w; m[0][2] = v3.x / v3.w; m[0][3] = v4.x / v4.w;
+    m[1][0] = v1.z / v1.w; m[1][1] = v2.y / v2.w; m[1][2] = v3.y / v3.w; m[1][3] = v4.y / v4.w;
+    m[2][0] = v1.y / v1.w; m[2][1] = v2.z / v2.w; m[2][2] = v3.z / v3.w; m[2][3] = v4.z / v4.w;
+    m[3][0] = 0; m[3][1] = 0; m[3][2] = 0; m[3][3] = 1;
+}
 // Addition
 Matrix4 Matrix4::operator+(const Matrix4& other) const {
     Matrix4 result;
@@ -328,20 +334,20 @@ Matrix4 Matrix4::rotationZ(float angle) {
 }
 
 // Scaling matrix
-Matrix4 Matrix4::scaling(float sx, float sy, float sz) {
+Matrix4 Matrix4::scaling(const Vector4& vec) {
     Matrix4 result = identity();
-    result.m[3][0] = sx;
-    result.m[3][1] = sy;
-    result.m[3][2] = sz;
+    result.m[0][0] = vec.x;
+    result.m[1][1] = vec.y;
+    result.m[2][2] = vec.z;
     return result;
 }
 
 // Translation matrix
-Matrix4 Matrix4::translate(float tx, float ty, float tz) {
-    Matrix4 result;
-    result.m[0][3] = tx;
-    result.m[1][3] = ty;
-    result.m[2][3] = tz;
+Matrix4 Matrix4::translate(const Vector4& vec) {
+    Matrix4 result = identity();
+    result.m[0][3] = vec.x;
+    result.m[1][3] = vec.y;
+    result.m[2][3] = vec.z;
     return result;
 }
 
