@@ -13,7 +13,7 @@ void BBox::toPrint() const{
     std::cout << "Boudning Box: " << m_minBounds <<", " << m_maxBounds << std::endl;
 }
 
-void BBox::updateBBox(const Vector4& vert) {
+void BBox::updateBBox(const Vector3& vert) {
     m_minBounds.x = std::min(m_minBounds.x, vert.x);
     m_minBounds.y = std::min(m_minBounds.y, vert.y);
     m_minBounds.z = std::min(m_minBounds.z, vert.z);
@@ -39,7 +39,7 @@ void PolygonGC::resetBounds() {
         m_bbox = BBox();
         return;
     }
-    m_bbox = BBox(Vector4(FLT_MAX, FLT_MAX, FLT_MAX, 1), Vector4(-FLT_MAX, -FLT_MAX, -FLT_MAX, 1));
+    m_bbox = BBox(Vector3(FLT_MAX, FLT_MAX, FLT_MAX), Vector3(-FLT_MAX, -FLT_MAX, -FLT_MAX));
     for (Vertex* vertex : m_vertices) {
         m_bbox.updateBBox(vertex->loc());
     }
@@ -49,7 +49,7 @@ void PolygonGC::resetBounds() {
 PolygonGC::PolygonGC(ColorGC color) : m_color(color), m_hasNormal(false){
     resetBounds();
 }
-PolygonGC::PolygonGC(const Vector4& normal,ColorGC color) : m_color(color),m_nomal(normal),m_hasNormal(true){
+PolygonGC::PolygonGC(const Vector3& normal,ColorGC color) : m_color(color),m_nomal(normal),m_hasNormal(true){
     resetBounds();
 }
 
@@ -76,10 +76,10 @@ const ColorGC& PolygonGC::getColor() const
 void PolygonGC::addVertexs(IPVertexStruct* vertex) {
     while (vertex)
     {
-        Vertex* temp = new Vertex(Vector4(
+        Vertex* temp = new Vertex(Vector3(
             vertex->Coord[0],
             vertex->Coord[1],
-            vertex->Coord[2], 1));
+            vertex->Coord[2]));
         m_vertices.push_back(temp);
         updateBounds(*temp);
         vertex = vertex->Pnext;
@@ -186,7 +186,7 @@ BBox PolygonGC::getBbox() const{
     return BBox();
 }
 
-Vector4 PolygonGC::getNormal() const
+Vector3 PolygonGC::getNormal() const
 {
     return m_nomal;
 }
@@ -200,8 +200,8 @@ void PolygonGC::calculateNormal() {
     {
         throw std::runtime_error("whaht the hell just happend?is it polygon with less then 2 vertices???hemmm?");
     }
-    const Vector4 vec1 = m_vertices.at(1)->loc() - m_vertices.at(0)->loc();
-    const Vector4 vec2 = m_vertices.at(2)->loc() - m_vertices.at(1)->loc();
-    m_nomal = Vector4::cross(vec1, vec2);
+    const Vector3 vec1 = m_vertices.at(1)->loc() - m_vertices.at(0)->loc();
+    const Vector3 vec2 = m_vertices.at(2)->loc() - m_vertices.at(1)->loc();
+    m_nomal = Vector3::cross(vec1, vec2);
 
 }

@@ -272,7 +272,7 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 		PVertex = PPolygon->PVertex;
 		PolygonGC* newPoly;
 		if (IP_HAS_PLANE_POLY(PPolygon)) {
-			const Vector4 polygon_normal = Vector4(PPolygon->Plane[0], PPolygon->Plane[1], PPolygon->Plane[2], 1);
+			const Vector3 polygon_normal = Vector3(PPolygon->Plane[0], PPolygon->Plane[1], PPolygon->Plane[2]);
 			newPoly = new PolygonGC(polygon_normal, ColorGC(red, green, blue));
 		}
 		else
@@ -282,17 +282,17 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 			Vertex* newVert;
 			if (IP_HAS_NORMAL_VRTX(PVertex))
 			{
-				newVert = new Vertex(Vector4(PVertex->Coord[0],
+				newVert = new Vertex(Vector3(PVertex->Coord[0],
 											 PVertex->Coord[1],
-										 	 PVertex->Coord[2],1)
-									,Vector4(PVertex->Normal[0],
+										 	 PVertex->Coord[2])
+									,Vector3(PVertex->Normal[0],
 											 PVertex->Normal[1],
-											 PVertex->Normal[2],1));
+											 PVertex->Normal[2]));
 			}
 			else {
-				newVert = new Vertex(Vector4(PVertex->Coord[0],
+				newVert = new Vertex(Vector3(PVertex->Coord[0],
 											 PVertex->Coord[1],
-											 PVertex->Coord[2], 1));
+											 PVertex->Coord[2]));
 			}
 
 			newPoly->addVertex(newVert);
