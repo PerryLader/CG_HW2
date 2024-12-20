@@ -602,7 +602,7 @@ void CCGWorkView::OnMouseMove(UINT nFlags, CPoint point) {
 	// Handle the left button move event here
 	if (m_bLeftButtonDown == true) {
 		//build commad object
-		ICommand* command = new TransformationCommand(m_WindowWidth,m_WindowHeight,Vector3(m_ref_point.x, m_ref_point.y, 0), Vector3(point.x, point.y, 0) , m_AspectRatio, m_nAction, m_nAxis, true, 1);
+		ScreenCommand* command = new TransformationCommand(m_WindowWidth,m_WindowHeight,Vector3(m_ref_point.x, m_ref_point.y, 0), Vector3(point.x, point.y, 0) , m_AspectRatio, m_nAction, m_nAxis, true, 1);
 		m_scene.executeCommand(command);
 		delete command;
 		m_ref_point = point;

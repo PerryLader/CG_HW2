@@ -28,7 +28,7 @@ uint32_t* Scene::getBuffer() {
     return m_renderer->getBuffer();
 }
 
-void Scene::executeCommand(ICommand* command) {
+void Scene::executeCommand(ScreenCommand* command) {
     command->execute(*this);
 }
 

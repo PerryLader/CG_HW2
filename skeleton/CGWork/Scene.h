@@ -8,8 +8,7 @@
 #include "Renderer.h"
 #include "resource.h"
 
-
-class ICommand;
+class ScreenCommand;
 
 class Scene {
 public:
@@ -26,7 +25,7 @@ public:
     // Function to render the scene
     void Scene::render(int width, int height, RenderMode renderMode, ColorGC bg_color, ColorGC normalColor, ColorGC bBoxColor) const;
     uint32_t* getBuffer();
-    void executeCommand(ICommand* command);
+    void executeCommand(ScreenCommand* command);
 
     void handleTransformationAction(const Vector3& ref_point,
          const Vector3& movement,
