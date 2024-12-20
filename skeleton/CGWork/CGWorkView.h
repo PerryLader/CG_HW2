@@ -16,7 +16,7 @@
 
 #include "Light.h"
 #include "Scene.h"
-
+#include "ICommand.h"
 
 class CCGWorkView : public CView
 {
@@ -47,7 +47,8 @@ private:
 	double m_lMaterialDiffuse;		// The Diffuse in the scene
 	double m_lMaterialSpecular;		// The Specular in the scene
 	int m_nMaterialCosineFactor;		// The cosine factor for the specular
-
+	bool m_bLeftButtonDown;
+	CPoint m_ref_point;
 	LightParams m_lights[MAX_LIGHT];	//configurable lights array
 	LightParams m_ambientLight;		//ambient light (only RGB is used)
 
@@ -115,6 +116,9 @@ protected:
 	afx_msg void OnLightShadingGouraud();
 	afx_msg void OnUpdateLightShadingGouraud(CCmdUI* pCmdUI);
 	afx_msg void OnLightConstants();
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:

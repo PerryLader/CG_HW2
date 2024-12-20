@@ -65,3 +65,8 @@ void Camera::setPerspective(float fovY, float aspect, float near, float far) {
         0, 0, -1, 0
     );
 }
+
+void Camera::modifiyView(const Matrix4& tMat) {
+    this->viewMatrix = viewMatrix * tMat;
+}
+
