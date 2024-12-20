@@ -62,6 +62,9 @@ BEGIN_MESSAGE_MAP(CCGWorkView, CView)
 	ON_COMMAND(ID_LIGHT_SHADING_GOURAUD, OnLightShadingGouraud)
 	ON_UPDATE_COMMAND_UI(ID_LIGHT_SHADING_GOURAUD, OnUpdateLightShadingGouraud)
 	ON_COMMAND(ID_LIGHT_CONSTANTS, OnLightConstants)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEMOVE()
 	//}}AFX_MSG_MAP
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
@@ -566,6 +569,27 @@ void CCGWorkView::OnTimer(UINT_PTR nIDEvent)
 		Invalidate();
 }
 
+void CCGWorkView::OnLButtonDown(UINT nFlags, CPoint point) {
+	// Handle the left button down event here
+	m_bLeftButtonDown = true;
+	m_ref_point = point;
+	CView::OnLButtonDown(nFlags, point);
+}
 
+void CCGWorkView::OnLButtonUp(UINT nFlags, CPoint point) {
+	// Handle the left button up event here
+	m_bLeftButtonDown = false;
+	CView::OnLButtonUp(nFlags, point);
+}
 
-
+void CCGWorkView::OnMouseMove(UINT nFlags, CPoint point) {
+	// Handle the left button move event here
+	if (m_bLeftButtonDown == true) {
+		//build commad object
+		ICommand* command = new TransformationCommand(m_WindowWidth,m_WindowHeight,Vector3(m_ref_point.x, m_ref_point.y, 0), Vector3(point.x, point.y, 0) , m_AspectRatio, m_nAction, m_nAxis, true, 1);
+		m_scene.executeCommand(command);
+		delete command;
+		m_ref_point = point;
+	}
+	CView::OnMouseMove(nFlags, point);
+}
