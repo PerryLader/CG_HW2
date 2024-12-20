@@ -59,7 +59,7 @@ public:
     size_t vertexCount() const;
     void printVertices() const;
     void printBounds() const;
-    void printColor() const;
+    void printColor() ;
 
     PolygonGC* applyTransformation(const Matrix4& transformation) const;
     std::vector<Line>* getEdges() const;

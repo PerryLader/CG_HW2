@@ -18,63 +18,37 @@ float Line::length() const {
 
 // Check if two lines intersect, and return the intersection point if they do
 bool Line::findIntersection(const Line& line1, const Line& line2, Vertex& interVertex) {
-    // Line 1 direction vector
-    //float d1x = line1.m_b.m_point.x - line1.m_a.m_point.x;
-    //float d1y = line1.m_b.m_point.y - line1.m_a.m_point.y;
-    //float d1z = line1.m_b.m_point.z - line1.m_a.m_point.z;
+    
+    double epsilon = 0.005;
+    Vector3 crossD1D2 = Vector3::cross(line1.m_b,line2.m_b);
+    double crossNorm = crossD1D2.normalized().length();
 
-    //// Line 2 direction vector
-    //float d2x = line2.m_b.m_point.x - line2.m_a.m_point.x;
-    //float d2y = line2.m_b.m_point.y - line2.m_a.m_point.y;
-    //float d2z = line2.m_b.m_point.z - line2.m_a.m_point.z;
+    // Check if the lines are parallel
+    if (crossNorm < epsilon) {
+        // Check if the lines are collinear
+        Vector3 P2P1 = line2.m_a - line1.m_a;
+        if (Vector3::cross(line1.m_b,P2P1).normalized().length() < epsilon) {
+            throw ; // Lines are collinear
+        }
+        throw; // Lines are parallel but not intersecting
+    }
 
-    //// Difference between starting points
-    //float px = line1.m_a.m_point.x - line2.m_a.m_point.x;
-    //float py = line1.m_a.m_point.y - line2.m_a.m_point.y;
-    //float pz = line1.m_a.m_point.z - line2.m_a.m_point.z;
+    // Compute the intersection parameters t and s
+    Vector3 P2P1 = line1.m_a - line2.m_a;
+    double t = Vector3::dot(Vector3::cross(P2P1,line2.m_b),crossD1D2) / Vector3::dot(crossD1D2,crossD1D2);
+    double s = Vector3::dot(Vector3::cross(P2P1,line1.m_b),crossD1D2) / Vector3::dot(crossD1D2,crossD1D2);
 
-    //// Dot products
-    //float d1d1 = d1x * d1x + d1y * d1y + d1z * d1z;
-    //float d2d2 = d2x * d2x + d2y * d2y + d2z * d2z;
-    //float d1d2 = d1x * d2x + d1y * d2y + d1z * d2z;
-    //float p1d1 = px * d1x + py * d1y + pz * d1z;
-    //float p1d2 = px * d2x + py * d2y + pz * d2z;
+    // Intersection point
+    Vector3 intersection1 = line1.m_a + line1.m_b * t;
+    Vector3 intersection2 = line2.m_a + line2.m_b * s;
 
-    //// Determinant
-    //float denominator = d1d1 * d2d2 - d1d2 * d1d2;
+    // Verify if the intersection points match
+    if ((intersection1 - intersection2).normalized().length() < epsilon) {
+        interVertex = Vertex(intersection1);
+        return true; // The lines intersect
+    }
 
-    //if (std::abs(denominator) < 1e-6) { // Lines are parallel or coincident
-    //    return false;
-    //}
-
-    //// Solve for t and u
-    //float t = (d2d2 * p1d1 - d1d2 * p1d2) / denominator;
-    //float u = (d1d1 * p1d2 - d1d2 * p1d1) / denominator;
-
-    //// Calculate intersection points
-    //float intersectX1 = line1.m_a.m_point.x + t * d1x;
-    //float intersectY1 = line1.m_a.m_point.y + t * d1y;
-    //float intersectZ1 = line1.m_a.m_point.z + t * d1z;
-
-    //float intersectX2 = line2.m_a.m_point.x + u * d2x;
-    //float intersectY2 = line2.m_a.m_point.y + u * d2y;
-    //float intersectZ2 = line2.m_a.m_point.z + u * d2z;
-
-    //// Check if the points are within a tolerance (for numerical stability)
-    //if (std::abs(intersectX1 - intersectX2) < 1e-6 &&
-    //    std::abs(intersectY1 - intersectY2) < 1e-6 &&
-    //    std::abs(intersectZ1 - intersectZ2) < 1e-6)
-    //{
-
-    //    interVertex.m_point.x = intersectX1;
-    //    interVertex.m_point.y = intersectY1;
-    //    interVertex.m_point.z = intersectZ1;
-    //    interVertex.m_point.w = 1;
-
-    //    return true;
-    //}
-
-    return false; // No intersection within segments
+    return false; // The lines are skew (not intersecting)
 }
 
 //void Line::DrawLineBresenham( pDC, int x1, int y1, int x2, int y2, COLORREF color)
