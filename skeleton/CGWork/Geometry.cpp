@@ -1,6 +1,6 @@
 #include "Geometry.h"
 
-Geometry::Geometry(std::string name) : m_name(name) {}
+Geometry::Geometry(std::string name) : m_name(name) ,m_bBox(){}
 
 // Destructor
 Geometry::~Geometry() {
@@ -11,7 +11,7 @@ Geometry::~Geometry() {
 }
 
 BBox Geometry::getBBox() const{
-	return BBox();
+	return m_bBox;
 }
 std::string Geometry::getName() {
 	return this->m_name;
@@ -20,6 +20,7 @@ std::string Geometry::getName() {
 void Geometry::addPolygon(PolygonGC* poli)
 {
 	this->m_polygons.push_back(poli);
+	m_bBox.updateBBox(poli->getBbox());
 }
 
 Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
@@ -51,6 +52,38 @@ void Geometry::backFaceCulling() {
 			it++;
 	}
 }
+
+std::vector<Line> Geometry::getPolyBboxLines(const ColorGC& bBoxColor)
+{
+	std::vector<Line> lines;
+	for (auto t : m_polygons)
+	{
+		std::vector<Line> polyLines=t->getPolyBboxLine(bBoxColor);
+		lines.insert(lines.end(), polyLines.begin(), polyLines.end());
+	}
+	return lines;
+}
+
+std::vector<Line> Geometry::calcPolyNormalLine(const ColorGC& normalColor)
+{
+	std::vector<Line> lines;
+	for (auto t : m_polygons)
+	{
+		lines.push_back(t->calcNormalLine(normalColor));
+	}
+	return lines;
+}
+
+std::vector<Line> Geometry::getPolyNormalLineFromData(const ColorGC& normalColor)
+{
+	std::vector<Line> lines;
+	for (auto t : m_polygons)
+	{
+		lines.push_back( t->getNormalLineFromData(normalColor));
+	}
+	return lines;
+}
+
 void Geometry::clip() {
 	for (PolygonGC* temp : m_polygons)
 		temp->clip();

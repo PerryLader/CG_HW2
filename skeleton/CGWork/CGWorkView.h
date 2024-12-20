@@ -33,7 +33,7 @@ public:
 
 private:
 	Scene m_scene;
-
+	RenderMode m_rendermode;
 	int m_nAxis;				// Axis of Action, X Y or Z
 	int m_nAction;				// Rotate, Translate, Scale
 	int m_nView;				// Orthographic, perspective

@@ -19,9 +19,60 @@ Renderer::~Renderer() {
 //    m_models_to_render.push_back(geoModel);
 //}
 
+void Renderer::createShapesLines(std::vector<Geometry*> transformedGeometries, std::vector<Line> &edges)
+{ 
+    
+    for (const auto& geom : transformedGeometries) {
+        const std::vector<Line>* geomEdges = geom->getEdges();
+        edges.insert(edges.end(), geomEdges->begin(), geomEdges->end());
+    }
+
+#ifdef APPLE_ALGO
+    for (auto& edge : edges) {
+        edge.computeQuantitativeVisibility(transformedGeometries);
+    }
+#endif // APPLE_ALGO
+
+    // Compute visibility for each edge
 
 
-void Renderer::render(const Camera* camera, int width, int height,const std::vector<Model*> models, const ColorGC& bgColor) {
+    // Render visible edges
+    
+
+}
+void Renderer::createObjBboxLines(std::vector<Geometry*> transformedGeometries, std::vector<Line>& edges, const ColorGC& bBoxColor)
+{
+    for (const auto& geom : transformedGeometries) {
+        BBox bBox = geom->getBBox();
+        std::vector<Line> bBoxLines = bBox.getLinesOfBbox(bBoxColor);
+        edges.insert(edges.end(), bBoxLines.begin(), bBoxLines.end());     
+    }
+}
+void Renderer::createPolyBboxLines(std::vector<Geometry*> transformedGeometries, std::vector<Line>& edges, const ColorGC& bBoxColor)
+{
+    for (const auto& geom : transformedGeometries) {
+        std::vector<Line> bBoxLines = geom->getPolyBboxLines(bBoxColor);
+        edges.insert(edges.end(), bBoxLines.begin(), bBoxLines.end());
+    }
+}
+void Renderer::createPolyNormalLlinesFromData(std::vector<Geometry*> transformedGeometries, std::vector<Line>& edges, const ColorGC& normalColor)
+{
+    for (const auto& geom : transformedGeometries) {
+        std::vector<Line> normalLines = geom->getPolyNormalLineFromData(normalColor);
+        edges.insert(edges.end(), normalLines.begin(), normalLines.end());
+    }
+}
+void Renderer::createPolyCalcNormalLlines(std::vector<Geometry*> transformedGeometries, std::vector<Line>& edges, const ColorGC& normalColor)
+{
+    for (const auto& geom : transformedGeometries) {
+        std::vector<Line> normalLines = geom->calcPolyNormalLine(normalColor);
+        edges.insert(edges.end(), normalLines.begin(), normalLines.end());
+    }
+}
+
+
+void Renderer::render(const Camera* camera, int width, int height,const std::vector<Model*> models,  RenderMode renderMode,
+    const ColorGC& bgColor, const ColorGC& normalColor, const ColorGC& bBoxColor) {
     if (getWidth() != width || getHeight() != height || getBgColor().getARGB() != bgColor.getARGB()) {
         setWidth(width); setHeight(height); setBgColor(bgColor);
         refreshBgBuffer();
@@ -34,12 +85,10 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     Matrix4 aspectRatioMatrix = Matrix4::scaling(Vector3(1.0f / aspectRatio, 1.0f, 1.0f));
     const Matrix4 viewProjectionMatrix = camera->getViewMatrix() * aspectRatioMatrix * camera->getProjectionMatrix();
 
-
     // Transform and cull geometry
     std::vector<Geometry*> transformedGeometries;
     for (const auto& model : models) {
-        const Matrix4 transformation = model->getModelTransformation() * viewProjectionMatrix;
-        Geometry* transformedGeometry = model->applyTransformation(transformation);
+        Geometry* transformedGeometry = model->onDraw(viewProjectionMatrix);
 
         // Clipping
         transformedGeometry->clip();
@@ -49,43 +98,53 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
         transformedGeometries.push_back(transformedGeometry);
     }
 
-   
+
+
     std::vector<Line> edges;
+
     //add axis origin for tests:
-    edges.push_back(Line((viewProjectionMatrix * Vector4(-1, 0, 0,1)).toVector3(), (viewProjectionMatrix * Vector4(1, 0, 0, 1)).toVector3(), ColorGC(255, 0, 0)));
+    edges.push_back(Line((viewProjectionMatrix * Vector4(-1, 0, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(1, 0, 0, 1)).toVector3(), ColorGC(255, 0, 0)));
     edges.push_back(Line((viewProjectionMatrix * Vector4(0, -1, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 1, 0, 1)).toVector3(), ColorGC(0, 255, 0)));
     edges.push_back(Line((viewProjectionMatrix * Vector4(0, 0, -1, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 0, 1, 1)).toVector3(), ColorGC(0, 0, 255)));
 
+
+
+    if (renderMode.getRenderShape())
+    {
+        this->createShapesLines(transformedGeometries, edges);
+    }
+    if (renderMode.getRenderObjBbox())
+    {
+        this->createObjBboxLines(transformedGeometries,  edges,bBoxColor);
+    }
+    if (renderMode.getRenderPolygonsBbox())
+    {
+        this->createPolyBboxLines(transformedGeometries,  edges,bBoxColor);
+    }
+    if (renderMode.getRenderPolygonsCalcNormal())
+    {
+        this->createPolyCalcNormalLlines(transformedGeometries, edges, normalColor);
+    }
+    if (renderMode.getRenderPolygonsNormalFromData())
+    {
+        this->createPolyNormalLlinesFromData(transformedGeometries, edges, normalColor);
+    }
+
+
+
+
+
+
     for (const auto& geom : transformedGeometries) {
-        const std::vector<Line>* geomEdges = geom->getEdges();
-        edges.insert(edges.end(), geomEdges->begin(), geomEdges->end());
-        delete geomEdges;
+        delete geom;
     }
 
-#ifdef APPLE_ALGO
-    for (auto& edge : edges) {
-        edge.computeQuantitativeVisibility(transformedGeometries);
+    //the Final draw
+    for (Line& edge : edges) {
+        // if (edge.isVisible()) {
+        edge.draw(m_Buffer, this->m_width, this->m_height);
+        // }
     }
-#endif // APPLE_ALGO
-
-    // Compute visibility for each edge
-   
-
-    // Render visible edges
-    for ( Line& edge : edges) {
-       // if (edge.isVisible()) {
-            edge.draw(m_Buffer,width,height);
-       // }
-    }
-
-    // Present the buffer (this is just an example, actual implementation may vary)
-    //for (int y = 0; y < height; ++y) {
-    //    for (int x = 0; x < width; ++x) {
-    //        // Output the pixel value (this is just an example, actual implementation may vary)
-    //        std::cout << m_Buffer[(y * width + x) * 3] << " ";
-    //    }
-    //    std::cout << std::endl;
-    //}
 }
 
 void Renderer::clear(bool clearBgBuffer) {

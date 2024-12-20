@@ -26,8 +26,60 @@ bool BBox::bboxCollide(const BBox& bbox) const{
     return BBox::bboxCollide(*this, bbox);
 }
 bool BBox::bboxCollide(const BBox& bbox1, const BBox& bbox2) {
-    return false;
+    return false;//TODO
 }
+void BBox::updateBBox(const BBox& box)
+{
+    updateBBox(box.m_maxBounds);
+    updateBBox(box.m_minBounds);
+}
+std::vector<Line> BBox::getLinesOfBbox( const ColorGC& bBoxColor)
+{
+    Vector3 corners[8] = {
+       {m_minBounds.x, m_minBounds.y, m_minBounds.z},
+       {m_minBounds.x, m_minBounds.y, m_maxBounds.z},
+       {m_minBounds.x, m_maxBounds.y, m_minBounds.z},
+       {m_minBounds.x, m_maxBounds.y, m_maxBounds.z},
+       {m_maxBounds.x, m_minBounds.y, m_minBounds.z},
+       {m_maxBounds.x, m_minBounds.y, m_maxBounds.z},
+       {m_maxBounds.x, m_maxBounds.y, m_minBounds.z},
+       {m_maxBounds.x, m_maxBounds.y, m_maxBounds.z}
+    };
+    std::vector<Line> lines = {
+        // Bottom face
+        {corners[0], corners[1],bBoxColor},
+        {corners[1], corners[5],bBoxColor},
+        {corners[5], corners[4],bBoxColor},
+        {corners[4], corners[0],bBoxColor},
+
+        // Top face
+        {corners[2], corners[3],bBoxColor},
+        {corners[3], corners[7],bBoxColor},
+        {corners[7], corners[6],bBoxColor},
+        {corners[6], corners[2],bBoxColor},
+
+        // Vertical edges
+        {corners[0], corners[2],bBoxColor},
+        {corners[1], corners[3],bBoxColor},
+        {corners[4], corners[6],bBoxColor},
+        {corners[5], corners[7],bBoxColor}
+    };
+    return lines;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Update min and max bounds
 void PolygonGC::updateBounds(const Vertex& vert) {
     m_bbox.updateBBox(vert.loc());
@@ -169,7 +221,10 @@ PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
     }
     return newPoly;
 }
-
+std::vector<Line> PolygonGC::getPolyBboxLine(const ColorGC& bBoxColor)
+{
+    return m_bbox.getLinesOfBbox(bBoxColor);
+}
 std::vector<Line>* PolygonGC::getEdges() const {
     std::vector<Line>* edges = new std::vector<Line>();
     for (size_t i = 0; i < m_vertices.size(); ++i) {
@@ -193,14 +248,39 @@ Vector3 PolygonGC::getNormal() const
 bool PolygonGC::hasNormal() const{
     return m_hasNormal;
 }
+Line PolygonGC::calcNormalLine(ColorGC normalColor)
+{
+    Vector3 centerPoint(0, 0, 0);
+    for (auto t : m_vertices)
+    {
+        centerPoint = centerPoint + t->loc();
+    }
+    centerPoint = centerPoint * (1 / m_vertices.size());
+    return Line(centerPoint, centerPoint + calculateNormal().normalized(), normalColor);
+}
 
-void PolygonGC::calculateNormal() {
+Line PolygonGC::getNormalLineFromData(ColorGC normalColor)
+{
+    if (!hasNormal())
+    {
+        throw;
+    }
+    Vector3 centerPoint(0, 0, 0);
+    for (auto t : m_vertices)
+    {
+        centerPoint = centerPoint + t->loc();
+    }
+    centerPoint = centerPoint * (1 / m_vertices.size());
+    return Line(centerPoint, centerPoint + m_nomal.normalized(), normalColor);
+
+}
+Vector3 PolygonGC::calculateNormal() {
     if (m_vertices.size() < 3)
     {
         throw std::runtime_error("whaht the hell just happend?is it polygon with less then 2 vertices???hemmm?");
     }
     const Vector3 vec1 = m_vertices.at(1)->loc() - m_vertices.at(0)->loc();
     const Vector3 vec2 = m_vertices.at(2)->loc() - m_vertices.at(1)->loc();
-    m_nomal = Vector3::cross(vec1, vec2);
+    return Vector3::cross(vec1, vec2).normalized();
 
 }

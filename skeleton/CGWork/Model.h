@@ -14,15 +14,16 @@ protected:
 	Matrix4 mTransform;
 public:
 	virtual ~Model() { delete T; T = nullptr; };
-	Matrix4 getModelTransformation() const{
-		return mTransform;
+
+	Geometry* onDraw(const Matrix4 viewProjectionMatrix)
+	{
+		return T->applyTransformation(mTransform* viewProjectionMatrix);
 	}
+	
 	void modifiyTransformation(const Matrix4& tMat){
 		mTransform = mTransform*tMat;
 	}
-	Geometry* applyTransformation(const Matrix4& mTransform) const {
-		return T->applyTransformation(mTransform);
-	}
+	
 	void virtual print() = 0;
 };
 

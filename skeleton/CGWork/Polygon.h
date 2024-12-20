@@ -15,8 +15,10 @@ public:
     BBox() : m_minBounds(), m_maxBounds(){};
     BBox(const Vector3& minBound, const Vector3& maxBound) : m_minBounds(minBound), m_maxBounds(maxBound) {};
     void updateBBox(const Vector3& vert);
+    void updateBBox(const BBox& box);
     bool bboxCollide(const BBox& bbox) const;
     static bool bboxCollide(const BBox& bbox1, const BBox& bbox2);
+    std::vector<Line> getLinesOfBbox(const ColorGC& bBoxColor);
     void toPrint() const;
 };
 
@@ -40,7 +42,7 @@ public:
     
     bool hasNormal() const;
     Vector3 getNormal() const;
-    void calculateNormal();
+    Vector3 calculateNormal();
    
     void setColor(const ColorGC& newColor);
     const ColorGC& getColor() const;
@@ -52,6 +54,8 @@ public:
     void printVertices();
     void printBounds();
     void printColor();
+    Line getNormalLineFromData(ColorGC normalColor);
+    Line calcNormalLine(ColorGC normalColor);
 
     void clip();
     bool isBehindCamera() const;
@@ -59,8 +63,9 @@ public:
     size_t vertexCount() const;
     void printVertices() const;
     void printBounds() const;
-    void printColor() ;
+    std::vector<Line> getPolyBboxLine(const ColorGC& bBoxColor);
 
+  
     PolygonGC* applyTransformation(const Matrix4& transformation) const;
     std::vector<Line>* getEdges() const;
     BBox getBbox() const;
