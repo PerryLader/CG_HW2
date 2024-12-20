@@ -6,6 +6,10 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Renderer.h"
+#include "resource.h"
+
+
+class ICommand;
 
 class Scene {
 public:
@@ -21,6 +25,15 @@ public:
     // Function to render the scene
     void render(int width, int height) const;
     uint32_t* getBuffer();
+    void executeCommand(ICommand* command);
+
+    void handleTransformationAction(const Vector3& ref_point,
+         const Vector3& movement,
+         float aspectRatio,
+         int action,
+         int axis,
+         float sensitivity,
+         int tSpace);
 
     void print() const;
 
@@ -28,6 +41,7 @@ private:
     std::vector<Model*> m_models;
     std::vector<Camera*> m_cameras;
     Renderer* m_renderer;
+    int m_primaryCameraIndex;
 };
 
 #endif // SCENE_H

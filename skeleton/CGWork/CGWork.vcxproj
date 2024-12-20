@@ -193,6 +193,7 @@
     </ClCompile>
     <ClCompile Include="ColorGC.cpp" />
     <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="ICommand.cpp" />
     <ClCompile Include="iritSkel.cpp" />
     <ClCompile Include="LightDialog.cpp" />
     <ClCompile Include="Line.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="CGWorkView.h" />
     <ClInclude Include="ColorGC.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="ICommand.h" />
     <ClInclude Include="iritSkel.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightDialog.h" />
