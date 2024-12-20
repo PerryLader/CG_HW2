@@ -183,3 +183,22 @@ std::istringstream& operator>>(std::istringstream& iss, Vector3& vec) {
     }
     return iss;
 }
+
+float& Vector3::operator[](std::size_t index) {
+    if (index == 0) return x;
+    if (index == 1) return y;
+    if (index == 2) return z;
+    throw std::out_of_range("Index must be 0, 1, or 2");
+}
+
+// Access operator for reading only
+const float& Vector3::operator[](std::size_t index) const {
+    if (index == 0) return x;
+    if (index == 1) return y;
+    if (index == 2) return z;
+    throw std::out_of_range("Index must be 0, 1, or 2");
+}
+
+bool Vector3::operator==(const Vector3& other) const {
+    return x == other.x && y == other.y && z == other.z;
+}

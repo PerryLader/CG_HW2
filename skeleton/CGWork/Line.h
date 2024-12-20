@@ -1,6 +1,6 @@
 #pragma once
 #include "Vertex.h"
-#include "Vector4.h"
+#include "Vector3.h"
 #include "ColorGC.h"
 
 class Line {

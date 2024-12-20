@@ -5,6 +5,7 @@
 Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
     setOrthogonal(Vector3(-1,-1,0), Vector3(1, 1, 2), 60, 45);
     lookAt(Vector3(0, 0, -3), Vector3(0, 0, 0), Vector3(0,1,0));
+
     
 }
 
@@ -57,11 +58,14 @@ void Camera::setOrthogonal(const Vector3& LBN, const Vector3& RTF,float theta, f
 
 // Function to set perspective projection
 void Camera::setPerspective(float fovY, float aspect, float near, float far) {
+    //not sure about the tanHalfFovY and and aspect usage
     const float tanHalfFovY = tan(fovY / 2);
+    double a = (near + far) / (far - near);
+    double b = ((2 * near) * far)/(near - far);
     projectionMatrix = Matrix4(
         1 / (aspect * tanHalfFovY), 0, 0, 0,
         0, 1 / tanHalfFovY, 0, 0,
-        0, 0, -(far + near) / (far - near), -2 * far * near / (far - near),
+        0, 0, a, b,
         0, 0, -1, 0
     );
 }

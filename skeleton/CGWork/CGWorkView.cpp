@@ -268,6 +268,18 @@ uint32_t RGBAtoBGRA(uint32_t rgba) {
 
 void CCGWorkView::OnDraw(CDC* pDC)
 {
+
+	//Vertex v1(Vector3(0, 1.5, 0));
+	//Vertex v2(Vector3(0, 2.5, 0));
+	//std::vector<Vertex*> t=Vertex::intersectClipVolume(&v1, &v2);
+	/*PolygonGC *p=new PolygonGC(ColorGC());
+	p->addVertex(new Vertex(Vector3(1.5, 0.0, 0.0)));
+	p->addVertex(new Vertex(Vector3(0.0,0.5,0.0)));
+	p->addVertex(new Vertex(Vector3(0.0, -0.5, 0.0)));
+	
+	
+	p->clip();*/
+	std::cout<< ColorGC().toHex();
 	static float theta = 0.0f;
 	CCGWorkDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);

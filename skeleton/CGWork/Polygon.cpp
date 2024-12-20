@@ -122,10 +122,8 @@ bool PolygonGC::isBehindCamera() const{
     return true;
 }
 // Print polygon color
-void PolygonGC::printColor() const{
-    std::cout << "Polygon color: implement mme!!!!! ";
-    // m_color;
-    std::cout << "\n";
+void PolygonGC::printColor() {
+    std::cout << m_color.toHex();   
 }
 
 void PolygonGC::clip(){
@@ -144,14 +142,14 @@ void PolygonGC::clip(){
             inscopeVertices.push_back(v2);
         }
         else if (v1Inside && !v2Inside) {
-            // v1 is inside, v2 is outside, add intersection point
-
-            inscopeVertices.push_back(intersectClipVolume(v1, v2));
+            // v1 is inside, v2 is outside, add intersection point 
+            inscopeVertices.push_back(Vertex::intersectClipVolume(v1, v2));
             outscopeVertices.insert(v2);
         }
         else if (!v1Inside && v2Inside) {
             // v1 is outside, v2 is inside, add intersection point and v2
-            inscopeVertices.push_back(intersectClipVolume(v1, v2));
+            
+            inscopeVertices.push_back(Vertex::intersectClipVolume(v1, v2));
             inscopeVertices.push_back(v2);
             outscopeVertices.insert(v1);
         }
