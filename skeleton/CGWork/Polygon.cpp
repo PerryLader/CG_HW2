@@ -179,37 +179,37 @@ void PolygonGC::printColor() {
 }
 
 void PolygonGC::clip(){
-    std::set<Vertex*> outscopeVertices;
-    std::vector<Vertex*> inscopeVertices;
-    for (size_t i = 0; i < m_vertices.size(); ++i) {
-        Vertex* v1 = m_vertices[i];
-        Vertex* v2 = m_vertices[(i + 1) % m_vertices.size()];
+    //std::set<Vertex*> outscopeVertices;
+    //std::vector<Vertex*> inscopeVertices;
+    //for (size_t i = 0; i < m_vertices.size(); ++i) {
+    //    Vertex* v1 = m_vertices[i];
+    //    Vertex* v2 = m_vertices[(i + 1) % m_vertices.size()];
 
-        // Check if vertices are inside the clipping volume
-        bool v1Inside = v1->isInsideClipVolume();
-        bool v2Inside = v2->isInsideClipVolume();
+    //    // Check if vertices are inside the clipping volume
+    //    bool v1Inside = v1->isInsideClipVolume();
+    //    bool v2Inside = v2->isInsideClipVolume();
 
-        if (v1Inside && v2Inside) {
-            // Both vertices are inside, add v2 to the clipped vertices
-            inscopeVertices.push_back(v2);
-        }
-        else if (v1Inside && !v2Inside) {
-            // v1 is inside, v2 is outside, add intersection point 
-            inscopeVertices.push_back(Vertex::intersectClipVolume(v1, v2));
-            outscopeVertices.insert(v2);
-        }
-        else if (!v1Inside && v2Inside) {
-            // v1 is outside, v2 is inside, add intersection point and v2
-            
-            inscopeVertices.push_back(Vertex::intersectClipVolume(v1, v2));
-            inscopeVertices.push_back(v2);
-            outscopeVertices.insert(v1);
-        }
-    }
-    for (auto& elem : outscopeVertices) {
-        delete elem;
-    }
-    m_vertices = inscopeVertices;
+    //    if (v1Inside && v2Inside) {
+    //        // Both vertices are inside, add v2 to the clipped vertices
+    //        inscopeVertices.push_back(v2);
+    //    }
+    //    else if (v1Inside && !v2Inside) {
+    //        // v1 is inside, v2 is outside, add intersection point 
+    //      //  inscopeVertices.push_back(Vertex::intersectClipVolume(v1, v2));
+    //        outscopeVertices.insert(v2);
+    //    }
+    //    else if (!v1Inside && v2Inside) {
+    //        // v1 is outside, v2 is inside, add intersection point and v2
+    //        
+    //    //    inscopeVertices.push_back(Vertex::intersectClipVolume(v1, v2));
+    //        inscopeVertices.push_back(v2);
+    //        outscopeVertices.insert(v1);
+    //    }
+    //}
+    //for (auto& elem : outscopeVertices) {
+    //    delete elem;
+    //}
+    //m_vertices = inscopeVertices;
 }
 // Function to apply a transformation matrix to all vertices
 PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
@@ -255,14 +255,15 @@ Line PolygonGC::calcNormalLine(ColorGC normalColor)
     {
         centerPoint = centerPoint + t->loc();
     }
-    centerPoint = centerPoint * (1 / m_vertices.size());
-    return Line(centerPoint, centerPoint + calculateNormal().normalized(), normalColor);
+    centerPoint = centerPoint * (1.0 / m_vertices.size());
+    return Line(centerPoint, centerPoint + (calculateNormal().normalized()), normalColor);
 }
 
 Line PolygonGC::getNormalLineFromData(ColorGC normalColor)
 {
     if (!hasNormal())
     {
+        std::cout << "U cant to ittt!!!!!!!!";
         throw;
     }
     Vector3 centerPoint(0, 0, 0);

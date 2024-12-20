@@ -19,10 +19,10 @@ public:
 
     // Check if two lines intersect, and return the intersection point if they do
     static bool findIntersection(const Line& line1, const Line& line2, Vertex& interVertex);
-
+    bool clip(Line &newLine);
     void draw(uint32_t* m_Buffer, int width, int hight);
     // Print the line
     void print();
-//private:
-//    static void DrawLineBresenham(CDC* pDC, int x1, int y1, int x2, int y2, COLORREF color);
+private:
+    bool isInClip();
 };

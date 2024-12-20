@@ -279,7 +279,7 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	
 	
 	p->clip();*/
-	std::cout<< ColorGC().toHex();
+	//std::cout<< ColorGC().toHex();
 	static float theta = 0.0f;
 	CCGWorkDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
