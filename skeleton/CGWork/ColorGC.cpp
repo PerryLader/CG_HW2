@@ -29,7 +29,7 @@ uint32_t ColorGC::getARGB()  const{ return color; }
 void ColorGC::setARGB(uint32_t rgba) { color = rgba; }
 
 // Convert to string in hexadecimal format
-std::string ColorGC::toHex()  {
+std::string ColorGC::toHex()  const{
     std::ostringstream ss;
     ss << "#" << std::hex << std::setfill('0') << std::setw(8) << color;
     return ss.str();

@@ -36,7 +36,7 @@ public:
     void setARGB(uint32_t rgba);
 
     // Convert to string in hexadecimal format
-    std::string toHex() ;
+    std::string toHex() const;
 
 };
 

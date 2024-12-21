@@ -1,5 +1,6 @@
 #include "Matrix4.h"
 #include <cmath> 
+#include <iostream>
 
 // Constructor
 Matrix4::Matrix4() {
@@ -9,8 +10,6 @@ Matrix4::Matrix4() {
         }
     }
 }
-#include "Matrix4.h"
-#include <iostream>
 
 // Constructor that takes 16 doubles
 Matrix4::Matrix4(double m00, double m01, double m02, double m03,

@@ -48,10 +48,6 @@ public:
     void addVertexs(IPVertexStruct* vertex);     // Add many vertex with geershon struct unsupported not recommended
     void PolygonGC::addVertex(Vertex* vertex);   // Adds vertex
     
-    size_t vertexCount();
-    void printVertices();
-    void printBounds();
-    void printColor();
 
     void clip();
     bool isBehindCamera() const;
@@ -59,7 +55,7 @@ public:
     size_t vertexCount() const;
     void printVertices() const;
     void printBounds() const;
-    void printColor() ;
+    void printColor() const;
 
     PolygonGC* applyTransformation(const Matrix4& transformation) const;
     std::vector<Line>* getEdges() const;

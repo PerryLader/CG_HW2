@@ -122,7 +122,7 @@ bool PolygonGC::isBehindCamera() const{
     return true;
 }
 // Print polygon color
-void PolygonGC::printColor() {
+void PolygonGC::printColor() const{
     std::cout << m_color.toHex();   
 }
 

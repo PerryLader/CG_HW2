@@ -3,13 +3,14 @@
 
 #include "Scene.h"
 
-class ICommand {
+class ScreenCommand {
 public:
-    virtual ~ICommand() {}
+    virtual ~ScreenCommand() {}
     virtual void execute(Scene& scene) = 0;
 };
 
-class RenderCommand : public ICommand {
+
+class RenderCommand : public ScreenCommand {
 public:
     virtual ~RenderCommand() {}
     RenderCommand(int width, int height) : screenWidth(width), screenHeigth(height) {}
