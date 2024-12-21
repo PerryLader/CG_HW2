@@ -16,7 +16,7 @@
 
 #include "Light.h"
 #include "Scene.h"
-#include "ICommand.h"
+#include "ScreenCommand.h"
 
 class CCGWorkView : public CView
 {

@@ -50,10 +50,6 @@ public:
     void addVertexs(IPVertexStruct* vertex);     // Add many vertex with geershon struct unsupported not recommended
     void PolygonGC::addVertex(Vertex* vertex);   // Adds vertex
     
-    size_t vertexCount();
-    void printVertices();
-    void printBounds();
-    void printColor();
     Line getNormalLineFromData(ColorGC normalColor);
     Line calcNormalLine(ColorGC normalColor);
 
@@ -63,6 +59,7 @@ public:
     size_t vertexCount() const;
     void printVertices() const;
     void printBounds() const;
+    void printColor() const;
     std::vector<Line> getPolyBboxLine(const ColorGC& bBoxColor);
 
   
