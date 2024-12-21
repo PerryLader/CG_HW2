@@ -3,8 +3,8 @@
 
 // Constructor
 Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
-    setOrthogonal(Vector3(-1,-1,0), Vector3(1, 1, 2), 60, 45);
-    lookAt(Vector3(0, 0, -3), Vector3(0, 0, 0), Vector3(0,1,0));
+    setOrthogonal(Vector3(-1,-1,0), Vector3(1, 1, 2), 70, 45);
+    lookAt(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0,1,0));
 
     
 }

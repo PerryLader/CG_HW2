@@ -7,6 +7,9 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Shader.h"
+#include <iomanip>
+
+
 
 class Renderer
 {
@@ -15,7 +18,9 @@ public:
     ~Renderer();
    // void addModel(Model* model);
     uint32_t* getBuffer() const;
-    void render(const Camera* camera, int width, int height,const std::vector<Model*> models, const ColorGC& bgColor);
+    void render(const Camera* camera, int width, int height, const std::vector<Model*> models, RenderMode renderMode,
+        const ColorGC& bgColor, const ColorGC& normalColor, const ColorGC& bBoxColor);
+
     void clear(bool clearBgBuffer);
 
 private:
@@ -36,6 +41,8 @@ private:
 
     void createBuffers();
     void refreshBgBuffer();
+    
+    
 };
 
 #endif // RENDERER_H

@@ -1,6 +1,6 @@
 #include "Geometry.h"
 
-Geometry::Geometry(std::string name) : m_name(name) {}
+Geometry::Geometry(std::string name) : m_name(name) ,m_bBox(){}
 
 // Destructor
 Geometry::~Geometry() {
@@ -11,7 +11,7 @@ Geometry::~Geometry() {
 }
 
 BBox Geometry::getBBox() const{
-	return BBox();
+	return m_bBox;
 }
 std::string Geometry::getName() {
 	return this->m_name;
@@ -20,6 +20,7 @@ std::string Geometry::getName() {
 void Geometry::addPolygon(PolygonGC* poli)
 {
 	this->m_polygons.push_back(poli);
+	m_bBox.updateBBox(poli->getBbox());
 }
 
 Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
@@ -30,6 +31,8 @@ Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
 	return res;
 }
 std::vector<Line>* Geometry::getEdges() const {
+	
+	
 	std::vector<Line>* res = new std::vector<Line>;
 	for (const auto& poly : m_polygons) {
 		const std::vector<Line>* edges = poly->getEdges();
@@ -51,7 +54,105 @@ void Geometry::backFaceCulling() {
 			it++;
 	}
 }
+
+std::vector<Line> Geometry::getPolyBboxLines(const ColorGC& bBoxColor)
+{
+	std::vector<Line> lines;
+	for (auto t : m_polygons)
+	{
+		std::vector<Line> polyLines=t->getPolyBboxLine(bBoxColor);
+		lines.insert(lines.end(), polyLines.begin(), polyLines.end());
+	}
+	return lines;
+}
+
+std::vector<Line> Geometry::calcPolyNormalLine(const ColorGC& normalColor)
+{
+	std::vector<Line> lines;
+	for (auto t : m_polygons)
+	{
+		lines.push_back(t->calcNormalLine(normalColor));
+	}
+	return lines;
+}
+
+
+
+void Geometry::createShapesLines(std::vector<std::vector<Line>>& lines)
+{
+	const std::vector<Line>* geomEdges = this->getEdges();
+	lines[LineVectorIndex::SHAPES].insert(lines[LineVectorIndex::SHAPES].end(), geomEdges->begin(), geomEdges->end());
+	
+
+#ifdef APPLE_ALGO
+	for (auto& edge : edges) {
+		edge.computeQuantitativeVisibility(transformedGeometries);
+	}
+#endif // APPLE_ALGO
+
+}
+void Geometry::createObjBboxLines(std::vector<std::vector<Line>>& lines,  const ColorGC& bBoxColor)
+{
+	std::vector<Line> bBoxLines = this->getBBox().getLinesOfBbox(bBoxColor);
+	lines[LineVectorIndex::OBJ_BBOX].insert(lines[LineVectorIndex::OBJ_BBOX].end(), bBoxLines.begin(), bBoxLines.end());	
+}
+void Geometry::createPolyBboxLines(std::vector<std::vector<Line>>& lines,  const ColorGC& bBoxColor)
+{
+	
+	std::vector<Line> bBoxLines = this->getPolyBboxLines(bBoxColor);
+	lines[LineVectorIndex::POLY_BBOX].insert(lines[LineVectorIndex::POLY_BBOX].end(), bBoxLines.begin(), bBoxLines.end());
+
+}
+void Geometry::createPolyNormalLlinesFromData(std::vector<std::vector<Line>> &lines,  const ColorGC& normalColor)
+{
+	std::vector<Line> normalLines = this->getPolyNormalLineFromData(normalColor);
+	lines[LineVectorIndex::POLY_DATA_NORNAL].insert(lines[LineVectorIndex::POLY_DATA_NORNAL].end(), normalLines.begin(), normalLines.end());
+	
+}
+void Geometry::createPolyCalcNormalLlines(std::vector<std::vector<Line>> &lines, const ColorGC& normalColor)
+{	
+	std::vector<Line> normalLines = this->calcPolyNormalLine(normalColor);
+	lines[LineVectorIndex::POLY_CALC_NORNAL].insert(lines[LineVectorIndex::POLY_CALC_NORNAL].end(), normalLines.begin(), normalLines.end());
+}
+
+
+
+void Geometry::loadLines(std::vector<std::vector<Line>>& lines, const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode renderMode)
+{
+	if (renderMode.getRenderShape())
+	{
+		this->createShapesLines(lines);
+	}
+	if (renderMode.getRenderObjBbox())
+	{
+		this->createObjBboxLines(lines, bBoxColor);
+	}
+	if (renderMode.getRenderPolygonsBbox())
+	{
+		this->createPolyBboxLines(lines, bBoxColor);
+	}
+	if (renderMode.getRenderPolygonsCalcNormal())
+	{
+		this->createPolyCalcNormalLlines(lines, normalColor);
+	}
+	if (renderMode.getRenderPolygonsNormalFromData())
+	{
+		this->createPolyNormalLlinesFromData(lines, normalColor);
+	}
+}
+
+std::vector<Line> Geometry::getPolyNormalLineFromData(const ColorGC& normalColor)
+{
+	std::vector<Line> lines;
+	for (auto t : m_polygons)
+	{
+		lines.push_back( t->getNormalLineFromData(normalColor));
+	}
+	return lines;
+}
+
 void Geometry::clip() {
+	//m_bBox.c
 	for (PolygonGC* temp : m_polygons)
 		temp->clip();
 }

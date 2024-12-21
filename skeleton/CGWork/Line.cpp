@@ -51,11 +51,60 @@ bool Line::findIntersection(const Line& line1, const Line& line2, Vertex& interV
     return false; // The lines are skew (not intersecting)
 }
 
-//void Line::DrawLineBresenham( pDC, int x1, int y1, int x2, int y2, COLORREF color)
-//{
-//
-//}
+bool Line::clip(Line& newLine)
+{
+    bool v1In = m_a.isInsideClipVolume();
+    bool v2In = m_b.isInsideClipVolume();
+    if (!v1In&&!v2In)
+    {
+        return false;//TODO Edge CASE
+    }
+    if(v1In&&v2In)
+    {
+        newLine = *this;
+        return true;
+    }
+    Vector3 temp;
+    //pos x
+    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(1, 0, 0), Vector3(1, 0, 0),temp))
+    { 
+        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
+        return true;
+    }
+    //neg x
+    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(-1, 0, 0), Vector3(-1, 0, 0),temp))
+    {
+        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
+        return true;
+    }
+    //pos y
+    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 1, 0), Vector3(0, 1, 0),temp))
+    {
+        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
+        return true;
+    }
+    //neg y
+    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, -1, 0), Vector3(0, -1, 0),temp))
+    {
+        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
+        return true;
+    }
+    //pos z
+    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, 1), Vector3(0, 0, 1),temp))
+    {
+        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
+        return true;
+    }
+    //neg z
+    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, -1), Vector3(0, 0, -1),temp))
+    {
+        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
+        return true;
+    }
+    throw;
 
+
+}
 void Line::draw(uint32_t* m_Buffer,int width,int hight)
 {
     // Calculate differences
@@ -106,4 +155,9 @@ void Line::print() {
     std::cout << "(" << m_a << ")" <<
         " -> (" << m_b << ")" << "]";
 
+}
+
+bool Line::isInClip()
+{
+    return m_a.isInsideClipVolume()&&m_b.isInsideClipVolume();
 }

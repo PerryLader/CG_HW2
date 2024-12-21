@@ -279,7 +279,7 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	
 	
 	p->clip();*/
-	std::cout<< ColorGC().toHex();
+	//std::cout<< ColorGC().toHex();
 	static float theta = 0.0f;
 	CCGWorkDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -295,7 +295,11 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	int height = r.Height();
 
 	// Retrieve the buffer from getBuffer()
-	m_scene.render(width, height);
+	
+	m_scene.render(width, height, m_rendermode,
+		ColorGC(120,120,120)/*bgColor-grey*/,
+		ColorGC(0, 250, 0)/*normalColor-green*/,
+		ColorGC(0, 0, 250)/*bBoxColor-blue*/);
 	uint32_t* buffer=m_scene.getBuffer();
 
 	

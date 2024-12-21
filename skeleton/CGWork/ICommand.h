@@ -3,19 +3,22 @@
 
 #include "Scene.h"
 
+
 class ScreenCommand {
 public:
     virtual ~ScreenCommand() {}
     virtual void execute(Scene& scene) = 0;
 };
 
-
 class RenderCommand : public ScreenCommand {
 public:
     virtual ~RenderCommand() {}
     RenderCommand(int width, int height) : screenWidth(width), screenHeigth(height) {}
     virtual void execute(Scene& scene) override {
-        scene.render(screenWidth, screenHeigth);
+        scene.render(screenWidth, screenHeigth,RenderMode(),
+            ColorGC(120, 120, 120)/*bgColor-grey*/,
+            ColorGC(0, 250, 0)/*normalColor-green*/,
+            ColorGC(0, 0, 250)/*bBoxColor-blue*/);
     }
 private:
     int screenWidth;
