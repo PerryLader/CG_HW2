@@ -41,7 +41,7 @@ POLY_DATA_NORNAL=2,
 VERTICES_NORMAL=2,
 OBJ_BBOX=4,
 POLY_BBOX=5,
-Count=6
+LAST=6
 };
 
 class Geometry
@@ -56,11 +56,11 @@ private:
 	std::vector<Line> getPolyBboxLines(const ColorGC& bBoxColor);
 	std::vector<Line> getPolyNormalLineFromData(const ColorGC& normalColor);
 	std::vector<Line> calcPolyNormalLine(const ColorGC& normalColor);
-	void createShapesLines(std::vector<std::vector<Line>> &lines);
-	void createObjBboxLines(std::vector<std::vector<Line>> &lines, const ColorGC& bBoxColor);
-	void createPolyBboxLines(std::vector<std::vector<Line>> &lines,const ColorGC& bBoxColor);
-	void createPolyNormalLlinesFromData(std::vector<std::vector<Line>>& lines, const ColorGC& bBoxColor);
-	void createPolyCalcNormalLlines(std::vector<std::vector<Line>>& lines, const ColorGC& bBoxColor);
+	void createShapesLines(std::vector<Line> lines[LineVectorIndex::LAST]);
+	void createObjBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
+	void createPolyBboxLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor);
+	void createPolyNormalLlinesFromData(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
+	void createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
 
 
 public:
@@ -69,7 +69,7 @@ public:
 	BBox getBBox() const;
 	
 	
-	void loadLines(std::vector<std::vector<Line>> &lines,const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode renderMode);
+	void loadLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode renderMode);
 	void Geometry::addPolygon(PolygonGC* poli);
 	Geometry* applyTransformation(const Matrix4& tMat) const;
 	

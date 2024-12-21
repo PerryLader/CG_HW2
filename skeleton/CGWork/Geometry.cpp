@@ -78,7 +78,7 @@ std::vector<Line> Geometry::calcPolyNormalLine(const ColorGC& normalColor)
 
 
 
-void Geometry::createShapesLines(std::vector<std::vector<Line>>& lines)
+void Geometry::createShapesLines(std::vector<Line> lines[LineVectorIndex::LAST])
 {
 	const std::vector<Line>* geomEdges = this->getEdges();
 	lines[LineVectorIndex::SHAPES].insert(lines[LineVectorIndex::SHAPES].end(), geomEdges->begin(), geomEdges->end());
@@ -91,25 +91,25 @@ void Geometry::createShapesLines(std::vector<std::vector<Line>>& lines)
 #endif // APPLE_ALGO
 
 }
-void Geometry::createObjBboxLines(std::vector<std::vector<Line>>& lines,  const ColorGC& bBoxColor)
+void Geometry::createObjBboxLines(std::vector<Line> lines[LineVectorIndex::LAST],  const ColorGC& bBoxColor)
 {
 	std::vector<Line> bBoxLines = this->getBBox().getLinesOfBbox(bBoxColor);
 	lines[LineVectorIndex::OBJ_BBOX].insert(lines[LineVectorIndex::OBJ_BBOX].end(), bBoxLines.begin(), bBoxLines.end());	
 }
-void Geometry::createPolyBboxLines(std::vector<std::vector<Line>>& lines,  const ColorGC& bBoxColor)
+void Geometry::createPolyBboxLines(std::vector<Line> lines[LineVectorIndex::LAST],  const ColorGC& bBoxColor)
 {
 	
 	std::vector<Line> bBoxLines = this->getPolyBboxLines(bBoxColor);
 	lines[LineVectorIndex::POLY_BBOX].insert(lines[LineVectorIndex::POLY_BBOX].end(), bBoxLines.begin(), bBoxLines.end());
 
 }
-void Geometry::createPolyNormalLlinesFromData(std::vector<std::vector<Line>> &lines,  const ColorGC& normalColor)
+void Geometry::createPolyNormalLlinesFromData(std::vector<Line> lines[LineVectorIndex::LAST],  const ColorGC& normalColor)
 {
 	std::vector<Line> normalLines = this->getPolyNormalLineFromData(normalColor);
 	lines[LineVectorIndex::POLY_DATA_NORNAL].insert(lines[LineVectorIndex::POLY_DATA_NORNAL].end(), normalLines.begin(), normalLines.end());
 	
 }
-void Geometry::createPolyCalcNormalLlines(std::vector<std::vector<Line>> &lines, const ColorGC& normalColor)
+void Geometry::createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& normalColor)
 {	
 	std::vector<Line> normalLines = this->calcPolyNormalLine(normalColor);
 	lines[LineVectorIndex::POLY_CALC_NORNAL].insert(lines[LineVectorIndex::POLY_CALC_NORNAL].end(), normalLines.begin(), normalLines.end());
@@ -117,7 +117,7 @@ void Geometry::createPolyCalcNormalLlines(std::vector<std::vector<Line>> &lines,
 
 
 
-void Geometry::loadLines(std::vector<std::vector<Line>>& lines, const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode renderMode)
+void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode renderMode)
 {
 	if (renderMode.getRenderShape())
 	{

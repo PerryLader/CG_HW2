@@ -15,10 +15,6 @@ Renderer::~Renderer() {
     clear(true);
 }
 
-
-
-
-
 void Renderer::render(const Camera* camera, int width, int height,const std::vector<Model*> models,  RenderMode renderMode,
     const ColorGC& bgColor, const ColorGC& normalColor, const ColorGC& bBoxColor) {
     
@@ -36,11 +32,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
 
     // Transform and cull geometry
     std::vector<Geometry*> transformedGeometries;
-    std::vector<std::vector<Line>> lines;
-    for (size_t i = 0; i < LineVectorIndex::Count; i++)
-    {
-        lines.push_back(std::vector<Line>());
-    }
+    std::vector<Line> lines[LineVectorIndex::LAST];
     for (const auto& model : models) {
         Geometry* transformedGeometry = model->onDraw(viewProjectionMatrix);
         transformedGeometry->loadLines(lines, bBoxColor, normalColor, renderMode);
@@ -50,40 +42,26 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
         // Backface culling
         //transformedGeometry->backFaceCulling();//there is bug here
     }
-
-
-
-   // std::vector<Line> edges;
-
     //add axis origin for tests:
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(-1, 0, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(1, 0, 0, 1)).toVector3(), ColorGC(255, 0, 0)));
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, -1, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 1, 0, 1)).toVector3(), ColorGC(0, 255, 0)));
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, 0, -1, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 0, 1, 1)).toVector3(), ColorGC(0, 0, 255)));
 
-
-
-    
-
-
-
-
-
-
-    for (const auto& geom : transformedGeometries) {
-        delete geom;
-    }
-
     //the Final draw
     for (std::vector<Line>& singleTypeLine : lines) {
         for (Line line : singleTypeLine){
             // if (edge.isVisible()) {          
-            if (line.clip(line))
-            {
-                line.draw(m_Buffer, this->m_width, this->m_height);
-            }
+        //    if (line.clip(line))
+           // {
+            line.draw(m_Buffer, this->m_width, this->m_height);
+           // }
         // }
         }
     }
+    for (const auto& geom : transformedGeometries) {
+        delete geom;
+    }
+
 }
 
 void Renderer::clear(bool clearBgBuffer) {

@@ -94,6 +94,12 @@ Vector3 Vector3::scaling(const Vector3& vec, float sx, float sy, float sz) {
     );
 }
 
+Vector3 Vector3::scale(float sx, float sy, float sz) {
+    this->x *= sx;
+    this->y *= sy;
+    this->z *= sz;
+    return *this;
+}
 // Translation
 Vector3 Vector3::translate(const Vector3& vec, float tx, float ty, float tz) {
     return Vector3(

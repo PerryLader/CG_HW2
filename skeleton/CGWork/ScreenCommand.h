@@ -20,7 +20,7 @@ public:
             ColorGC(0, 250, 0)/*normalColor-green*/,
             ColorGC(0, 0, 250)/*bBoxColor-blue*/);
     }
-private:
+protected:
     int screenWidth;
     int screenHeigth;
 };
@@ -31,7 +31,7 @@ public:
         : RenderCommand(width,height), ref_point(ref_point), movement(movement), aspectRatio(aspectRatio), action(action), axis(axis), tSpace(tSpace), sensitivity(sensitivity) {}
 
     void execute(Scene& scene) override {
-        scene.handleTransformationAction(ref_point, movement, aspectRatio,action, axis, sensitivity,tSpace);
+        scene.handleTransformationAction(ref_point, movement, aspectRatio,action, axis, sensitivity,tSpace, screenWidth, screenHeigth);
         RenderCommand::execute(scene);
     }
 

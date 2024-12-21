@@ -42,6 +42,8 @@ public:
     // Scaling
     static Vector3 scaling(const Vector3& vec, float sx, float sy, float sz);
 
+    Vector3 scale(float sx, float sy, float sz);
+
     // Translation
     static Vector3 translate(const Vector3& vec, float tx, float ty, float tz);
 

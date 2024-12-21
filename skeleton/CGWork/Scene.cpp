@@ -1,5 +1,5 @@
 #include "Scene.h"
-#include "ICommand.h"
+#include "ScreenCommand.h"
 
 // Constructor
 Scene::Scene():m_renderer(new Renderer()) {
@@ -38,7 +38,9 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
     int action,
     int axis,
     float sensitivity,
-    int tSpace) {
+    int tSpace,
+    int width,
+    int height) {
     Vector3 axisVector = Vector3::unitX();
     switch(axis){
     case ID_AXIS_X:
@@ -52,7 +54,7 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
         break;
     }
     Matrix4 Trasformation = Matrix4::identity();
-    float magnitude = Vector3::dot((movement - ref_point), axisVector) * sensitivity;
+    float magnitude = ((movement - ref_point).x / (width/aspectRatio) + (movement - ref_point).y / height) * sensitivity;
     switch (action) {
     case ID_ACTION_ROTATE:
         switch (axis) {
@@ -66,22 +68,21 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
             Trasformation = Matrix4::rotationZ(magnitude);
             break;
         }
+        m_cameras[0]->translate(Trasformation);
         break;
     case ID_ACTION_SCALE:
         Trasformation = Matrix4::scaling(Vector3::one()*magnitude);
         break;
     case ID_ACTION_TRANSLATE:
-        Trasformation = Matrix4::translate((movement - ref_point) * sensitivity);
+        Trasformation = Matrix4::translate(axisVector* magnitude);
+        m_cameras[0]->translate(Trasformation);
         break;
     }
-    bool ObjecetSpace = tSpace; // should be a comparison between tSpace and some definition of what is ObjectSpace
+    bool ObjecetSpace = false; // should be a comparison between tSpace and some definition of what is ObjectSpace
     if (ObjecetSpace) {
         for (Model* mod : m_models) {
             mod->modifiyTransformation(Trasformation);
         }
-    }
-    else {
-        m_cameras[0]->modifiyView(Trasformation);
     }
 }
 void Scene::print() const {

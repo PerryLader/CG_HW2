@@ -33,7 +33,9 @@ public:
          int action,
          int axis,
          float sensitivity,
-         int tSpace);
+         int tSpace,
+        int width,
+        int height);
 
     void print() const;
 

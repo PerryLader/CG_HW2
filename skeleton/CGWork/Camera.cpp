@@ -3,10 +3,8 @@
 
 // Constructor
 Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
-    setOrthogonal(Vector3(-1,-1,0), Vector3(1, 1, 2), 70, 45);
-    lookAt(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0,1,0));
-
-    
+    setOrthogonal(Vector3(-1,-1,0), Vector3(1, 1, 4), 0, 0);
+    lookAt(Vector3(0, 0, 2), Vector3(0, 0, 0), Vector3(0.5,0.5,0));
 }
 
 // Function to set the view transformation matrix
@@ -35,15 +33,15 @@ void Camera::lookAt(const Vector3& eye, const Vector3& target, const Vector3& up
     const Vector3 xAxis = Vector3::cross(up, zAxis).normalized();
     const Vector3 yAxis = Vector3::cross(zAxis, xAxis);
 
-    const Matrix4 orientation(
+    orientation = Matrix4(
         xAxis.x, xAxis.y, xAxis.z, 0,
         yAxis.x, yAxis.y, yAxis.z, 0,
         zAxis.x, zAxis.y, zAxis.z, 0,
         0, 0, 0, 1
     );
 
-    const Matrix4 translation = Matrix4::translate(-eye);
-
+    translation = Matrix4::translate(-eye);
+    translation_inv = translation.inverse();
     viewMatrix = orientation * translation;
 }
 
@@ -52,7 +50,9 @@ void Camera::setOrthogonal(const Vector3& LBN, const Vector3& RTF,float theta, f
     const Vector3 translationVector = Vector3::scaling(LBN+RTF, -0.5, -0.5, 0.5);
     const Vector3 scaleVector = Vector3(2/(RTF.x - LBN.x), 2/(RTF.y - LBN.y), 2/(LBN.z - RTF.z));
     const Matrix4 Morth = Matrix4(Vector4::unitX(), Vector4::unitY(), Vector4::zero(), Vector4::unitW());
-    const Matrix4 Hshear = Matrix4(Vector4::unitX(), Vector4::unitY(), Vector4(-1/tan(theta), -1 / tan(phi), 1, 0), Vector4::unitW());
+    theta = theta == 0 ? 0 : -1 / tan(theta);
+    phi = phi == 0 ? 0 : -1 / tan(phi);
+    const Matrix4 Hshear = Matrix4(Vector4::unitX(), Vector4::unitY(), Vector4( theta, phi, 1, 0), Vector4::unitW());
     projectionMatrix = Morth * Matrix4::scaling(scaleVector) * Matrix4::translate(translationVector)*Hshear;
 }
 
@@ -70,7 +70,12 @@ void Camera::setPerspective(float fovY, float aspect, float near, float far) {
     );
 }
 
-void Camera::modifiyView(const Matrix4& tMat) {
-    this->viewMatrix = viewMatrix * tMat;
+void Camera::orientate(const Matrix4& tMat) {
+    orientation = orientation * tMat;
+    this->viewMatrix = orientation * translation;
+}
+
+void Camera::translate(const Matrix4& tMat) {
+    this->viewMatrix = this->viewMatrix * tMat;
 }
 

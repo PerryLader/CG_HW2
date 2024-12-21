@@ -31,10 +31,16 @@ public:
     // Function to set perspective projection
     void setPerspective(float fovY, float aspect, float near, float far);
 
-    void modifiyView(const Matrix4& tMat);
+    void Camera::orientate(const Matrix4& tMat);
+
+    void Camera::translate(const Matrix4& tMat);
+
 private:
     Matrix4 viewMatrix;
     Matrix4 projectionMatrix;
+    Matrix4 orientation;
+    Matrix4 translation;
+    Matrix4 translation_inv;
     int cameraIndex;
 };
 
