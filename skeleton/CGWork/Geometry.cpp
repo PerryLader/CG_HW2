@@ -46,7 +46,7 @@ void Geometry::backFaceCulling() {
     const Vector3 camera_vec = Vector3::unitZ();
 	for (auto it = m_polygons.begin(); it != m_polygons.end(); ) {
 		PolygonGC* polygon = *it;
-		if (polygon->isBehindCamera() || Vector3::dot(camera_vec, polygon->getNormal()) < 0) {
+		if (polygon->isBehindCamera() || Vector3::dot(camera_vec, polygon->getCalcNormal()) < 0) {
 			delete polygon;
 			it = m_polygons.erase(it);
 		}

@@ -30,29 +30,29 @@ private:
     std::vector<Vertex*> m_vertices; // List of vertices
     ColorGC m_color;                // Color of the polygon
     BBox m_bbox;
-    Vector3 m_nomal;
-    // Update min and max bounds
-    bool m_hasNormal;
+    Vector3 m_calcNormal;
+    Vector3 m_dataNormal;
+    bool m_hasDataNormal;
     void updateBounds(const Vertex& vert);
     void resetBounds();
+    Vector3 calculateNormal() const;
 public:
     // Constructor with a default color
     PolygonGC(ColorGC color);
     PolygonGC(const Vector3& normal, ColorGC color);
     
-    bool hasNormal() const;
-    Vector3 getNormal() const;
-    Vector3 calculateNormal();
+    bool hasDataNormal() const;
+    Vector3 getCalcNormal() const;
+    Vector3 getDataNormal() const;
+    Line getNormalLineFromData(ColorGC normalColor) const;
+    Line calcNormalLine(ColorGC normalColor) const;
    
     void setColor(const ColorGC& newColor);
     const ColorGC& getColor() const;
     
     void addVertexs(IPVertexStruct* vertex);     // Add many vertex with geershon struct unsupported not recommended
-    void PolygonGC::addVertex(Vertex* vertex);   // Adds vertex
+    void addVertex(Vertex* vertex);   // Adds vertex
     
-    Line getNormalLineFromData(ColorGC normalColor);
-    Line calcNormalLine(ColorGC normalColor);
-
     void clip();
     bool isBehindCamera() const;
 

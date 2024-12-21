@@ -98,10 +98,10 @@ void PolygonGC::resetBounds() {
 }
 
 // Constructor with a default color
-PolygonGC::PolygonGC(ColorGC color) : m_color(color), m_hasNormal(false){
+PolygonGC::PolygonGC(ColorGC color) : m_color(color), m_hasDataNormal(false){
     resetBounds();
 }
-PolygonGC::PolygonGC(const Vector3& normal,ColorGC color) : m_color(color),m_nomal(normal),m_hasNormal(true){
+PolygonGC::PolygonGC(const Vector3& normal,ColorGC color) : m_color(color),m_dataNormal(normal),m_hasDataNormal(true){
     resetBounds();
 }
 
@@ -136,12 +136,21 @@ void PolygonGC::addVertexs(IPVertexStruct* vertex) {
         updateBounds(*temp);
         vertex = vertex->Pnext;
     }
+    if (3>m_vertices.size())
+    {
+        throw;
+    }
+    m_calcNormal= this->calculateNormal();
 }
 
 void PolygonGC::addVertex(Vertex* vertex) {
     if (vertex)
     {
         m_vertices.push_back(vertex);
+        if (m_vertices.size() == 3)
+        {
+            this->m_calcNormal = this->calculateNormal();
+        }
         updateBounds(*vertex);
     }
 }
@@ -215,9 +224,13 @@ void PolygonGC::clip(){
 PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
     PolygonGC* newPoly = new PolygonGC(this->m_color);
     for (const Vertex* vertex : m_vertices) {
-       Vertex* newVertex = new Vertex((transformation * Vector4::extendOne(vertex->loc())).toVector3(),
-           (transformation * Vector4::extendOne(vertex->normal())).toVector3());
+        Vertex* newVertex = vertex->getTransformedVertex(transformation);
        newPoly->addVertex(newVertex);
+    }
+    newPoly->m_calcNormal = (transformation * Vector4::extendOne(newPoly->m_calcNormal)).toVector3();
+    if (newPoly->m_hasDataNormal)
+    {
+        newPoly->m_dataNormal = (transformation * Vector4::extendOne(newPoly->m_dataNormal)).toVector3();
     }
     return newPoly;
 }
@@ -240,15 +253,20 @@ BBox PolygonGC::getBbox() const{
     return BBox();
 }
 
-Vector3 PolygonGC::getNormal() const
+Vector3 PolygonGC::getCalcNormal() const
 {
-    return m_nomal;
+    return m_calcNormal;
 }
 
-bool PolygonGC::hasNormal() const{
-    return m_hasNormal;
+Vector3 PolygonGC::getDataNormal() const
+{
+    return m_dataNormal;
 }
-Line PolygonGC::calcNormalLine(ColorGC normalColor)
+
+bool PolygonGC::hasDataNormal() const{
+    return m_hasDataNormal;
+}
+Line PolygonGC::calcNormalLine(ColorGC normalColor) const
 {
     Vector3 centerPoint(0, 0, 0);
     for (auto t : m_vertices)
@@ -256,12 +274,12 @@ Line PolygonGC::calcNormalLine(ColorGC normalColor)
         centerPoint = centerPoint + t->loc();
     }
     centerPoint = centerPoint * (1.0 / m_vertices.size());
-    return Line(centerPoint, centerPoint + (calculateNormal().normalized()), normalColor);
+    return Line(centerPoint, centerPoint + (m_calcNormal.normalized() * 0.25), normalColor);
 }
 
-Line PolygonGC::getNormalLineFromData(ColorGC normalColor)
+Line PolygonGC::getNormalLineFromData(ColorGC normalColor) const
 {
-    if (!hasNormal())
+    if (!hasDataNormal())
     {
         std::cout << "U cant to ittt!!!!!!!!";
         throw;
@@ -272,10 +290,10 @@ Line PolygonGC::getNormalLineFromData(ColorGC normalColor)
         centerPoint = centerPoint + t->loc();
     }
     centerPoint = centerPoint * (1 / m_vertices.size());
-    return Line(centerPoint, centerPoint + m_nomal.normalized(), normalColor);
+    return Line(centerPoint, centerPoint + m_dataNormal.normalized(), normalColor);
 
 }
-Vector3 PolygonGC::calculateNormal() {
+Vector3 PolygonGC::calculateNormal() const {
     if (m_vertices.size() < 3)
     {
         throw std::runtime_error("whaht the hell just happend?is it polygon with less then 2 vertices???hemmm?");

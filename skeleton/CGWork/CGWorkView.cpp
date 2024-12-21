@@ -298,7 +298,7 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	
 	m_scene.render(width, height, m_rendermode,
 		ColorGC(120,120,120)/*bgColor-grey*/,
-		ColorGC(0, 250, 0)/*normalColor-green*/,
+		ColorGC(0, 250, 250)/*normalColor-green*/,
 		ColorGC(0, 0, 250)/*bBoxColor-blue*/);
 	uint32_t* buffer=m_scene.getBuffer();
 
@@ -318,7 +318,6 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	void* dibPixels = nullptr;
 	HBITMAP hBitmap = CreateDIBSection(pDC->GetSafeHdc(), &bmi, DIB_RGB_COLORS, &dibPixels, nullptr, 0);
 	if (!hBitmap || !dibPixels) {
-		// If DIB section creation fails, use a fallback rendering
 		pDC->FillSolidRect(&r, RGB(255, 0, 0)); // Red error background
 		return;
 	}
@@ -327,22 +326,8 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	uint32_t* dibBuffer = (uint32_t*)dibPixels; // DIB buffer as 32-bit ARGB values
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
-			//int index = (y * width + x); // Index in the float buffer (RGBA)
-
-			// Convert float values (0.0 to 1.0) to 8-bit integers (0 to 255)
-			//uint8_t r = static_cast<uint8_t>(buffer[index] );
-			//uint8_t g = static_cast<uint8_t>(buffer[index + 1] );
-			//uint8_t b = static_cast<uint8_t>(buffer[index + 2] );
-			//uint8_t a = static_cast<uint8_t>(buffer[index + 3] ); // Alpha
-
-			// Pack into 32-bit ARGB (Windows uses BGRA order in memory)
-			uint32_t* final = buffer + (((y* width) + x));
-			uint32_t t = buffer[y * width + x];
-			if (t != 0x64646464)
-			{
-				int x = 5;
-			}
-			dibBuffer[y * width + x] = /*(a << 24) | (r << 16) | (g << 8) | b;*/ buffer[y * width + x];
+			
+			dibBuffer[y * width + x] =buffer[y * width + x];
 		}
 	}
 
