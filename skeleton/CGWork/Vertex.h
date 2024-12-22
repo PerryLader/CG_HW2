@@ -3,6 +3,10 @@
 #include "Matrix4.h"
 #include "Vector4.h"
 #include <vector>
+//#include "Polygon.h"
+//
+class PolygonGC;
+//extern Vector3 getCalcNormal();
 
 
 class Vertex {
@@ -12,85 +16,31 @@ private:
     bool m_hasDataNormal;  
     Vector3 m_calcNormal;
     bool m_hasCalcNormal;
-    void setCalcNormal(Vector3 normal) {
-        m_calcNormal = normal;
-        m_hasCalcNormal = true;
-    }
-    void setDataNormal(Vector3 normal) {
-        m_dataNormal = normal;
-        m_hasDataNormal = true;
-    }
+    std::vector<PolygonGC*> m_neigberPolygons;
+
+    void setCalcNormal(Vector3 normal);
+    void setDataNormal(Vector3 normal);
+    
 public:
-
+    bool m_hasTranformed = false;
     // Constructor
-    Vertex(Vector3 p) : m_point(p), m_dataNormal(Vector3(0, 0, 0)), m_hasDataNormal(false), m_hasCalcNormal(false) {}
-    // Constructor
-    Vertex(Vector3 p, Vector3 n) : m_point(p), m_dataNormal(n), m_hasDataNormal(true) ,m_hasCalcNormal(false){}
-
+    Vertex(Vector3 p);
+    Vertex(Vector3 p, Vector3 n);
+    void addNeigberPolygon(PolygonGC* poly);
+    Vector3 getCalcNormal();
     // Print function
-    void print() {
-        std::cout << "Vertex Located at: " << m_point << std::endl;
-    }
-    Vector3 loc() const    // Get location
-    {
-        return m_point;
-    }
-    Vector3 getDataNormal() const {
-        return m_dataNormal;
-    }
-    bool hasDataNormal() const {
-        return m_hasDataNormal;
-    }
-    void calculateNormal() const {
-        //how?
-    }
-    Vertex* getTransformedVertex(const Matrix4& transformation)const
-    {
-        Vertex* temp = new Vertex((transformation * Vector4::extendOne(this->m_point)).toVector3()    );
-        if (m_hasCalcNormal)
-        {
-            temp->setCalcNormal(m_calcNormal);
-        }
-        if (m_hasDataNormal)
-        {
-            temp->setDataNormal(m_calcNormal);
-           
-        }
-        return temp;
-    }
-    bool isInsideClipVolume() {
-        return m_point.x >= -1 && m_point.x <= 1 &&
-            m_point.y >= -1 && m_point.y <= 1 &&
-            m_point.z >= -1 && m_point.z <= 1;
-    }
+    void print();
+    Vector3 loc() const;
+    Vector3 getDataNormal() const;
+    bool hasDataNormal() const;
+    
+    std::shared_ptr<Vertex> getTransformedVertex(const Matrix4& transformation)const;
+    void transformVertex(const Matrix4& transformation);
+    bool isInsideClipVolume();
     // Overload compound assignment operator for matrix multiplication
-    Vertex& operator*=(const Matrix4& mat) {
-        m_point = (mat * Vector4::extendOne(m_point)).toVector3();
-        if (m_hasDataNormal)
-        {
-            m_dataNormal = (mat * Vector4::extendOne(m_dataNormal)).toVector3();
-        }
-        if (m_hasCalcNormal)
-        {
-            m_calcNormal = (mat * Vector4::extendOne(m_calcNormal)).toVector3();//TODO 
-        }
-
-        return *this;
-    }
+    Vertex& operator*=(const Matrix4& mat);
     // Overload multiplication operator to accept matrix operation
-    friend Vertex operator*(const Matrix4& mat, const Vertex& vert) 
-    {
-        Vertex res = Vertex((mat * Vector4::extendOne(vert.m_point)).toVector3());
-        if(vert.hasDataNormal())
-        {
-            res.m_dataNormal = (mat * Vector4::extendOne(vert.m_dataNormal)).toVector3();
-        }
-        if (vert.m_hasCalcNormal)
-        {
-            res.setCalcNormal((mat * Vector4::extendOne(vert.m_calcNormal)).toVector3());
-        }
-        return res;
-    }
+    friend Vertex operator*(const Matrix4& mat, const Vertex& vert);
     //One of the vertex must be out!and one must be in
     //static Vertex* intersectClipVolume(Vertex* v1, Vertex* v2) {
     //    Vector3 temp;

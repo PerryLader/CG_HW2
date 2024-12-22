@@ -37,6 +37,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     std::vector<Line> lines[LineVectorIndex::LAST];
     for (const auto& model : models) {
         Geometry* transformedGeometry = model->onDraw(viewProjectionMatrix);
+
         transformedGeometry->loadLines(lines, bBoxColor, normalColor, renderMode);
         transformedGeometries.push_back(transformedGeometry);
         // Clipping

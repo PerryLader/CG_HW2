@@ -8,6 +8,7 @@
 #include "iritprsr.h"
 #include "Line.h"
 #include "ColorGC.h"
+#include <memory>
 //might be useful
 class BBox {
     Vector3 m_minBounds, m_maxBounds;
@@ -27,7 +28,7 @@ public:
 
 class PolygonGC {
 private:
-    std::vector<Vertex*> m_vertices; // List of vertices
+    std::vector<std::shared_ptr< Vertex>> m_vertices; // List of vertices
     ColorGC m_color;                // Color of the polygon
     BBox m_bbox;
     Vector3 m_calcNormal;
@@ -51,21 +52,22 @@ public:
     const ColorGC& getColor() const;
     
     void addVertexs(IPVertexStruct* vertex);     // Add many vertex with geershon struct unsupported not recommended
-    void addVertex(Vertex* vertex);   // Adds vertex
+    void addVertex(std::shared_ptr<Vertex> vertex);   // Adds vertex
     
     void clip();
     bool isBehindCamera() const;
-
+    std::vector<std::shared_ptr<Vertex>> getVertexVector();
     size_t vertexCount() const;
     void printVertices() const;
     void printBounds() const;
     void printColor() const;
     std::vector<Line> getPolyBboxLine(const ColorGC& bBoxColor);
 
-  
-    PolygonGC* applyTransformation(const Matrix4& transformation) const;
+    PolygonGC* applyForceTransformation(const Matrix4& transformation) const;
+
+    PolygonGC* applySoftTransformation(const Matrix4& transformation) const;
     std::vector<Line>* getEdges() const;
     BBox getBbox() const;
-    ~PolygonGC();
+    ~PolygonGC()=default;
 };
 #endif

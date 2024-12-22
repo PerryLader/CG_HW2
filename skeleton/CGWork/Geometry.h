@@ -3,7 +3,7 @@
 #include "Polygon.h"
 #include <vector>
 #include <string>
-
+#include <unordered_map>
 
 #define RENDER_SHAPE                        1ULL
 #define RENDER_POLYGONS_CALC_NORMALS        1ULL<<1
@@ -44,13 +44,32 @@ POLY_BBOX=5,
 LAST=6
 };
 
+
+
+	
+	
+struct KeyHash {
+	std::size_t operator()(const Vector3 key) const {
+
+		std::hash<float> hasher;
+		return hasher(key.x) ^ (hasher(key.y) << 1) ^ (hasher(key.z) << 2);
+	}
+};
+
+struct KeyEqual {
+	bool operator()(const Vector3& lhs,
+		const Vector3& rhs) const {
+		return lhs == rhs;
+	}
+};
+
 class Geometry
 {
 private:
 	std::vector<PolygonGC*> m_polygons;
 	std::string m_name;
 	BBox m_bBox;
-
+	
 
 	std::vector<Line>* getEdges() const;
 	std::vector<Line> getPolyBboxLines(const ColorGC& bBoxColor);
@@ -61,11 +80,14 @@ private:
 	void createPolyBboxLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor);
 	void createPolyNormalLlinesFromData(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
 	void createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
-
+	//void calVertexNormal();
 
 public:
+	std::unordered_map<Vector3, std::shared_ptr<Vertex>, KeyHash, KeyEqual> m_map;
+
 	std::string getName();
 	Geometry(std::string name);
+	Geometry::Geometry(std::string name, std::unordered_map<Vector3, std::shared_ptr<Vertex>, KeyHash, KeyEqual> map);
 	BBox getBBox() const;
 	
 	

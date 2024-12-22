@@ -2,6 +2,7 @@
 
 Geometry::Geometry(std::string name) : m_name(name) ,m_bBox(){}
 
+Geometry::Geometry(std::string name, std::unordered_map<Vector3, std::shared_ptr<Vertex>, KeyHash, KeyEqual> map) : m_name(name), m_bBox(),m_map(map){}
 // Destructor
 Geometry::~Geometry() {
 	for (PolygonGC* polygon : m_polygons) {
@@ -21,12 +22,43 @@ void Geometry::addPolygon(PolygonGC* poli)
 {
 	this->m_polygons.push_back(poli);
 	m_bBox.updateBBox(poli->getBbox());
+	//for (PolygonGC* poly : m_polygons) {
+	//	//std::pair<PolygonGC*, std::vector<Vertex*>> t(poly, poly->getVertexVector());
+	//	std::vector <Vertex*> vertexVector = poly->getVertexVector();
+	//	for (Vertex* vertex : vertexVector)
+	//	{
+	//		m_map[vertex->loc()].push_back(std::pair<PolygonGC*, Vertex*>(poly, vertex));
+	//	}
+	//}
+	//	
+	//	
+	//for (std::pair<Vector3,std::vector<std::pair<PolygonGC*, Vertex*>>> pair : map)
+	//{
+	//	std::vector<std::pair<PolygonGC*, Vertex*>> vec = pair.second;
+	//	Vector3 avrageNormal(0, 0, 0);
+	//	for (std::pair<PolygonGC*, Vertex*> t : vec)
+	//	{
+	//		avrageNormal= avrageNormal + t.first->getCalcNormal();
+	//	}
+	//	avrageNormal = avrageNormal * (1 / vec.size());
+	//	for (std::pair<PolygonGC*, Vertex*> t : vec)
+	//	{
+	//		t.second->setDataNormal(avrageNormal);
+	//	}
+	//}
+
 }
 
 Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
-	Geometry* res = new Geometry(m_name);
+	for (std::pair<Vector3, std::shared_ptr<Vertex>> t : m_map)
+	{
+		t.second->transformVertex(tMat);
+		t.second->m_hasTranformed = true;
+	}
+	Geometry* res = new Geometry(m_name,this->m_map);
 	for (const auto& poly : m_polygons) {
-		res->addPolygon(poly->applyTransformation(tMat));
+
+		res->addPolygon(poly->applySoftTransformation(tMat));
 	}
 	return res;
 }
@@ -115,6 +147,55 @@ void Geometry::createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorInde
 	lines[LineVectorIndex::POLY_CALC_NORNAL].insert(lines[LineVectorIndex::POLY_CALC_NORNAL].end(), normalLines.begin(), normalLines.end());
 }
 
+//void Geometry::calVertexNormal()
+//{
+//	struct KeyHash {
+//		std::size_t operator()(const Vector3 key) const {
+//			
+//			std::hash<float> hasher;
+//			return hasher(key.x) ^ (hasher(key.y) << 1) ^ (hasher(key.z) << 2);
+//		}
+//	};
+//
+//	struct KeyEqual {
+//		bool operator()(const Vector3& lhs,
+//			const Vector3&& rhs) const {
+//			return lhs == rhs;
+//		}
+//	};
+//
+//	std::unordered_map<Vector3, std::vector<std::pair<PolygonGC*, Vertex*>>, KeyHash, KeyEqual> map;
+//
+//	// Add elements
+//
+//	
+//	for (PolygonGC* poly : m_polygons) {
+//		//std::pair<PolygonGC*, std::vector<Vertex*>> t(poly, poly->getVertexVector());
+//		std::vector <Vertex*> vertexVector = poly->getVertexVector();
+//		for (Vertex* vertex : vertexVector)
+//		{
+//			map[vertex->loc()].push_back(std::pair<PolygonGC*, Vertex*>(poly, vertex));
+//		}
+//	}
+//
+//
+//	for (std::pair<Vector3,std::vector<std::pair<PolygonGC*, Vertex*>>> pair : map)
+//	{
+//		std::vector<std::pair<PolygonGC*, Vertex*>> vec = pair.second;
+//		Vector3 avrageNormal(0, 0, 0);
+//		for (std::pair<PolygonGC*, Vertex*> t : vec)
+//		{
+//			avrageNormal= avrageNormal + t.first->getCalcNormal();
+//		}
+//		avrageNormal = avrageNormal * (1 / vec.size());
+//		for (std::pair<PolygonGC*, Vertex*> t : vec)
+//		{
+//			t.second->setDataNormal(avrageNormal);
+//		}
+//	}
+//	
+//}
+//
 
 
 void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode renderMode)
