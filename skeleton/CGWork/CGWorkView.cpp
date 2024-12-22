@@ -542,10 +542,10 @@ void CCGWorkView::OnUpdateShowIritVertNormals(CCmdUI* pCmdUI) {
 
 }
 void CCGWorkView::OnShowBBox(){
-	m_rendermode.setRenderPolygonsBbox();
+	m_rendermode.setRenderObjBbox();
 }
 void CCGWorkView::OnUpdateShowBBox(CCmdUI* pCmdUI) {
-	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsBbox());
+	pCmdUI->SetCheck(m_rendermode.getRenderObjBbox());
 }
 void CCGWorkView::OnNormalsColor() {
 

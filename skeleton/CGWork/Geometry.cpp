@@ -22,31 +22,6 @@ void Geometry::addPolygon(PolygonGC* poli)
 {
 	this->m_polygons.push_back(poli);
 	m_bBox.updateBBox(poli->getBbox());
-	//for (PolygonGC* poly : m_polygons) {
-	//	//std::pair<PolygonGC*, std::vector<Vertex*>> t(poly, poly->getVertexVector());
-	//	std::vector <Vertex*> vertexVector = poly->getVertexVector();
-	//	for (Vertex* vertex : vertexVector)
-	//	{
-	//		m_map[vertex->loc()].push_back(std::pair<PolygonGC*, Vertex*>(poly, vertex));
-	//	}
-	//}
-	//	
-	//	
-	//for (std::pair<Vector3,std::vector<std::pair<PolygonGC*, Vertex*>>> pair : map)
-	//{
-	//	std::vector<std::pair<PolygonGC*, Vertex*>> vec = pair.second;
-	//	Vector3 avrageNormal(0, 0, 0);
-	//	for (std::pair<PolygonGC*, Vertex*> t : vec)
-	//	{
-	//		avrageNormal= avrageNormal + t.first->getCalcNormal();
-	//	}
-	//	avrageNormal = avrageNormal * (1 / vec.size());
-	//	for (std::pair<PolygonGC*, Vertex*> t : vec)
-	//	{
-	//		t.second->setDataNormal(avrageNormal);
-	//	}
-	//}
-
 }
 
 Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
