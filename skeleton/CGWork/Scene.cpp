@@ -88,7 +88,7 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
     default:
         Trasformation = Matrix4::rotation(magnitude, axis);
     }
-    tSpace == ID_OBJECT_SPACE ? applyToObjectSpace(Trasformation) : applyToCamera(Trasformation); // should be a comparison between tSpace and some definition of what is ObjectSpace
+    tSpace == ID_TRANS_SPACE ? applyToObjectSpace(Trasformation) : applyToCamera(Trasformation); // should be a comparison between tSpace and some definition of what is ObjectSpace
 }
 
 void Scene::print() const {

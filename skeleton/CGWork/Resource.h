@@ -52,20 +52,26 @@
 #define ID_BUTTON_SUBDIVIDE             32797
 #define ID_OPTIONS_PERSPECTIVECONTROL   32798
 #define ID_OPTIONS_MOUSESENSITIVITY     32799
-#define ID_POLY_NORMALS                 32801
-#define ID_VERTEX_NORMALS               32802
-#define ID_OBJECT_SPACE                 32803
-#define ID_BUTTON32805                  32805
-#define ID_BUTTON32806                  32806
-#define ID_BUTTON32807                  32807
+#define ID_CALC_P_NORMALS               32801
+#define ID_CALC_V_NORMALS               32802
+#define ID_TRANS_SPACE                  32803
+#define ID_OBJECT_SPACE                 32804
+#define ID_CAMERA_SPACE                 32805
 #define ID_BBOX                         32808
+#define ID_IRIT_P_NORMALS               32809
+#define ID_IRIT_V_NORMALS               32810
+#define ID_NORMAL_COLOR                 32812
+#define ID_IRIT_NORMAL_COLOR            32813
+#define ID_VIEW_ANGLE                   32814
+#define ID_WIREFRAME_COLOR              32816
+#define ID_BG_COLOR                     32817
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
-#define _APS_NEXT_COMMAND_VALUE         32809
+#define _APS_NEXT_COMMAND_VALUE         32818
 #define _APS_NEXT_CONTROL_VALUE         1040
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

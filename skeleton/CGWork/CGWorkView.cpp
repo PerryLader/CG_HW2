@@ -62,17 +62,32 @@ BEGIN_MESSAGE_MAP(CCGWorkView, CView)
 	ON_COMMAND(ID_LIGHT_SHADING_GOURAUD, OnLightShadingGouraud)
 	ON_UPDATE_COMMAND_UI(ID_LIGHT_SHADING_GOURAUD, OnUpdateLightShadingGouraud)
 	ON_COMMAND(ID_LIGHT_CONSTANTS, OnLightConstants)
-	ON_COMMAND(ID_POLY_NORMALS, OnShowPolyNormals)
-	ON_UPDATE_COMMAND_UI(ID_POLY_NORMALS, OnUpdateShowPolyNormals)
-	ON_COMMAND(ID_VERTEX_NORMALS, OnShowVertNormals)
-	ON_UPDATE_COMMAND_UI(ID_VERTEX_NORMALS, OnUpdateShowVertNormals)
+	ON_COMMAND(ID_CALC_P_NORMALS, OnShowCalcPolyNormals)
+	ON_UPDATE_COMMAND_UI(ID_CALC_P_NORMALS, OnUpdateShowCalcPolyNormals)
+	ON_COMMAND(ID_CALC_V_NORMALS, OnShowCalcVertNormals)
+	ON_UPDATE_COMMAND_UI(ID_CALC_V_NORMALS, OnUpdateShowCalcVertNormals)
+	ON_COMMAND(ID_IRIT_P_NORMALS, OnShowCalcPolyNormals)
+	ON_UPDATE_COMMAND_UI(ID_IRIT_P_NORMALS, OnUpdateShowCalcPolyNormals)
+	ON_COMMAND(ID_IRIT_V_NORMALS, OnShowCalcVertNormals)
+	ON_UPDATE_COMMAND_UI(ID_IRIT_V_NORMALS, OnUpdateShowCalcVertNormals)
+	ON_COMMAND(ID_BBOX, OnShowBBox)
+	ON_UPDATE_COMMAND_UI(ID_BBOX, OnUpdateShowBBox)
+	ON_COMMAND(ID_NORMAL_COLOR, OnNormalsColor)
+	ON_UPDATE_COMMAND_UI(ID_NORMAL_COLOR, OnUpdateNormalsColor)
+	ON_COMMAND(ID_WIREFRAME_COLOR, OnWireframeColor)
+	ON_UPDATE_COMMAND_UI(ID_WIREFRAME_COLOR, OnUpdateWireframeColor)
+	ON_COMMAND(ID_BG_COLOR, OnBgColor)
+	ON_UPDATE_COMMAND_UI(ID_BG_COLOR, OnUpdateBgColor)
+	ON_COMMAND(ID_TRANS_SPACE, OnTransformationSpace)
+	ON_UPDATE_COMMAND_UI(ID_TRANS_SPACE, OnUpdateTransformationSpace)
+	ON_COMMAND(ID_VIEW_ANGLE, OnViewAngle)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_ANGLE, OnUpdateViewAngle)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	//}}AFX_MSG_MAP
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
-
 
 // A patch to fix GLaux disappearance from VS2005 to VS2008
 void auxSolidCone(GLdouble radius, GLdouble height) {
@@ -236,9 +251,6 @@ BOOL CCGWorkView::SetupViewingOrthoConstAspect(void)
 }
 
 
-
-
-
 BOOL CCGWorkView::OnEraseBkgnd(CDC* pDC)
 {
 	// Windows will clear the window with the background color every time your window 
@@ -273,17 +285,6 @@ uint32_t RGBAtoBGRA(uint32_t rgba) {
 void CCGWorkView::OnDraw(CDC* pDC)
 {
 
-	//Vertex v1(Vector3(0, 1.5, 0));
-	//Vertex v2(Vector3(0, 2.5, 0));
-	//std::vector<Vertex*> t=Vertex::intersectClipVolume(&v1, &v2);
-	/*PolygonGC *p=new PolygonGC(ColorGC());
-	p->addVertex(new Vertex(Vector3(1.5, 0.0, 0.0)));
-	p->addVertex(new Vertex(Vector3(0.0,0.5,0.0)));
-	p->addVertex(new Vertex(Vector3(0.0, -0.5, 0.0)));
-	
-	
-	p->clip();*/
-	//std::cout<< ColorGC().toHex();
 	static float theta = 0.0f;
 	CCGWorkDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -511,22 +512,83 @@ void CCGWorkView::OnUpdateAxisZ(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(m_nAxis == ID_AXIS_Z);
 }
 
-void CCGWorkView::OnShowPolyNormals() {
+void CCGWorkView::OnShowCalcPolyNormals() {
 	m_rendermode.setRenderPolygonsCalcNormal();
 }
-void CCGWorkView::OnUpdateShowPolyNormals(CCmdUI* pCmdUI) {
+void CCGWorkView::OnUpdateShowCalcPolyNormals(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsCalcNormal());
 
 }
-void CCGWorkView::OnShowVertNormals() {
+void CCGWorkView::OnShowCalcVertNormals() {
 	m_rendermode.setRenderVertivesNormal();
 }
-void CCGWorkView::OnUpdateShowVertNormals(CCmdUI* pCmdUI) {
+void CCGWorkView::OnUpdateShowCalcVertNormals(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderVertivesNormal());
 
 }
 
+void CCGWorkView::OnShowIritPolyNormals() {
+	m_rendermode.getRenderPolygonsNormalFromData();
+}
+void CCGWorkView::OnUpdateShowIritPolyNormals(CCmdUI* pCmdUI) {
+	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsNormalFromData());
 
+}
+void CCGWorkView::OnShowIritVertNormals() {
+	m_rendermode.setRenderVertivesNormal();
+}
+void CCGWorkView::OnUpdateShowIritVertNormals(CCmdUI* pCmdUI) {
+	pCmdUI->SetCheck(m_rendermode.getRenderVertivesNormal());
+
+}
+void CCGWorkView::OnShowBBox(){
+	m_rendermode.setRenderPolygonsBbox();
+}
+void CCGWorkView::OnUpdateShowBBox(CCmdUI* pCmdUI) {
+	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsBbox());
+}
+void CCGWorkView::OnNormalsColor() {
+
+}
+void CCGWorkView::OnUpdateNormalsColor(CCmdUI* pCmdUI) {
+
+}
+void CCGWorkView::OnWireframeColor() {
+
+}
+void CCGWorkView::OnUpdateWireframeColor(CCmdUI* pCmdUI) {
+
+}
+void CCGWorkView::OnBgColor() {
+	// Create a color dialog with the initial color set to white
+	CColorDialog colorDlg(RGB(255, 255, 255), CC_FULLOPEN | CC_RGBINIT);
+
+	// Display the color dialog
+	if (colorDlg.DoModal() == IDOK)
+	{
+		// Get the selected color
+		COLORREF color = colorDlg.GetColor();
+		m_bg_color.setRed(GetRValue(color));
+		m_bg_color.setGreen(GetGValue(color));
+		m_bg_color.setBlue(GetBValue(color));
+	}
+
+}
+void CCGWorkView::OnUpdateBgColor(CCmdUI* pCmdUI) {
+
+}
+void CCGWorkView::OnTransformationSpace() {
+	m_tSpace = m_tSpace == ID_OBJECT_SPACE ? ID_CAMERA_SPACE : ID_OBJECT_SPACE;
+}
+void CCGWorkView::OnUpdateTransformationSpace(CCmdUI* pCmdUI) {
+	pCmdUI->SetCheck(m_tSpace == ID_OBJECT_SPACE);
+}
+void CCGWorkView::OnViewAngle() {
+
+}
+void CCGWorkView::OnUpdateViewAngle(CCmdUI* pCmdUI) {
+
+}
 
 // OPTIONS HANDLERS ///////////////////////////////////////////
 
@@ -608,7 +670,7 @@ void CCGWorkView::OnMouseMove(UINT nFlags, CPoint point) {
 			Vector3(m_ref_point.x, m_ref_point.y, 0),
 			Vector3(point.x, point.y, 0) ,
 			m_AspectRatio, m_nAction, m_nAxis,
-			ID_OBJECT_SPACE, 1);
+			ID_TRANS_SPACE, 1);
 		m_scene.executeCommand(command);
 		delete command;
 		m_ref_point = point;

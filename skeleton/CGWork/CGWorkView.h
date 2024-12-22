@@ -52,7 +52,7 @@ private:
 	CPoint m_ref_point;
 	LightParams m_lights[MAX_LIGHT];	//configurable lights array
 	LightParams m_ambientLight;		//ambient light (only RGB is used)
-
+	ColorGC m_bg_color, m_normalColor, m_bBoxColor;
 
 	// Overrides
 		// ClassWizard generated virtual function overrides
@@ -117,10 +117,26 @@ protected:
 	afx_msg void OnLightShadingGouraud();
 	afx_msg void OnUpdateLightShadingGouraud(CCmdUI* pCmdUI);
 	afx_msg void OnLightConstants();
-	afx_msg void OnShowPolyNormals();
-	afx_msg void OnUpdateShowPolyNormals(CCmdUI* pCmdUI);
-	afx_msg void OnShowVertNormals();
-	afx_msg void OnUpdateShowVertNormals(CCmdUI* pCmdUI);
+	afx_msg void OnShowCalcPolyNormals();
+	afx_msg void OnUpdateShowCalcPolyNormals(CCmdUI* pCmdUI);
+	afx_msg void OnShowCalcVertNormals();
+	afx_msg void OnUpdateShowCalcVertNormals(CCmdUI* pCmdUI);
+	afx_msg void OnShowIritPolyNormals();
+	afx_msg void OnUpdateShowIritPolyNormals(CCmdUI* pCmdUI);
+	afx_msg void OnShowIritVertNormals();
+	afx_msg void OnUpdateShowIritVertNormals(CCmdUI* pCmdUI);
+	afx_msg void OnShowBBox();
+	afx_msg void OnUpdateShowBBox(CCmdUI* pCmdUI);
+	afx_msg void OnNormalsColor();
+	afx_msg void OnUpdateNormalsColor(CCmdUI* pCmdUI);
+	afx_msg void OnWireframeColor();
+	afx_msg void OnUpdateWireframeColor(CCmdUI* pCmdUI);
+	afx_msg void OnBgColor();
+	afx_msg void OnUpdateBgColor(CCmdUI* pCmdUI);
+	afx_msg void OnTransformationSpace();
+	afx_msg void OnUpdateTransformationSpace(CCmdUI* pCmdUI);
+	afx_msg void OnViewAngle();
+	afx_msg void OnUpdateViewAngle(CCmdUI* pCmdUI);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);

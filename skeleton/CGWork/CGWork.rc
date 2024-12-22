@@ -50,7 +50,9 @@ BEGIN
     SEPARATOR
     BUTTON      ID_VIEW_ORTHOGRAPHIC
     BUTTON      ID_VIEW_PERSPECTIVE
+    BUTTON      ID_VIEW_ANGLE
     SEPARATOR
+    BUTTON      ID_TRANS_SPACE
     BUTTON      ID_ACTION_ROTATE
     BUTTON      ID_ACTION_TRANSLATE
     BUTTON      ID_ACTION_SCALE
@@ -59,11 +61,15 @@ BEGIN
     BUTTON      ID_AXIS_Y
     BUTTON      ID_AXIS_Z
     SEPARATOR
-    BUTTON      ID_POLY_NORMALS
-    BUTTON      ID_VERTEX_NORMALS
-    BUTTON      ID_BUTTON32805
-    BUTTON      ID_BUTTON32806
+    BUTTON      ID_CALC_P_NORMALS
+    BUTTON      ID_CALC_V_NORMALS
+    BUTTON      ID_IRIT_P_NORMALS
+    BUTTON      ID_IRIT_V_NORMALS
     BUTTON      ID_BBOX
+    SEPARATOR
+    BUTTON      ID_NORMAL_COLOR
+    BUTTON      ID_WIREFRAME_COLOR
+    BUTTON      ID_BG_COLOR
 END
 
 
@@ -453,13 +459,25 @@ END
 
 STRINGTABLE
 BEGIN
-    ID_BUTTON_SUBDIVIDE     "Run Subdivision Scheme\nSubdivide"
+    ID_CALC_P_NORMALS       "Normals\nCalculated Polygon Normals"
+    ID_CALC_V_NORMALS       "Normals\nCalculated Vertex Normals"
+    ID_TRANS_SPACE          "Transformation Space/nObject space"
+    ID_BBOX                 "Bbox\nBounding Box"
+    ID_IRIT_P_NORMALS       "Normals\nIrit Polygon Normals"
+    ID_IRIT_V_NORMALS       "Normals\nIrit Vertex Normals"
+    ID_NORMAL_COLOR         "Colors\nNormal Color"
+    ID_VIEW_ANGLE           "View Perspective projection\nChange Perspective View Angle"
 END
 
 STRINGTABLE
 BEGIN
-    ID_POLY_NORMALS         "Poly Normals\nPoly Normals"
-    ID_VERTEX_NORMALS       "Vertex Normals\nVertex Normals"
+    ID_WIREFRAME_COLOR      "Color\nWireframe Color"
+    ID_BG_COLOR             "Colors\nBackground Color"
+END
+
+STRINGTABLE
+BEGIN
+    ID_BUTTON_SUBDIVIDE     "Run Subdivision Scheme\nSubdivide"
 END
 
 #endif    // English (United States) resources
