@@ -523,7 +523,7 @@ void CCGWorkView::OnShowCalcVertNormals() {
 	m_rendermode.setRenderCalcVertivesNormal();
 }
 void CCGWorkView::OnUpdateShowCalcVertNormals(CCmdUI* pCmdUI) {
-	pCmdUI->SetCheck(m_rendermode.getRenderVertivesNormal());
+	pCmdUI->SetCheck(m_rendermode.getRenderCalcVertivesNormal());
 
 }
 
@@ -535,10 +535,10 @@ void CCGWorkView::OnUpdateShowIritPolyNormals(CCmdUI* pCmdUI) {
 
 }
 void CCGWorkView::OnShowIritVertNormals() {
-	m_rendermode.setRenderVertivesNormal();
+	m_rendermode.setRenderDataVertivesNormal();
 }
 void CCGWorkView::OnUpdateShowIritVertNormals(CCmdUI* pCmdUI) {
-	pCmdUI->SetCheck(m_rendermode.getRenderVertivesNormal());
+	pCmdUI->SetCheck(m_rendermode.getRenderDataVertivesNormal());
 
 }
 void CCGWorkView::OnShowBBox(){
