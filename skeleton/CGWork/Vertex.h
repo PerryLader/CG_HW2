@@ -18,16 +18,18 @@ private:
     bool m_hasCalcNormal;
     std::vector<PolygonGC*> m_neigberPolygons;
 
-    void setCalcNormal(Vector3 normal);
     void setDataNormal(Vector3 normal);
     
 public:
-    bool m_hasTranformed = false;
+    
     // Constructor
+    // Vertex(const Vertex& v);
     Vertex(Vector3 p);
     Vertex(Vector3 p, Vector3 n);
+    
     void addNeigberPolygon(PolygonGC* poly);
-    Vector3 getCalcNormal();
+    Vector3 getCalcNormal()const ;
+    void setCalcNormal();
     // Print function
     void print();
     Vector3 loc() const;

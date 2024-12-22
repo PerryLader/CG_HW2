@@ -8,9 +8,10 @@
 #define RENDER_SHAPE                        1ULL
 #define RENDER_POLYGONS_CALC_NORMALS        1ULL<<1
 #define RENDER_POLYGONS_NORMALS_FROM_DATA   1ULL<<2
-#define RENDER_VETICES_NORMALS              1ULL<<3
-#define RENDER_OBJ_BBOX                     1ULL<<4
-#define RENDER_POLYGONS_BBOX                1ULL<<5
+#define RENDER_CALC_VETICES_NORMALS         1ULL<<3
+#define RENDER_DATA_VETICES_NORMALS         1ULL<<4
+#define RENDER_OBJ_BBOX                     1ULL<<5
+#define RENDER_POLYGONS_BBOX                1ULL<<6
 
 
 class RenderMode {
@@ -20,15 +21,16 @@ public:
 	bool getRenderShape() { return RENDER_SHAPE & flags; }
 	bool getRenderPolygonsCalcNormal() { return RENDER_POLYGONS_CALC_NORMALS & flags; }
 	bool getRenderPolygonsNormalFromData() { return RENDER_POLYGONS_NORMALS_FROM_DATA & flags; }
-
-	bool getRenderVertivesNormal() { return RENDER_VETICES_NORMALS & flags; }
+	bool getRenderCalcVertivesNormal() { return RENDER_CALC_VETICES_NORMALS & flags; }
+	bool getRenderDataVertivesNormal() { return RENDER_DATA_VETICES_NORMALS & flags; }
 	bool getRenderObjBbox() { return RENDER_OBJ_BBOX & flags; }
 	bool getRenderPolygonsBbox() { return RENDER_POLYGONS_BBOX & flags; }
 
 	void setRenderShape() { flags ^= RENDER_SHAPE; }
 	void setRenderPolygonsCalcNormal() { flags ^= RENDER_POLYGONS_CALC_NORMALS; }
 	void setRenderPolygonsNormalFromData() { flags ^= RENDER_POLYGONS_NORMALS_FROM_DATA; }
-	void setRenderVertivesNormal() { flags ^= RENDER_VETICES_NORMALS; }
+	void setRenderCalcVertivesNormal() { flags ^= RENDER_CALC_VETICES_NORMALS; }
+	void setRenderDataVertivesNormal() { flags ^= RENDER_DATA_VETICES_NORMALS; }
 	void setRenderObjBbox() { flags ^= RENDER_OBJ_BBOX; }
 	void setRenderPolygonsBbox() { flags ^= RENDER_POLYGONS_BBOX; }
 	void unSetAll() { flags = 0; }
@@ -38,10 +40,11 @@ enum LineVectorIndex{
 SHAPES=0,
 POLY_CALC_NORNAL=1,
 POLY_DATA_NORNAL=2,
-VERTICES_NORMAL=2,
-OBJ_BBOX=4,
-POLY_BBOX=5,
-LAST=6
+VERTICES_CALC_NORMAL=3,
+VERTICES_DATA_NORMAL = 4,
+OBJ_BBOX=5,
+POLY_BBOX=6,
+LAST=7
 };
 
 
@@ -80,6 +83,8 @@ private:
 	void createPolyBboxLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor);
 	void createPolyNormalLlinesFromData(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
 	void createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
+	void createVertCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
+
 	//void calVertexNormal();
 
 public:

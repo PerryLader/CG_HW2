@@ -394,7 +394,7 @@ void CCGWorkView::OnFileLoad()
 		std::vector<Model*> container;
 		if(CGSkelProcessIritDataFilesToContainer(m_strItdFileName, 1, container)){
 			m_scene.addModels(container);
-			m_scene.print();
+		//	m_scene.print();
 		}
 		Invalidate();	// force a WM_PAINT for drawing.
 	}
@@ -520,25 +520,10 @@ void CCGWorkView::OnUpdateShowCalcPolyNormals(CCmdUI* pCmdUI) {
 
 }
 void CCGWorkView::OnShowCalcVertNormals() {
-	m_rendermode.setRenderVertivesNormal();
+	m_rendermode.setRenderCalcVertivesNormal();
 }
 void CCGWorkView::OnUpdateShowCalcVertNormals(CCmdUI* pCmdUI) {
-	pCmdUI->SetCheck(m_rendermode.getRenderVertivesNormal());
-
-}
-
-void CCGWorkView::OnShowIritPolyNormals() {
-	m_rendermode.getRenderPolygonsNormalFromData();
-}
-void CCGWorkView::OnUpdateShowIritPolyNormals(CCmdUI* pCmdUI) {
-	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsNormalFromData());
-
-}
-void CCGWorkView::OnShowIritVertNormals() {
-	m_rendermode.setRenderVertivesNormal();
-}
-void CCGWorkView::OnUpdateShowIritVertNormals(CCmdUI* pCmdUI) {
-	pCmdUI->SetCheck(m_rendermode.getRenderVertivesNormal());
+	pCmdUI->SetCheck(m_rendermode.getRenderCalcVertivesNormal());
 
 }
 void CCGWorkView::OnShowBBox(){

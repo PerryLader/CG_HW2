@@ -8,31 +8,43 @@
 
    
 
-void Vertex::setCalcNormal(Vector3 normal) {
-    m_calcNormal = normal;
-    m_hasCalcNormal = true;
-}
 void Vertex::setDataNormal(Vector3 normal) {
     m_dataNormal = normal;
     m_hasDataNormal = true;
 }
+
+//Vertex::Vertex(const Vertex &v)
+//{
+//    m_calcNormal=v.
+//}
 
 // Constructor
 Vertex::Vertex(Vector3 p) : m_point(p), m_dataNormal(Vector3(0, 0, 0)), m_hasDataNormal(false), m_hasCalcNormal(false) {}
 // Constructor
 Vertex::Vertex(Vector3 p, Vector3 n) : m_point(p), m_dataNormal(n), m_hasDataNormal(true), m_hasCalcNormal(false) {}
 
+
+
 void Vertex::addNeigberPolygon(PolygonGC* poly) { m_neigberPolygons.push_back(poly); }
 
-Vector3 Vertex::getCalcNormal()
+Vector3 Vertex::getCalcNormal()const
 {
-
+    if (!m_hasCalcNormal)
+    {
+        throw;
+    }
+    return m_calcNormal;    
+}
+void Vertex::setCalcNormal()
+{
+    
     Vector3 avrageNormal(0, 0, 0);
     for (PolygonGC* t : m_neigberPolygons)
     {
         avrageNormal = avrageNormal + t->getCalcNormal();
     }
-    return avrageNormal * (1 / m_neigberPolygons.size());
+    this->m_calcNormal= avrageNormal * (1.0 / m_neigberPolygons.size());
+    m_hasCalcNormal = true;
 }
 // Print function
 void Vertex::print() {
@@ -54,10 +66,12 @@ std::shared_ptr<Vertex> Vertex::getTransformedVertex(const Matrix4& transformati
     std::shared_ptr<Vertex> temp(  new Vertex((transformation * Vector4::extendOne(this->m_point)).toVector3()));
     if (m_hasCalcNormal)
     {
-        temp->setCalcNormal((transformation * Vector4::extendOne(this->m_calcNormal)).toVector3());
+        temp->m_hasCalcNormal = true;
+        temp->m_calcNormal=((transformation * Vector4::extendOne(temp->m_calcNormal)).toVector3());
     }
     if (m_hasDataNormal)
     {
+        temp->m_hasDataNormal = true;
         temp->setDataNormal((transformation * Vector4::extendOne(this->m_dataNormal)).toVector3());
 
     }
@@ -105,7 +119,7 @@ Vertex operator*(const Matrix4& mat, const Vertex& vert)
     }
     if (vert.m_hasCalcNormal)
     {
-        res.setCalcNormal((mat * Vector4::extendOne(vert.m_calcNormal)).toVector3());
+        res.m_calcNormal=((mat * Vector4::extendOne(vert.m_calcNormal)).toVector3());
     }
     return res;
 }

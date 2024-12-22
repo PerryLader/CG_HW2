@@ -455,10 +455,6 @@ BEGIN
     ID_AXIS_X               "X Axis\nX Axis"
     ID_AXIS_Y               "Y Axis\nY Axis"
     ID_AXIS_Z               "Z Axis\nZ Axis"
-END
-
-STRINGTABLE
-BEGIN
     ID_CALC_P_NORMALS       "Normals\nCalculated Polygon Normals"
     ID_CALC_V_NORMALS       "Normals\nCalculated Vertex Normals"
     ID_TRANS_SPACE          "Transformation Space/nObject space"
@@ -467,13 +463,11 @@ BEGIN
     ID_IRIT_V_NORMALS       "Normals\nIrit Vertex Normals"
     ID_NORMAL_COLOR         "Colors\nNormal Color"
     ID_VIEW_ANGLE           "View Perspective projection\nChange Perspective View Angle"
-END
-
-STRINGTABLE
-BEGIN
     ID_WIREFRAME_COLOR      "Color\nWireframe Color"
     ID_BG_COLOR             "Colors\nBackground Color"
 END
+
+
 
 STRINGTABLE
 BEGIN

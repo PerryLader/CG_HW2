@@ -295,6 +295,7 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 								PVertex->Normal[1],
 								PVertex->Normal[2])));
 					newVert = shape->m_map[pos];
+					newVert->addNeigberPolygon(newPoly);
 				}
 				else
 				{
@@ -306,6 +307,7 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 				if (shape->m_map.find(pos) == shape->m_map.end()) {
 					shape->m_map[pos] = std::shared_ptr<Vertex>(new Vertex(pos));
 					newVert = shape->m_map[pos];
+					newVert->addNeigberPolygon(newPoly);
 				}
 				else
 				{

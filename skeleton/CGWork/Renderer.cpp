@@ -37,7 +37,6 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     std::vector<Line> lines[LineVectorIndex::LAST];
     for (const auto& model : models) {
         Geometry* transformedGeometry = model->onDraw(viewProjectionMatrix);
-
         transformedGeometry->loadLines(lines, bBoxColor, normalColor, renderMode);
         transformedGeometries.push_back(transformedGeometry);
         // Clipping
@@ -58,7 +57,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
         }
         for (Line line : singleTypeLine){
             // if (edge.isVisible()) {          
-            //if (line.clip(line))
+         //   if (line.clip(line))
             {
             line.draw(m_Buffer, this->m_width, this->m_height);
             }

@@ -176,10 +176,8 @@ bool PolygonGC::isBehindCamera() const{
     return true;
 }
 std::vector<std::shared_ptr<Vertex>> PolygonGC::getVertexVector() 
-{
-    
+{    
     return m_vertices;
-
 }
 // Print polygon color
 void PolygonGC::printColor() const{
@@ -237,8 +235,9 @@ PolygonGC* PolygonGC::applyForceTransformation(const Matrix4& transformation) co
 PolygonGC* PolygonGC::applySoftTransformation(const Matrix4& transformation) const{
     PolygonGC* newPoly = new PolygonGC(this->m_color);
     for ( auto vertex : m_vertices) {
-        //Vertex* newVertex = vertex->getTransformedVertex(transformation);
-       newPoly->addVertex(vertex);
+       
+            std::shared_ptr<Vertex> newVertex = vertex->getTransformedVertex(transformation);
+            newPoly->addVertex(newVertex);
     }
 
     newPoly->m_calcNormal = (transformation * Vector4::extendOne(newPoly->m_calcNormal)).toVector3();
