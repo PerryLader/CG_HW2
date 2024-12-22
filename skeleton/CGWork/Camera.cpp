@@ -76,6 +76,6 @@ void Camera::orientate(const Matrix4& tMat) {
 }
 
 void Camera::translate(const Matrix4& tMat) {
-    this->viewMatrix = tMat* this->viewMatrix;
+    this->viewMatrix = tMat * this->viewMatrix;
 }
 

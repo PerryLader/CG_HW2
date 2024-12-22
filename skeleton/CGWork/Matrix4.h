@@ -5,6 +5,8 @@
 #include <sstream>
 #include <array>
 #include "Vector4.h"
+#include "resource.h"
+
 
 class Matrix4 {
 
@@ -49,6 +51,8 @@ public:
     Matrix4 inverse() const;
 
     // Rotation matrices
+    static Matrix4 rotation(float angle, int axis);
+
     static Matrix4 rotationX(float angle);
     static Matrix4 rotationY(float angle);
     static Matrix4 rotationZ(float angle);

@@ -25,12 +25,12 @@ public:
 	bool getRenderObjBbox() { return RENDER_OBJ_BBOX & flags; }
 	bool getRenderPolygonsBbox() { return RENDER_POLYGONS_BBOX & flags; }
 
-	bool setRenderShape() { flags &= RENDER_SHAPE & flags; }
-	bool setRenderPolygonsCalcNormal() { flags &= RENDER_POLYGONS_CALC_NORMALS & flags; }
-	bool setRenderPolygonsNormalFromData() { flags &= RENDER_POLYGONS_NORMALS_FROM_DATA & flags; }
-	bool setRenderVertivesNormal() { flags &= RENDER_VETICES_NORMALS & flags; }
-	bool setRenderObjBbox() { flags &= RENDER_OBJ_BBOX & flags; }
-	bool setRenderPolygonsBbox() { flags &= RENDER_POLYGONS_BBOX & flags; }
+	void setRenderShape() { flags ^= RENDER_SHAPE; }
+	void setRenderPolygonsCalcNormal() { flags ^= RENDER_POLYGONS_CALC_NORMALS; }
+	void setRenderPolygonsNormalFromData() { flags ^= RENDER_POLYGONS_NORMALS_FROM_DATA; }
+	void setRenderVertivesNormal() { flags ^= RENDER_VETICES_NORMALS; }
+	void setRenderObjBbox() { flags ^= RENDER_OBJ_BBOX; }
+	void setRenderPolygonsBbox() { flags ^= RENDER_POLYGONS_BBOX; }
 	void unSetAll() { flags = 0; }
 
 };

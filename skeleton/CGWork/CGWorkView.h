@@ -37,10 +37,11 @@ private:
 	int m_nAxis;				// Axis of Action, X Y or Z
 	int m_nAction;				// Rotate, Translate, Scale
 	int m_nView;				// Orthographic, perspective
+	float m_sensitivity; 
 	bool m_bIsPerspective;			// is the view perspective
-
+	int m_tSpace;
 	CString m_strItdFileName;		// file name of IRIT data
-
+	int m_renderMode; 
 	int m_nLightShading;			// shading: Flat, Gouraud.
 
 	double m_lMaterialAmbient;		// The Ambient in the scene
@@ -116,6 +117,10 @@ protected:
 	afx_msg void OnLightShadingGouraud();
 	afx_msg void OnUpdateLightShadingGouraud(CCmdUI* pCmdUI);
 	afx_msg void OnLightConstants();
+	afx_msg void OnShowPolyNormals();
+	afx_msg void OnUpdateShowPolyNormals(CCmdUI* pCmdUI);
+	afx_msg void OnShowVertNormals();
+	afx_msg void OnUpdateShowVertNormals(CCmdUI* pCmdUI);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);

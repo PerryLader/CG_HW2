@@ -299,6 +299,19 @@ Matrix4 Matrix4::inverse() const {
     return inv.transpose();
 }
 
+Matrix4 Matrix4::rotation(float angle, int axis) {
+    switch (axis) {
+    case ID_AXIS_X:
+        return Matrix4::rotationX(angle);
+        break;
+    case ID_AXIS_Y:
+        return Matrix4::rotationY(angle);
+        break;
+    case ID_AXIS_Z:
+        return Matrix4::rotationZ(angle);
+        break;
+    }
+}
 // Rotation matrices
 Matrix4 Matrix4::rotationX(float angle) {
     Matrix4 result;

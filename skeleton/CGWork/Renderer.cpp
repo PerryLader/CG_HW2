@@ -30,7 +30,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     Matrix4 aspectRatioMatrix = Matrix4::scaling(Vector3(1.0f / aspectRatio, 1.0f, 1.0f));
     Matrix4 view = camera->getViewMatrix();
     Matrix4 proj = camera->getProjectionMatrix();
-    const Matrix4 viewProjectionMatrix = camera->getViewMatrix() * aspectRatioMatrix * proj;
+    const Matrix4 viewProjectionMatrix = camera->getViewMatrix() * proj* aspectRatioMatrix;
 
     // Transform and cull geometry
     std::vector<Geometry*> transformedGeometries;

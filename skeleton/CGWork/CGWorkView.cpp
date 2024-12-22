@@ -62,6 +62,10 @@ BEGIN_MESSAGE_MAP(CCGWorkView, CView)
 	ON_COMMAND(ID_LIGHT_SHADING_GOURAUD, OnLightShadingGouraud)
 	ON_UPDATE_COMMAND_UI(ID_LIGHT_SHADING_GOURAUD, OnUpdateLightShadingGouraud)
 	ON_COMMAND(ID_LIGHT_CONSTANTS, OnLightConstants)
+	ON_COMMAND(ID_POLY_NORMALS, OnShowPolyNormals)
+	ON_UPDATE_COMMAND_UI(ID_POLY_NORMALS, OnUpdateShowPolyNormals)
+	ON_COMMAND(ID_VERTEX_NORMALS, OnShowVertNormals)
+	ON_UPDATE_COMMAND_UI(ID_VERTEX_NORMALS, OnUpdateShowVertNormals)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
@@ -507,7 +511,20 @@ void CCGWorkView::OnUpdateAxisZ(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(m_nAxis == ID_AXIS_Z);
 }
 
+void CCGWorkView::OnShowPolyNormals() {
+	m_rendermode.setRenderPolygonsCalcNormal();
+}
+void CCGWorkView::OnUpdateShowPolyNormals(CCmdUI* pCmdUI) {
+	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsCalcNormal());
 
+}
+void CCGWorkView::OnShowVertNormals() {
+	m_rendermode.setRenderVertivesNormal();
+}
+void CCGWorkView::OnUpdateShowVertNormals(CCmdUI* pCmdUI) {
+	pCmdUI->SetCheck(m_rendermode.getRenderVertivesNormal());
+
+}
 
 
 
@@ -587,7 +604,11 @@ void CCGWorkView::OnMouseMove(UINT nFlags, CPoint point) {
 	// Handle the left button move event here
 	if (m_bLeftButtonDown == true) {
 		//build commad object
-		ScreenCommand* command = new TransformationCommand(m_WindowWidth,m_WindowHeight,Vector3(m_ref_point.x, m_ref_point.y, 0), Vector3(point.x, point.y, 0) , m_AspectRatio, m_nAction, m_nAxis, true, 1);
+		ScreenCommand* command = new TransformationCommand(m_WindowWidth,m_WindowHeight,
+			Vector3(m_ref_point.x, m_ref_point.y, 0),
+			Vector3(point.x, point.y, 0) ,
+			m_AspectRatio, m_nAction, m_nAxis,
+			ID_OBJECT_SPACE, 1);
 		m_scene.executeCommand(command);
 		delete command;
 		m_ref_point = point;

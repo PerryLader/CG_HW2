@@ -23,9 +23,12 @@ public:
     // Function to add a camera to the scene
     void addCamera(Camera* camera);
     // Function to render the scene
-    void Scene::render(int width, int height, RenderMode renderMode, ColorGC bg_color, ColorGC normalColor, ColorGC bBoxColor) const;
+    void render(int width, int height, RenderMode renderMode, ColorGC bg_color, ColorGC normalColor, ColorGC bBoxColor) const;
     uint32_t* getBuffer();
     void executeCommand(ScreenCommand* command);
+
+    void applyToObjectSpace(const Matrix4& tMat);
+    void applyToCamera(const Matrix4& tMat);
 
     void handleTransformationAction(const Vector3& ref_point,
          const Vector3& movement,

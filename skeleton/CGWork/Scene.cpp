@@ -32,6 +32,24 @@ void Scene::executeCommand(ScreenCommand* command) {
     command->execute(*this);
 }
 
+static float calculateTransformationMagnitude(const Vector3& ref_point,
+    const Vector3& movement,
+    float aspectRatio,
+    float sensitivity,
+    int width,
+    int height) {
+    return ((movement - ref_point).x / (width / aspectRatio) + (movement - ref_point).y / height) * sensitivity;
+}
+
+void Scene::applyToObjectSpace(const Matrix4& tMat) {
+    for (Model* mod : m_models) {
+        mod->modifiyTransformation(tMat);
+    }
+}
+void Scene::applyToCamera(const Matrix4& tMat) {
+    m_cameras[m_primaryCameraIndex]->translate(tMat);
+}
+
 void Scene::handleTransformationAction(const Vector3& ref_point,
     const Vector3& movement,
     float aspectRatio,
@@ -41,7 +59,9 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
     int tSpace,
     int width,
     int height) {
-    Vector3 axisVector = Vector3::unitX();
+    const float magnitude = calculateTransformationMagnitude(ref_point, movement, aspectRatio, sensitivity, width, height);
+    Vector3 axisVector;
+    Matrix4 Trasformation;
     switch(axis){
     case ID_AXIS_X:
         axisVector = Vector3::unitX();
@@ -52,39 +72,25 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
     case ID_AXIS_Z:
         axisVector = Vector3::unitZ();
         break;
+    default:
+        axisVector = Vector3::unitX();
     }
-    Matrix4 Trasformation = Matrix4::identity();
-    float magnitude = ((movement - ref_point).x / (width/aspectRatio) + (movement - ref_point).y / height) * sensitivity;
     switch (action) {
     case ID_ACTION_ROTATE:
-        switch (axis) {
-        case ID_AXIS_X:
-            Trasformation = Matrix4::rotationX(magnitude);
-            break;
-        case ID_AXIS_Y:
-            Trasformation = Matrix4::rotationY(magnitude);
-            break;
-        case ID_AXIS_Z:
-            Trasformation = Matrix4::rotationZ(magnitude);
-            break;
-        }
-        m_cameras[0]->translate(Trasformation);
+        Trasformation = Matrix4::rotation(magnitude, axis);
         break;
     case ID_ACTION_SCALE:
-        Trasformation = Matrix4::scaling(Vector3::one()*magnitude);
+        Trasformation = Matrix4::scaling(Vector3::one() + axisVector * magnitude);
         break;
     case ID_ACTION_TRANSLATE:
         Trasformation = Matrix4::translate(axisVector* magnitude);
-        m_cameras[0]->translate(Trasformation);
         break;
+    default:
+        Trasformation = Matrix4::rotation(magnitude, axis);
     }
-    bool ObjecetSpace = false; // should be a comparison between tSpace and some definition of what is ObjectSpace
-    if (ObjecetSpace) {
-        for (Model* mod : m_models) {
-            mod->modifiyTransformation(Trasformation);
-        }
-    }
+    tSpace == ID_OBJECT_SPACE ? applyToObjectSpace(Trasformation) : applyToCamera(Trasformation); // should be a comparison between tSpace and some definition of what is ObjectSpace
 }
+
 void Scene::print() const {
     std::cout << "Scene:" << std::endl;
     for (const auto& elem : m_models)
