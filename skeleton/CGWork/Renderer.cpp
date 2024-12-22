@@ -45,9 +45,9 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
         //transformedGeometry->backFaceCulling();//there is bug here
     }
     //add axis origin for tests:
-    lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(-3, 0, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(3, 0, 0, 1)).toVector3(), ColorGC(255, 0, 0)));
-    lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, -3, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 3, 0, 1)).toVector3(), ColorGC(0, 255, 0)));
-    lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, 0, -3, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 0, 3, 1)).toVector3(), ColorGC(0, 0, 255)));
+    lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(-1, 0, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(1, 0, 0, 1)).toVector3(), ColorGC(255, 0, 0)));
+    lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, -1, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 1, 0, 1)).toVector3(), ColorGC(0, 255, 0)));
+    lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, 0, -1, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 0, 1, 1)).toVector3(), ColorGC(0, 0, 255)));
 
     //the Final draw
     for (std::vector<Line>& singleTypeLine : lines) {
@@ -57,7 +57,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
         }
         for (Line line : singleTypeLine){
             // if (edge.isVisible()) {          
-            if (line.clip(line))
+            //if (line.clip(line))
             {
             line.draw(m_Buffer, this->m_width, this->m_height);
             }
