@@ -255,6 +255,7 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 			Attrs = AttrTraceAttributes(Attrs, NULL);
 		}
 	}
+	
 	for (PPolygon = PObj_src->U.Pl; PPolygon != NULL; PPolygon = PPolygon->Pnext)
 	{
 		if (PPolygon->PVertex == NULL) {
@@ -269,6 +270,10 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 
 		/* use if(IP_HAS_PLANE_POLY(PPolygon)) to know whether a normal is defined for the polygon
 		   access the normal by the first 3 components of PPolygon->Plane */
+
+		
+
+
 		PVertex = PPolygon->PVertex;
 		PolygonGC* newPoly;
 		if (IP_HAS_PLANE_POLY(PPolygon)) {
@@ -279,20 +284,36 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 			newPoly = new PolygonGC(ColorGC(red, green, blue));
 		do {			     /* Assume at least one edge in polygon! */
 			/* code handeling all vertex/normal/texture coords */
-			Vertex* newVert;
+			std::shared_ptr<Vertex> newVert;
+			Vector3 pos = Vector3(PVertex->Coord[0], PVertex->Coord[1], PVertex->Coord[2]);
+
 			if (IP_HAS_NORMAL_VRTX(PVertex))
 			{
-				newVert = new Vertex(Vector3(PVertex->Coord[0],
-											 PVertex->Coord[1],
-										 	 PVertex->Coord[2])
-									,Vector3(PVertex->Normal[0],
-											 PVertex->Normal[1],
-											 PVertex->Normal[2]));
+				if (shape->m_map.find(pos) == shape->m_map.end()) {
+					shape->m_map[pos]= std::shared_ptr<Vertex>( new Vertex(pos,
+						Vector3(PVertex->Normal[0],
+								PVertex->Normal[1],
+								PVertex->Normal[2])));
+					newVert = shape->m_map[pos];
+					newVert->addNeigberPolygon(newPoly);
+				}
+				else
+				{
+					newVert = shape->m_map[pos];
+					newVert->addNeigberPolygon(newPoly);					
+				}
 			}
 			else {
-				newVert = new Vertex(Vector3(PVertex->Coord[0],
-											 PVertex->Coord[1],
-											 PVertex->Coord[2]));
+				if (shape->m_map.find(pos) == shape->m_map.end()) {
+					shape->m_map[pos] = std::shared_ptr<Vertex>(new Vertex(pos));
+					newVert = shape->m_map[pos];
+					newVert->addNeigberPolygon(newPoly);
+				}
+				else
+				{
+					newVert = shape->m_map[pos];
+					newVert->addNeigberPolygon(newPoly);
+				}
 			}
 
 			newPoly->addVertex(newVert);

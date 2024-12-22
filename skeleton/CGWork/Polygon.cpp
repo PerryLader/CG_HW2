@@ -8,7 +8,6 @@
 //    yes my man!BJ also?  //
 // Yes my friend! coffee?  //
 /////////////////////////////
-
 void BBox::toPrint() const{
     std::cout << "Boudning Box: " << m_minBounds <<", " << m_maxBounds << std::endl;
 }
@@ -92,7 +91,7 @@ void PolygonGC::resetBounds() {
         return;
     }
     m_bbox = BBox(Vector3(FLT_MAX, FLT_MAX, FLT_MAX), Vector3(-FLT_MAX, -FLT_MAX, -FLT_MAX));
-    for (Vertex* vertex : m_vertices) {
+    for (auto vertex : m_vertices) {
         m_bbox.updateBBox(vertex->loc());
     }
 }
@@ -106,12 +105,6 @@ PolygonGC::PolygonGC(const Vector3& normal,ColorGC color) : m_color(color),m_dat
 }
 
 
-PolygonGC::~PolygonGC(){
-    for (Vertex* vert : m_vertices) {
-        delete vert;
-    }
-    m_vertices.clear();
-}
 
 // Set the color of the polygon
 void PolygonGC::setColor(const ColorGC& newColor) {   
@@ -128,10 +121,10 @@ const ColorGC& PolygonGC::getColor() const
 void PolygonGC::addVertexs(IPVertexStruct* vertex) {
     while (vertex)
     {
-        Vertex* temp = new Vertex(Vector3(
+        std::shared_ptr<Vertex> temp(new Vertex(Vector3(
             vertex->Coord[0],
             vertex->Coord[1],
-            vertex->Coord[2]));
+            vertex->Coord[2])));
         m_vertices.push_back(temp);
         updateBounds(*temp);
         vertex = vertex->Pnext;
@@ -143,7 +136,7 @@ void PolygonGC::addVertexs(IPVertexStruct* vertex) {
     m_calcNormal= this->calculateNormal();
 }
 
-void PolygonGC::addVertex(Vertex* vertex) {
+void PolygonGC::addVertex(std::shared_ptr<Vertex> vertex) {
     if (vertex)
     {
         m_vertices.push_back(vertex);
@@ -181,6 +174,10 @@ bool PolygonGC::isBehindCamera() const{
         if (m_vertices[i]->loc().z > 0)
             return false;
     return true;
+}
+std::vector<std::shared_ptr<Vertex>> PolygonGC::getVertexVector() 
+{    
+    return m_vertices;
 }
 // Print polygon color
 void PolygonGC::printColor() const{
@@ -221,12 +218,28 @@ void PolygonGC::clip(){
     //m_vertices = inscopeVertices;
 }
 // Function to apply a transformation matrix to all vertices
-PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const{
+PolygonGC* PolygonGC::applyForceTransformation(const Matrix4& transformation) const
+{
     PolygonGC* newPoly = new PolygonGC(this->m_color);
-    for (const Vertex* vertex : m_vertices) {
-        Vertex* newVertex = vertex->getTransformedVertex(transformation);
-       newPoly->addVertex(newVertex);
+    for (auto vertex : m_vertices) {
+        newPoly->addVertex(vertex->getTransformedVertex(transformation));
     }
+
+    newPoly->m_calcNormal = (transformation * Vector4::extendOne(newPoly->m_calcNormal)).toVector3();
+    if (newPoly->m_hasDataNormal)
+    {
+        newPoly->m_dataNormal = (transformation * Vector4::extendOne(newPoly->m_dataNormal)).toVector3();
+    }
+    return newPoly;
+}
+PolygonGC* PolygonGC::applySoftTransformation(const Matrix4& transformation) const{
+    PolygonGC* newPoly = new PolygonGC(this->m_color);
+    for ( auto vertex : m_vertices) {
+       
+            std::shared_ptr<Vertex> newVertex = vertex->getTransformedVertex(transformation);
+            newPoly->addVertex(newVertex);
+    }
+
     newPoly->m_calcNormal = (transformation * Vector4::extendOne(newPoly->m_calcNormal)).toVector3();
     if (newPoly->m_hasDataNormal)
     {
@@ -238,11 +251,12 @@ std::vector<Line> PolygonGC::getPolyBboxLine(const ColorGC& bBoxColor)
 {
     return m_bbox.getLinesOfBbox(bBoxColor);
 }
+
 std::vector<Line>* PolygonGC::getEdges() const {
     std::vector<Line>* edges = new std::vector<Line>();
     for (size_t i = 0; i < m_vertices.size(); ++i) {
-        Vertex* v1 = m_vertices[i];
-        Vertex* v2 = m_vertices[(i + 1) % m_vertices.size()];
+        std::shared_ptr<Vertex> v1 = m_vertices[i];
+        std::shared_ptr<Vertex> v2 = m_vertices[(i + 1) % m_vertices.size()];
         edges->push_back(Line(*v1, *v2, m_color));
     }
     return edges;
