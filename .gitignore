@@ -5,6 +5,8 @@ skeleton/CGWork/.vs
 # Build directories and files
 skeleton/bin/
 skeleton/obj/
+skeleton/CGWork/Debug
+skeleton/CGWork/Release
 
 # User-specific Visual Studio settings
 *.obj
@@ -12,7 +14,13 @@ skeleton/obj/
 *.userosscache
 *.suo
 *.userprefs
-
+*.pdb
+*.pch
+*.log
+*.ilk
+*.tlog
+*.ilk
+*.ilk
 
 
 # Logs and temporary files
