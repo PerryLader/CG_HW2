@@ -51,10 +51,6 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
 
     //the Final draw
     for (std::vector<Line>& singleTypeLine : lines) {
-        if (singleTypeLine.size() == 3)
-        {
-            int x = 5;
-        }
         for (Line line : singleTypeLine){
             // if (edge.isVisible()) {          
          //   if (line.clip(line))

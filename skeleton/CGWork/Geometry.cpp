@@ -161,6 +161,23 @@ void Geometry::createVertCalcNormalLlines(std::vector<Line> lines[LineVectorInde
 	lines[LineVectorIndex::VERTICES_CALC_NORMAL].insert(lines[LineVectorIndex::VERTICES_CALC_NORMAL].end(), normalLines.begin(), normalLines.end());
 
 }
+void Geometry::createVertDataNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor)
+{
+	std::vector<Line> normalLines;
+	for (auto poly : this->m_polygons)
+	{
+		for (auto vert : poly->getVertexVector())
+		{
+			Vector3 vec = vert->getDataNormal();
+			Vector3 centerPoint = vert->loc();
+			normalLines.push_back(Line(centerPoint, centerPoint + (vec.normalized() * 0.25)));
+		}
+	}
+
+	lines[LineVectorIndex::VERTICES_DATA_NORMAL].insert(lines[LineVectorIndex::VERTICES_DATA_NORMAL].end(), normalLines.begin(), normalLines.end());
+
+}
+
 
 
 void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode renderMode)
@@ -188,6 +205,12 @@ void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const C
 	if (renderMode.getRenderCalcVertivesNormal())
 	{
 		this->createVertCalcNormalLlines(lines, normalColor);
+	}
+	if (renderMode.getRenderDataVertivesNormal())
+	{
+		
+		this->createVertDataNormalLlines(lines, normalColor);
+		
 	}
 }
 
