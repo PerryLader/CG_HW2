@@ -528,7 +528,7 @@ void CCGWorkView::OnUpdateShowCalcVertNormals(CCmdUI* pCmdUI) {
 }
 
 void CCGWorkView::OnShowIritPolyNormals() {
-	m_rendermode.getRenderPolygonsNormalFromData();
+	m_rendermode.setRenderPolygonsNormalFromData();
 }
 void CCGWorkView::OnUpdateShowIritPolyNormals(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsNormalFromData());
