@@ -1,3 +1,4 @@
+
 #include "Vertex.h"
 #include "Polygon.h"
 //
@@ -123,43 +124,3 @@ Vertex operator*(const Matrix4& mat, const Vertex& vert)
     }
     return res;
 }
-//One of the vertex must be out!and one must be in
-//static Vertex* intersectClipVolume(Vertex* v1, Vertex* v2) {
-//    Vector3 temp;
-//    //pos x
-//    temp = intersectPoint(v2->loc()- v1->loc(), v1->loc(), Vector3(1, 0, 0), Vector3(1, 0, 0));
-//    if (Vertex(temp).isInsideClipVolume())
-//    {
-//        return new Vertex(temp);
-//    }
-//    //neg x
-//    temp = intersectPoint(v2->loc() - v1->loc(), v1->loc(), Vector3(-1, 0, 0), Vector3(-1, 0, 0));
-//    if (Vertex(temp).isInsideClipVolume())
-//    {
-//        return new Vertex(temp);
-//    }
-//    //pos y
-//    temp = intersectPoint(v2->loc() - v1->loc(), v1->loc(), Vector3(0,1 , 0), Vector3(0, 1, 0));
-//    if (Vertex(temp).isInsideClipVolume())
-//    {
-//        return new Vertex(temp);
-//    }
-//    //neg y
-//    temp = intersectPoint(v2->loc() - v1->loc(), v1->loc(), Vector3(0, -1, 0), Vector3(0, -1, 0));
-//    if (Vertex(temp).isInsideClipVolume())
-//    {
-//        return new Vertex(temp);
-//    }
-//    //pos z
-//    temp = intersectPoint(v2->loc() - v1->loc(), v1->loc(), Vector3(0, 0, 1), Vector3(0, 0, 1));
-//    if (Vertex(temp).isInsideClipVolume())
-//    {
-//        return new Vertex(temp);
-//    }
-//    //neg z
-//    temp = intersectPoint(v2->loc() - v1->loc(), v1->loc(), Vector3(0, 0, -1), Vector3(0, 0, -1));
-//    if (Vertex(temp).isInsideClipVolume())
-//    {
-//        return new Vertex(temp);
-//    }
-//}

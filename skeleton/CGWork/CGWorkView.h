@@ -52,8 +52,9 @@ private:
 	CPoint m_ref_point;
 	LightParams m_lights[MAX_LIGHT];	//configurable lights array
 	LightParams m_ambientLight;		//ambient light (only RGB is used)
-	ColorGC m_bg_color, m_normalColor, m_bBoxColor;
+	ColorGC m_bg_color, m_normalColor, m_wireframe;
 
+	RenderCommand createRenderingCommand();
 	// Overrides
 		// ClassWizard generated virtual function overrides
 		//{{AFX_VIRTUAL(CCGWorkView)

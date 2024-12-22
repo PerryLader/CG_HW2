@@ -13,22 +13,36 @@ public:
 class RenderCommand : public ScreenCommand {
 public:
     virtual ~RenderCommand() {}
-    RenderCommand(int width, int height) : screenWidth(width), screenHeigth(height) {}
+    RenderCommand(int width, int height, const RenderMode& rd_mode, const ColorGC& bgColor, const ColorGC& normColor,
+        const ColorGC& wireColor) : screenWidth(width), screenHeigth(height), rd_mode(rd_mode), bg(bgColor),
+        normals(normColor), wireframe(wireColor){}
     virtual void execute(Scene& scene) override {
-        scene.render(screenWidth, screenHeigth,RenderMode(),
-            ColorGC(120, 120, 120)/*bgColor-grey*/,
-            ColorGC(0, 250, 0)/*normalColor-green*/,
-            ColorGC(0, 0, 250)/*bBoxColor-blue*/);
+        scene.render(screenWidth, screenHeigth, rd_mode, bg, normals, wireframe);
     }
 protected:
     int screenWidth;
     int screenHeigth;
+    RenderMode rd_mode;
+    ColorGC bg;
+    ColorGC normals;
+    ColorGC wireframe;
 };
 
 class TransformationCommand : public RenderCommand {
 public:
-    TransformationCommand(int width, int height, const Vector3& ref_point, const Vector3& movement, float aspectRatio,int action, int axis,int tSpace,  float sensitivity)
-        : RenderCommand(width,height), ref_point(ref_point), movement(movement), aspectRatio(aspectRatio), action(action), axis(axis), tSpace(tSpace), sensitivity(sensitivity) {}
+    TransformationCommand(int width, int height, const RenderMode& rd_mode, const ColorGC& bgColor,
+        const ColorGC& normColor, const ColorGC& wireColor,
+        const Vector3& ref_point, const Vector3& movement,
+        float aspectRatio,int action, int axis,int tSpace, 
+        float sensitivity)
+        : RenderCommand(width,height,rd_mode,bgColor, normColor, wireColor)
+        , ref_point(ref_point), movement(movement), aspectRatio(aspectRatio),
+        action(action), axis(axis), tSpace(tSpace), sensitivity(sensitivity) {}
+
+    TransformationCommand(const RenderCommand& rc, const Vector3& ref_point, const Vector3& movement,
+        float aspectRatio, int action, int axis, int tSpace, float sensitivity)
+        : RenderCommand(rc), ref_point(ref_point), movement(movement), aspectRatio(aspectRatio),
+        action(action), axis(axis), tSpace(tSpace), sensitivity(sensitivity) {}
 
     void execute(Scene& scene) override {
         scene.handleTransformationAction(ref_point, movement, aspectRatio,action, axis, sensitivity,tSpace, screenWidth, screenHeigth);

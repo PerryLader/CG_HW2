@@ -264,7 +264,7 @@ std::vector<Line>* PolygonGC::getEdges() const {
 
 // get polygon Bbox
 BBox PolygonGC::getBbox() const{
-    return BBox();
+    return m_bbox;
 }
 
 Vector3 PolygonGC::getCalcNormal() const

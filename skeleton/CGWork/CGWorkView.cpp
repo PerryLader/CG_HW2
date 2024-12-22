@@ -66,10 +66,10 @@ BEGIN_MESSAGE_MAP(CCGWorkView, CView)
 	ON_UPDATE_COMMAND_UI(ID_CALC_P_NORMALS, OnUpdateShowCalcPolyNormals)
 	ON_COMMAND(ID_CALC_V_NORMALS, OnShowCalcVertNormals)
 	ON_UPDATE_COMMAND_UI(ID_CALC_V_NORMALS, OnUpdateShowCalcVertNormals)
-	ON_COMMAND(ID_IRIT_P_NORMALS, OnShowCalcPolyNormals)
-	ON_UPDATE_COMMAND_UI(ID_IRIT_P_NORMALS, OnUpdateShowCalcPolyNormals)
-	ON_COMMAND(ID_IRIT_V_NORMALS, OnShowCalcVertNormals)
-	ON_UPDATE_COMMAND_UI(ID_IRIT_V_NORMALS, OnUpdateShowCalcVertNormals)
+	ON_COMMAND(ID_IRIT_P_NORMALS, OnShowIritPolyNormals)
+	ON_UPDATE_COMMAND_UI(ID_IRIT_P_NORMALS, OnUpdateShowIritPolyNormals)
+	ON_COMMAND(ID_IRIT_V_NORMALS, OnShowIritVertNormals)
+	ON_UPDATE_COMMAND_UI(ID_IRIT_V_NORMALS, OnUpdateShowIritVertNormals)
 	ON_COMMAND(ID_BBOX, OnShowBBox)
 	ON_UPDATE_COMMAND_UI(ID_BBOX, OnUpdateShowBBox)
 	ON_COMMAND(ID_NORMAL_COLOR, OnNormalsColor)
@@ -107,14 +107,22 @@ CCGWorkView::CCGWorkView()
 	m_nAction = ID_ACTION_ROTATE;
 	m_nView = ID_VIEW_ORTHOGRAPHIC;
 	m_bIsPerspective = false;
-
+	m_sensitivity = 1.0;
 	m_nLightShading = ID_LIGHT_SHADING_FLAT;
-
+	m_tSpace = ID_CAMERA_SPACE;
 	m_lMaterialAmbient = 0.2;
 	m_lMaterialDiffuse = 0.8;
 	m_lMaterialSpecular = 1.0;
 	m_nMaterialCosineFactor = 32;
-
+	m_bg_color.setRed(150);
+	m_bg_color.setGreen(150);
+	m_bg_color.setBlue(150);
+	m_normalColor.setRed(150);
+	m_normalColor.setGreen(150);
+	m_normalColor.setBlue(150);
+	m_wireframe.setRed(150);
+	m_wireframe.setGreen(150);
+	m_wireframe.setBlue(150);
 	//init the first light to be enabled
 	m_lights[LIGHT_ID_1].enabled = true;
 	m_pDbBitMap = NULL;
@@ -301,10 +309,8 @@ void CCGWorkView::OnDraw(CDC* pDC)
 
 	// Retrieve the buffer from getBuffer()
 	
-	m_scene.render(width, height, m_rendermode,
-		ColorGC(120,120,120)/*bgColor-grey*/,
-		ColorGC(0, 250, 250)/*normalColor-green*/,
-		ColorGC(0, 0, 250)/*bBoxColor-blue*/);
+	m_scene.executeCommand(&createRenderingCommand());
+
 	uint32_t* buffer=m_scene.getBuffer();
 
 	
@@ -542,19 +548,42 @@ void CCGWorkView::OnUpdateShowIritVertNormals(CCmdUI* pCmdUI) {
 
 }
 void CCGWorkView::OnShowBBox(){
-	m_rendermode.setRenderPolygonsBbox();
+	m_rendermode.setRenderObjBbox();
 }
 void CCGWorkView::OnUpdateShowBBox(CCmdUI* pCmdUI) {
-	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsBbox());
+	pCmdUI->SetCheck(m_rendermode.getRenderObjBbox());
 }
 void CCGWorkView::OnNormalsColor() {
+	// Create a color dialog with the initial color set to white
+	CColorDialog colorDlg(RGB(255, 255, 255), CC_FULLOPEN | CC_RGBINIT);
 
+	// Display the color dialog
+	if (colorDlg.DoModal() == IDOK)
+	{
+		// Get the selected color
+		COLORREF color = colorDlg.GetColor();
+		m_normalColor.setRed(GetRValue(color));
+		m_normalColor.setGreen(GetGValue(color));
+		m_normalColor.setBlue(GetBValue(color));
+	}
 }
 void CCGWorkView::OnUpdateNormalsColor(CCmdUI* pCmdUI) {
 
+
 }
 void CCGWorkView::OnWireframeColor() {
+	// Create a color dialog with the initial color set to white
+	CColorDialog colorDlg(RGB(255, 255, 255), CC_FULLOPEN | CC_RGBINIT);
 
+	// Display the color dialog
+	if (colorDlg.DoModal() == IDOK)
+	{
+		// Get the selected color
+		COLORREF color = colorDlg.GetColor();
+		m_wireframe.setRed(GetRValue(color));
+		m_wireframe.setGreen(GetGValue(color));
+		m_wireframe.setBlue(GetBValue(color));
+	}
 }
 void CCGWorkView::OnUpdateWireframeColor(CCmdUI* pCmdUI) {
 
@@ -572,9 +601,10 @@ void CCGWorkView::OnBgColor() {
 		m_bg_color.setGreen(GetGValue(color));
 		m_bg_color.setBlue(GetBValue(color));
 	}
-
+    m_scene.executeCommand(&createRenderingCommand());
 }
 void CCGWorkView::OnUpdateBgColor(CCmdUI* pCmdUI) {
+	// do nothing
 
 }
 void CCGWorkView::OnTransformationSpace() {
@@ -649,6 +679,9 @@ void CCGWorkView::OnTimer(UINT_PTR nIDEvent)
 		Invalidate();
 }
 
+RenderCommand CCGWorkView::createRenderingCommand() {
+	return RenderCommand(m_WindowWidth, m_WindowWidth, m_rendermode, m_bg_color, m_normalColor, m_wireframe);
+}
 void CCGWorkView::OnLButtonDown(UINT nFlags, CPoint point) {
 	// Handle the left button down event here
 	m_bLeftButtonDown = true;
@@ -666,11 +699,11 @@ void CCGWorkView::OnMouseMove(UINT nFlags, CPoint point) {
 	// Handle the left button move event here
 	if (m_bLeftButtonDown == true) {
 		//build commad object
-		ScreenCommand* command = new TransformationCommand(m_WindowWidth,m_WindowHeight,
+		ScreenCommand* command = new TransformationCommand(createRenderingCommand(),
 			Vector3(m_ref_point.x, m_ref_point.y, 0),
 			Vector3(point.x, point.y, 0) ,
 			m_AspectRatio, m_nAction, m_nAxis,
-			ID_TRANS_SPACE, 1);
+			m_tSpace, 1);
 		m_scene.executeCommand(command);
 		delete command;
 		m_ref_point = point;

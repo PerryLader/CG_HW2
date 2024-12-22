@@ -5,18 +5,20 @@
 #include <string>
 #include <unordered_map>
 
-#define RENDER_SHAPE                        1ULL
-#define RENDER_POLYGONS_CALC_NORMALS        1ULL<<1
-#define RENDER_POLYGONS_NORMALS_FROM_DATA   1ULL<<2
-#define RENDER_CALC_VETICES_NORMALS         1ULL<<3
-#define RENDER_DATA_VETICES_NORMALS         1ULL<<4
-#define RENDER_OBJ_BBOX                     1ULL<<5
-#define RENDER_POLYGONS_BBOX                1ULL<<6
+const uint32_t RENDER_SHAPE = 1;
+const uint32_t RENDER_POLYGONS_CALC_NORMALS = 2;
+const uint32_t RENDER_POLYGONS_NORMALS_FROM_DATA = 4;
+const uint32_t RENDER_CALC_VETICES_NORMALS = 8;
+const uint32_t RENDER_DATA_VETICES_NORMALS = 16;
+const uint32_t RENDER_OBJ_BBOX = 32;
+const uint32_t RENDER_POLYGONS_BBOX = 64;
+const uint32_t RENDER_OVERRIDER_WIRE_COLOR = 128;
+const uint32_t RENDER_OVERRIDER_BACKGROUND_COLOR = 256;
 
 
 class RenderMode {
 private:
-	uint32_t flags =3;
+	uint32_t flags =1;
 public:
 	bool getRenderShape() { return RENDER_SHAPE & flags; }
 	bool getRenderPolygonsCalcNormal() { return RENDER_POLYGONS_CALC_NORMALS & flags; }
@@ -25,6 +27,8 @@ public:
 	bool getRenderDataVertivesNormal() { return RENDER_DATA_VETICES_NORMALS & flags; }
 	bool getRenderObjBbox() { return RENDER_OBJ_BBOX & flags; }
 	bool getRenderPolygonsBbox() { return RENDER_POLYGONS_BBOX & flags; }
+	bool getRenderOverrideWireColor() { return RENDER_OVERRIDER_WIRE_COLOR & flags; }
+	bool getRenderOverrideBackgroundColor() { return RENDER_OVERRIDER_BACKGROUND_COLOR & flags; }
 
 	void setRenderShape() { flags ^= RENDER_SHAPE; }
 	void setRenderPolygonsCalcNormal() { flags ^= RENDER_POLYGONS_CALC_NORMALS; }
@@ -33,6 +37,9 @@ public:
 	void setRenderDataVertivesNormal() { flags ^= RENDER_DATA_VETICES_NORMALS; }
 	void setRenderObjBbox() { flags ^= RENDER_OBJ_BBOX; }
 	void setRenderPolygonsBbox() { flags ^= RENDER_POLYGONS_BBOX; }
+	void setRenderOverrideWireColor() { flags ^= RENDER_OVERRIDER_WIRE_COLOR; }
+	void setRenderOverrideBackgroundColor() { flags ^= RENDER_OVERRIDER_BACKGROUND_COLOR;}
+
 	void unSetAll() { flags = 0; }
 
 };
@@ -84,7 +91,7 @@ private:
 	void createPolyNormalLlinesFromData(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
 	void createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
 	void createVertCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
-
+	void createVertDataNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
 	//void calVertexNormal();
 
 public:

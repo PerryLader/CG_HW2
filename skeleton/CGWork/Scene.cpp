@@ -5,6 +5,7 @@
 Scene::Scene():m_renderer(new Renderer()) {
     Camera* cam = new Camera();
     m_cameras.push_back(cam);
+    m_primaryCameraIndex = 0;
 }
 // Function to add a model to the scene
 void Scene::addModel(Model* model) {
@@ -88,7 +89,7 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
     default:
         Trasformation = Matrix4::rotation(magnitude, axis);
     }
-    tSpace == ID_TRANS_SPACE ? applyToObjectSpace(Trasformation) : applyToCamera(Trasformation); // should be a comparison between tSpace and some definition of what is ObjectSpace
+    tSpace == ID_OBJECT_SPACE ? applyToObjectSpace(Trasformation) : applyToCamera(Trasformation); // should be a comparison between tSpace and some definition of what is ObjectSpace
 }
 
 void Scene::print() const {
