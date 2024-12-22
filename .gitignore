@@ -19,7 +19,7 @@ skeleton/CGWork/Release
 *.log
 *.ilk
 *.tlog
-*.ilk
+*.idb
 *.ilk
 
 
