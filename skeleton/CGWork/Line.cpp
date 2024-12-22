@@ -55,15 +55,53 @@ bool Line::clip(Line& newLine)
 {
     bool v1In = m_a.isInsideClipVolume();
     bool v2In = m_b.isInsideClipVolume();
+    std::pair<bool,Vector3> planIntersectPoint[6];
+    uint8_t intesectPlanCount = 0;
     if (!v1In&&!v2In)
     {
-        return false;//TODO Edge CASE
+        //pos x
+        intesectPlanCount+= planIntersectPoint[0].first= (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(1, 0, 0), Vector3(1, 0, 0), planIntersectPoint[0].second));
+        //neg x
+        intesectPlanCount += planIntersectPoint[1].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(-1, 0, 0), Vector3(-1, 0, 0), planIntersectPoint[1].second) );
+        //pos y
+        intesectPlanCount += planIntersectPoint[2].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 1, 0), Vector3(0, 1, 0), planIntersectPoint[2].second) );
+        //neg y
+        intesectPlanCount += planIntersectPoint[3].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, -1, 0), Vector3(0, -1, 0), planIntersectPoint[3].second) );
+        //pos z
+        intesectPlanCount += planIntersectPoint[4].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, 1), Vector3(0, 0, 1), planIntersectPoint[4].second) );
+        //neg z
+        intesectPlanCount += planIntersectPoint[5].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, -1), Vector3(0, 0, -1), planIntersectPoint[5].second) );
+        if (intesectPlanCount >0)
+        {
+            Vector3 tempV1, tempV2;
+            bool firstFilled = false;
+            for (auto t:planIntersectPoint)
+            {
+                if (t.first) {
+                    if (!firstFilled)
+                    {
+                        tempV1 = t.second;
+                        firstFilled = true;
+                    }
+                    else
+                    {
+                        tempV2 = t.second;
+                    }
+                }
+            }
+            newLine = Line(tempV1, tempV2, this->m_color);
+
+            return true;
+        }
+
+        return false;
     }
     if(v1In&&v2In)
     {
         newLine = *this;
         return true;
     }
+  
     Vector3 temp;
     //pos x
     if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(1, 0, 0), Vector3(1, 0, 0),temp))
