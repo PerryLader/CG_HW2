@@ -6,6 +6,9 @@
 #include <sstream>
 #include <cmath>
 //#include "Matrix4.h"
+
+class Matrix4;
+
 class Vector4 {
 private:
     Vector3 vec;
@@ -37,7 +40,6 @@ public:
     static Vector4 unitW();
     static Vector4 extendOne(const Vector3& vec);
     static Vector4 extendZero(const Vector3& vec);
-
 
     // Print
     void print() const;

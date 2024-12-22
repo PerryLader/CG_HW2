@@ -28,7 +28,9 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
 
     float aspectRatio = width / height;
     Matrix4 aspectRatioMatrix = Matrix4::scaling(Vector3(1.0f / aspectRatio, 1.0f, 1.0f));
-    const Matrix4 viewProjectionMatrix = camera->getViewMatrix() * aspectRatioMatrix * camera->getProjectionMatrix();
+    Matrix4 view = camera->getViewMatrix();
+    Matrix4 proj = camera->getProjectionMatrix();
+    const Matrix4 viewProjectionMatrix = camera->getViewMatrix() * aspectRatioMatrix * proj;
 
     // Transform and cull geometry
     std::vector<Geometry*> transformedGeometries;
@@ -38,7 +40,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
         transformedGeometry->loadLines(lines, bBoxColor, normalColor, renderMode);
         transformedGeometries.push_back(transformedGeometry);
         // Clipping
-        // transformedGeometry->clip();
+     //   transformedGeometry->clip();
         // Backface culling
         //transformedGeometry->backFaceCulling();//there is bug here
     }

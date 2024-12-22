@@ -125,11 +125,12 @@ Matrix4 Matrix4::operator*(const Matrix4& other) const {
 
 // Multiplication with Vector4
 Vector4 Matrix4::operator*(const Vector4& vec) const {
+    float vecX = vec.getX(), vecY = vec.getY(), vecZ = vec.getZ(), vecW = vec.getW();
     return Vector4(
-        m[0][0] * vec.getX() + m[0][1] * vec.getY() + m[0][2] * vec.getZ() + m[0][3] * vec.getW(),
-        m[1][0] * vec.getX() + m[1][1] * vec.getY() + m[1][2] * vec.getZ() + m[1][3] * vec.getW(),
-        m[2][0] * vec.getX() + m[2][1] * vec.getY() + m[2][2] * vec.getZ() + m[2][3] * vec.getW(),
-        m[3][0] * vec.getX() + m[3][1] * vec.getY() + m[3][2] * vec.getZ() + m[3][3] * vec.getW()
+        m[0][0] * vecX + m[0][1] * vecY + m[0][2] * vecZ + m[0][3] * vecW,
+        m[1][0] * vecX + m[1][1] * vecY + m[1][2] * vecZ + m[1][3] * vecW,
+        m[2][0] * vecX + m[2][1] * vecY + m[2][2] * vecZ + m[2][3] * vecW,
+        m[3][0] * vecX + m[3][1] * vecY + m[3][2] * vecZ + m[3][3] * vecW
     );
 }
 
