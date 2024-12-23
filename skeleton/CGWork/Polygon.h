@@ -6,9 +6,9 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "iritprsr.h"
-#include "Line.h"
 #include "ColorGC.h"
 #include <memory>
+
 //might be useful
 class BBox {
     Vector3 m_minBounds, m_maxBounds;
@@ -32,8 +32,8 @@ private:
     std::vector<std::shared_ptr< Vertex>> m_vertices; // List of vertices
     ColorGC m_color;                // Color of the polygon
     BBox m_bbox;
-    Vector3 m_calcNormal;
-    Vector3 m_dataNormal;
+    Line m_calcNormalLine;
+    Line m_dataNormalLine;
     bool m_hasDataNormal;
     void updateBounds(const Vertex& vert);
     void resetBounds();
@@ -41,22 +41,19 @@ private:
 public:
     // Constructor with a default color
     PolygonGC(ColorGC color);
-    PolygonGC(const Vector3& normal, ColorGC color);
-    
-    bool hasDataNormal() const;
-    Vector3 getCalcNormal() const;
-    Vector3 getDataNormal() const;
-    Line getNormalLineFromData(const ColorGC* overridingColor) const;
-    Line getNormalLineFromCalc(const ColorGC* overridingColor) const;
+    void setCalcAndDataNormalLines( Vector3 dataNormal);
+    void setCalcNormalLines();
+    Vector3 getCalcNormalNormolized();
+    Vector3 getDataNormalNormolized();
+
+    bool hasDataNormalLine() const;
+    Line getCalcNormalLine(const ColorGC* overridingColor) const;
+    Line getDataNormalLine(const ColorGC* overridingColor) const;
     std::vector<Line>* getVertNormLinesFromData(const ColorGC* overridingColor) const;
     std::vector<Line>* getVertNormLinesFromCalc(const ColorGC* overridingColor) const;
-
     void setColor(const ColorGC& newColor);
-    const ColorGC& getColor() const;
-    
-    void addVertexs(IPVertexStruct* vertex);     // Add many vertex with geershon struct unsupported not recommended
-    void addVertex(std::shared_ptr<Vertex> vertex);   // Adds vertex
-    
+    const ColorGC& getColor() const;    
+    void addVertex(std::shared_ptr<Vertex> vertex);    
     void clip();
     bool isBehindCamera() const;
     size_t vertexCount() const;
@@ -64,10 +61,7 @@ public:
     void printBounds() const;
     void printColor() const;
     std::vector<Line> getPolyBboxLine(const ColorGC* overridingColor);
-
-    PolygonGC* applyForceTransformation(const Matrix4& transformation) const;
-
-    PolygonGC* applySoftTransformation(const Matrix4& transformation) const;
+    PolygonGC* applyTransformation(const Matrix4& transformation) const;
     std::vector<Line>* getEdges(const ColorGC* overridingColor) const;
     BBox getBbox() const;
     ~PolygonGC()=default;

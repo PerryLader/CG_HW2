@@ -281,11 +281,7 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 
 		PVertex = PPolygon->PVertex;
 		PolygonGC* newPoly;
-		if (IP_HAS_PLANE_POLY(PPolygon)) {
-			const Vector3 polygon_normal = Vector3(PPolygon->Plane[0], PPolygon->Plane[1], PPolygon->Plane[2]);
-			newPoly = new PolygonGC(polygon_normal, color);
-		}
-		else
+		
 			newPoly = new PolygonGC(color);
 		do {			     /* Assume at least one edge in polygon! */
 			/* code handeling all vertex/normal/texture coords */
@@ -324,9 +320,20 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 			newPoly->addVertex(newVert);
 			PVertex = PVertex->Pnext;
 		} while (PVertex != PPolygon->PVertex && PVertex != NULL);
+		
+		if (IP_HAS_PLANE_POLY(PPolygon)) {
+			const Vector3 polygon_data_normal = Vector3(PPolygon->Plane[0], PPolygon->Plane[1], PPolygon->Plane[2]);
+			newPoly->setCalcAndDataNormalLines(polygon_data_normal);
+		}
+		else
+		{
+			newPoly->setCalcNormalLines();
+		}
+		
 		/* Close the polygon. */
 		shape->addPolygon(newPoly);
 	}
+	shape->calcVertxNormal();
 	/* Close the object. */
 	*PGeom_dest = shape;
 	return true;

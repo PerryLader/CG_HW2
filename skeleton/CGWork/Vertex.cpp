@@ -1,95 +1,83 @@
 
 #include "Vertex.h"
 #include "Polygon.h"
-//
-//class PolygonGC;
-//extern Vector3 getCalcNormal();
-
-
-
-   
-
-void Vertex::setDataNormal(Vector3 normal) {
-    m_dataNormal = normal;
-    m_hasDataNormal = true;
-}
-
-//Vertex::Vertex(const Vertex &v)
-//{
-//    m_calcNormal=v.
-//}
 
 // Constructor
-Vertex::Vertex(Vector3 p) : m_point(p), m_dataNormal(Vector3(0, 0, 0)), m_hasDataNormal(false), m_hasCalcNormal(false) {}
-// Constructor
-Vertex::Vertex(Vector3 p, Vector3 n) : m_point(p), m_dataNormal(n), m_hasDataNormal(true), m_hasCalcNormal(false) {}
-
-
-
-void Vertex::addNeigberPolygon(PolygonGC* poly) { m_neigberPolygons.push_back(poly); }
-
-Vector3 Vertex::getCalcNormal()const
+Vertex::Vertex(Vector3 p) : m_point(p), m_dataNormalLine(), m_hasDataNormalLine(false), m_hasCalcNormalLine(false) {}
+Vertex::Vertex(Vector3 p, Vector3 n) : m_point(p), m_hasDataNormalLine(true), m_hasCalcNormalLine(false)
 {
-    if (!m_hasCalcNormal)
-    {
-        throw;
-    }
-    return m_calcNormal;    
+    m_dataNormalLine = Line(p, (p + (n.normalized() * 0.25)));
 }
-void Vertex::setCalcNormal()
+
+
+//getters and setters
+void Vertex::setCalcNormalLine()
 {
-    
     Vector3 avrageNormal(0, 0, 0);
     for (PolygonGC* t : m_neigberPolygons)
     {
-        avrageNormal = avrageNormal + t->getCalcNormal();
+        avrageNormal = avrageNormal + t->getCalcNormalNormolized();
     }
-    this->m_calcNormal= avrageNormal * (1.0 / m_neigberPolygons.size());
-    m_hasCalcNormal = true;
+    this->m_calcNormalLine = Line(m_point,
+        m_point + ((avrageNormal * (1.0 / m_neigberPolygons.size())).normalized() * 0.25));
+    m_hasCalcNormalLine = true;
+    //color here???
 }
-// Print function
-void Vertex::print() {
-    std::cout << "Vertex Located at: " << m_point << std::endl;
+void Vertex::setDataNormalLine(Line normal) {
+    m_dataNormalLine = normal;
+    m_hasDataNormalLine = true;
+}
+Line Vertex::getCalcNormalLine()const
+{
+    if (!m_hasCalcNormalLine)
+    {
+        throw;
+    }
+    return m_calcNormalLine;
+}
+Line Vertex::getDataNormalLine()const 
+{
+    if (!m_hasDataNormalLine)
+        throw std::exception();
+    return m_dataNormalLine;
+}
+std::shared_ptr<Vertex> Vertex::getTransformedVertex(const Matrix4& transformation)const
+{
+    std::shared_ptr<Vertex> temp(new Vertex((transformation * Vector4::extendOne(this->m_point)).toVector3()));
+    if (m_hasCalcNormalLine)
+    {
+        temp->m_hasCalcNormalLine = true;
+        temp->m_calcNormalLine = this->m_calcNormalLine.getTransformedLine(transformation);
+    }
+    if (m_hasDataNormalLine)
+    {
+        temp->m_hasDataNormalLine = true;
+        temp->m_dataNormalLine = m_dataNormalLine.getTransformedLine(transformation);
+
+    }
+    return temp;
+}
+bool Vertex::hasDataNormalLine() const {
+    return m_hasDataNormalLine;
 }
 Vector3 Vertex::loc() const    // Get location
 {
     return m_point;
 }
-Vector3 Vertex::getDataNormal() const {
-    if (!m_hasDataNormal)
-        throw std::exception();
-    return m_dataNormal;
-}
-bool Vertex::hasDataNormal() const {
-    return m_hasDataNormal;
-}
 
-std::shared_ptr<Vertex> Vertex::getTransformedVertex(const Matrix4& transformation)const
-{
-    std::shared_ptr<Vertex> temp(  new Vertex((transformation * Vector4::extendOne(this->m_point)).toVector3()));
-    if (m_hasCalcNormal)
-    {
-        temp->m_hasCalcNormal = true;
-        temp->m_calcNormal=((transformation * Vector4::extendOne(temp->m_calcNormal)).toVector3());
-    }
-    if (m_hasDataNormal)
-    {
-        temp->m_hasDataNormal = true;
-        temp->setDataNormal((transformation * Vector4::extendOne(this->m_dataNormal)).toVector3());
 
-    }
-    return temp;
-}
+
+//utils
 void Vertex::transformVertex(const Matrix4& transformation)
 {
     m_point = ((transformation * Vector4::extendOne(this->m_point)).toVector3());
-    if (m_hasCalcNormal)
+    if (m_hasCalcNormalLine)
     {
-        m_calcNormal = ((transformation * Vector4::extendOne(this->m_calcNormal)).toVector3());
+        m_calcNormalLine = m_calcNormalLine.getTransformedLine(transformation);
     }
-    if (m_hasDataNormal)
+    if (m_hasDataNormalLine)
     {
-        m_dataNormal = ((transformation * Vector4::extendOne(this->m_dataNormal)).toVector3());
+        m_dataNormalLine = m_dataNormalLine.getTransformedLine(transformation);
 
     }
 }
@@ -98,31 +86,7 @@ bool Vertex::isInsideClipVolume() {
         m_point.y >= -1 && m_point.y <= 1 &&
         m_point.z >= -1 && m_point.z <= 1;
 }
-// Overload compound assignment operator for matrix multiplication
-Vertex& Vertex::operator*=(const Matrix4& mat) {
-    m_point = (mat * Vector4::extendOne(m_point)).toVector3();
-    if (m_hasDataNormal)
-    {
-        m_dataNormal = (mat * Vector4::extendOne(m_dataNormal)).toVector3();
-    }
-    if (m_hasCalcNormal)
-    {
-        m_calcNormal = (mat * Vector4::extendOne(m_calcNormal)).toVector3();//TODO 
-    }
-
-    return *this;
+void Vertex::print() {
+    std::cout << "Vertex Located at: " << m_point << std::endl;
 }
-// Overload multiplication operator to accept matrix operation
-Vertex operator*(const Matrix4& mat, const Vertex& vert)
-{
-    Vertex res = Vertex((mat * Vector4::extendOne(vert.m_point)).toVector3());
-    if (vert.hasDataNormal())
-    {
-        res.m_dataNormal = (mat * Vector4::extendOne(vert.m_dataNormal)).toVector3();
-    }
-    if (vert.m_hasCalcNormal)
-    {
-        res.m_calcNormal=((mat * Vector4::extendOne(vert.m_calcNormal)).toVector3());
-    }
-    return res;
-}
+void Vertex::addNeigberPolygon(PolygonGC* poly) { m_neigberPolygons.push_back(poly); }
