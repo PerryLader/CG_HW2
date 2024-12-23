@@ -223,7 +223,7 @@ bool Vector3::intersectPointInClipVolume(Vector3 rayVector, Vector3 rayPoint, Ve
     {
       //  float epsilon = 0.01;
         Vector3 diff1 = intersectPoint - rayPoint;
-        float dot = Vector3::dot(rayVector, diff);
+        float dot = Vector3::dot(rayVector, diff1);
         float d = diff1.length();
         float r = rayVector.length();
         if(d <= r && dot >= 0)
