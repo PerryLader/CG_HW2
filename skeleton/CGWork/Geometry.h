@@ -13,7 +13,7 @@ const uint32_t RENDER_DATA_VETICES_NORMALS = 16;
 const uint32_t RENDER_OBJ_BBOX = 32;
 const uint32_t RENDER_POLYGONS_BBOX = 64;
 const uint32_t RENDER_OVERRIDER_WIRE_COLOR = 128;
-const uint32_t RENDER_OVERRIDER_BACKGROUND_COLOR = 256;
+const uint32_t RENDER_OVERRIDER_NORMAL_COLOR = 256;
 
 
 class RenderMode {
@@ -28,7 +28,7 @@ public:
 	bool getRenderObjBbox() { return RENDER_OBJ_BBOX & flags; }
 	bool getRenderPolygonsBbox() { return RENDER_POLYGONS_BBOX & flags; }
 	bool getRenderOverrideWireColor() { return RENDER_OVERRIDER_WIRE_COLOR & flags; }
-	bool getRenderOverrideBackgroundColor() { return RENDER_OVERRIDER_BACKGROUND_COLOR & flags; }
+	bool getRenderOverrideNormalColor() { return RENDER_OVERRIDER_NORMAL_COLOR & flags; }
 
 	void setRenderShape() { flags ^= RENDER_SHAPE; }
 	void setRenderPolygonsCalcNormal() { flags ^= RENDER_POLYGONS_CALC_NORMALS; }
@@ -38,7 +38,7 @@ public:
 	void setRenderObjBbox() { flags ^= RENDER_OBJ_BBOX; }
 	void setRenderPolygonsBbox() { flags ^= RENDER_POLYGONS_BBOX; }
 	void setRenderOverrideWireColor() { flags ^= RENDER_OVERRIDER_WIRE_COLOR; }
-	void setRenderOverrideBackgroundColor() { flags ^= RENDER_OVERRIDER_BACKGROUND_COLOR;}
+	void setRenderOverrideNormalColor() { flags ^= RENDER_OVERRIDER_NORMAL_COLOR;}
 
 	void unSetAll() { flags = 0; }
 
@@ -81,17 +81,17 @@ private:
 	BBox m_bBox;
 	
 
-	std::vector<Line>* getEdges() const;
-	std::vector<Line> getPolyBboxLines(const ColorGC& bBoxColor);
-	std::vector<Line> getPolyNormalLineFromData(const ColorGC& normalColor);
-	std::vector<Line> calcPolyNormalLine(const ColorGC& normalColor);
-	void createShapesLines(std::vector<Line> lines[LineVectorIndex::LAST]);
-	void createObjBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
-	void createPolyBboxLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor);
-	void createPolyNormalLlinesFromData(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
-	void createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
-	void createVertCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
-	void createVertDataNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& bBoxColor);
+	std::vector<Line>* getEdges(const ColorGC* overridingColor) const;
+	std::vector<Line> getPolyBboxLines(const ColorGC* overridingColor) const;
+	std::vector<Line> getPolyNormalLineFromData(const ColorGC* overridingColor) const;
+	std::vector<Line> getPolyNormalLineFromCalc(const ColorGC* overridingColor) const;
+	void createShapesLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC* overridingColor) const;
+	void createObjBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& wireColor) const;
+	void createPolyBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const;
+	void createPolyNormalLlinesFromData(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const;
+	void createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const;
+	void createVertCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const;
+	void createVertDataNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const;
 	//void calVertexNormal();
 
 public:

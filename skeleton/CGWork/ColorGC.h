@@ -37,6 +37,10 @@ public:
 
     // Convert to string in hexadecimal format
     std::string toHex() const;
-
+    static ColorGC defaultColor();
+    static const uint8_t defaultRed = 165;
+    static const uint8_t defaultGreen = 100;
+    static const uint8_t defaultBlue = 0;
+    static const uint8_t defaultAlpha = 255;
 };
 

@@ -34,6 +34,9 @@ std::string ColorGC::toHex()  const{
     ss << "#" << std::hex << std::setfill('0') << std::setw(8) << color;
     return ss.str();
 }
+ColorGC ColorGC::defaultColor() {
+    return ColorGC(ColorGC::defaultRed, ColorGC::defaultGreen, ColorGC::defaultBlue, ColorGC::defaultAlpha);
+ }
 
 
 

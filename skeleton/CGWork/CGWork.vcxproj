@@ -192,6 +192,7 @@
       <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BrowseInformation>
     </ClCompile>
     <ClCompile Include="ColorGC.cpp" />
+    <ClCompile Include="dynamicSliderDialog.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="iritSkel.cpp" />
     <ClCompile Include="LightDialog.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="CGWorkDoc.h" />
     <ClInclude Include="CGWorkView.h" />
     <ClInclude Include="ColorGC.h" />
+    <ClInclude Include="dynamicSliderDialog.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="ScreenCommand.h" />
     <ClInclude Include="iritSkel.h" />

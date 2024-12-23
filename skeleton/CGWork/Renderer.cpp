@@ -16,7 +16,7 @@ Renderer::~Renderer() {
 }
 
 void Renderer::render(const Camera* camera, int width, int height,const std::vector<Model*> models,  RenderMode renderMode,
-    const ColorGC& bgColor, const ColorGC& normalColor, const ColorGC& bBoxColor) {
+    const ColorGC& bgColor, const ColorGC& normalColor, const ColorGC& wireColor) {
     const char* debuging = bgColor.toHex().c_str();
 
     if (getWidth() != width || getHeight() != height || getBgColor().getARGB() != bgColor.getARGB()) {
@@ -31,14 +31,14 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     Matrix4 aspectRatioMatrix = Matrix4::scaling(Vector3(1.0f / aspectRatio, 1.0f, 1.0f));
     Matrix4 view = camera->getViewMatrix();
     Matrix4 proj = camera->getProjectionMatrix();
-    const Matrix4 viewProjectionMatrix = camera->getViewMatrix() * proj* aspectRatioMatrix;
+    const Matrix4 viewProjectionMatrix = view * proj* aspectRatioMatrix;
 
     // Transform and cull geometry
     std::vector<Geometry*> transformedGeometries;
     std::vector<Line> lines[LineVectorIndex::LAST];
     for (const auto& model : models) {
         Geometry* transformedGeometry = model->onDraw(viewProjectionMatrix);
-        transformedGeometry->loadLines(lines, bBoxColor, normalColor, renderMode);
+        transformedGeometry->loadLines(lines, wireColor, normalColor, renderMode);
         transformedGeometries.push_back(transformedGeometry);
         // Clipping
      //   transformedGeometry->clip();
@@ -49,7 +49,6 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(-1, 0, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(1, 0, 0, 1)).toVector3(), ColorGC(255, 0, 0)));
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, -1, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 1, 0, 1)).toVector3(), ColorGC(0, 255, 0)));
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, 0, -1, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 0, 1, 1)).toVector3(), ColorGC(0, 0, 255)));
-
     //the Final draw
     for (std::vector<Line>& singleTypeLine : lines) {
         for (Line line : singleTypeLine){

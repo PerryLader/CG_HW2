@@ -7,6 +7,7 @@
 #define IDR_CGWorkTYPE                  129
 #define IDD_LIGHTS_DLG                  134
 #define IDD_MATERIAL_DLG                136
+#define IDD_DIALOG1                     139
 #define IDC_LIGHT_SPACE                 1010
 #define IDC_RADIO_LIGHT1                1017
 #define IDC_RADIO_LIGHT2                1018
@@ -32,8 +33,11 @@
 #define IDC_LIGHT_TYPE                  1038
 #define IDC_MATERIAL_AMBIENT            1039
 #define IDC_MATERIAL_DIFFUSE            1040
+#define IDC_SLIDER1                     1040
 #define IDC_MATERIAL_SHININESS          1041
+#define IDC_STATIC1                     1041
 #define IDC_MATERIAL_SPECULAR           1042
+#define IDC_STATIC2                     1042
 #define ID_FILE_LOAD                    32771
 #define ID_VIEW_ORTHOGRAPHIC            32772
 #define ID_VIEW_PERSPECTIVE             32773
@@ -52,6 +56,7 @@
 #define ID_BUTTON_SUBDIVIDE             32797
 #define ID_OPTIONS_PERSPECTIVECONTROL   32798
 #define ID_OPTIONS_MOUSESENSITIVITY     32799
+#define ID_OPTIONS_TESSELLATION         32800
 #define ID_CALC_P_NORMALS               32801
 #define ID_CALC_V_NORMALS               32802
 #define ID_TRANS_SPACE                  32803
@@ -65,14 +70,15 @@
 #define ID_VIEW_ANGLE                   32814
 #define ID_WIREFRAME_COLOR              32816
 #define ID_BG_COLOR                     32817
+#define ID_OPTIONS                      32818
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        139
-#define _APS_NEXT_COMMAND_VALUE         32818
-#define _APS_NEXT_CONTROL_VALUE         1040
+#define _APS_NEXT_RESOURCE_VALUE        141
+#define _APS_NEXT_COMMAND_VALUE         32819
+#define _APS_NEXT_CONTROL_VALUE         1043
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

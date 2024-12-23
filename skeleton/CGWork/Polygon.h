@@ -19,7 +19,7 @@ public:
     void updateBBox(const BBox& box);
     bool bboxCollide(const BBox& bbox) const;
     static bool bboxCollide(const BBox& bbox1, const BBox& bbox2);
-    std::vector<Line> getLinesOfBbox(const ColorGC& bBoxColor);
+    std::vector<Line> getLinesOfBbox(const ColorGC& bBoxColor) const;
     void toPrint() const;
 };
 
@@ -45,8 +45,8 @@ public:
     bool hasDataNormal() const;
     Vector3 getCalcNormal() const;
     Vector3 getDataNormal() const;
-    Line getNormalLineFromData(ColorGC normalColor) const;
-    Line calcNormalLine(ColorGC normalColor) const;
+    Line getNormalLineFromData(const ColorGC* overridingColor) const;
+    Line calcNormalLine(const ColorGC* overridingColor) const;
    
     void setColor(const ColorGC& newColor);
     const ColorGC& getColor() const;
@@ -61,12 +61,12 @@ public:
     void printVertices() const;
     void printBounds() const;
     void printColor() const;
-    std::vector<Line> getPolyBboxLine(const ColorGC& bBoxColor);
+    std::vector<Line> getPolyBboxLine(const ColorGC* overridingColor);
 
     PolygonGC* applyForceTransformation(const Matrix4& transformation) const;
 
     PolygonGC* applySoftTransformation(const Matrix4& transformation) const;
-    std::vector<Line>* getEdges() const;
+    std::vector<Line>* getEdges(const ColorGC* overridingColor) const;
     BBox getBbox() const;
     ~PolygonGC()=default;
 };

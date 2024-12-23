@@ -11,6 +11,7 @@ using std::cout;
 using std::endl;
 #include "MaterialDlg.h"
 #include "LightDialog.h"
+#include "dynamicSliderDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -80,8 +81,9 @@ BEGIN_MESSAGE_MAP(CCGWorkView, CView)
 	ON_UPDATE_COMMAND_UI(ID_BG_COLOR, OnUpdateBgColor)
 	ON_COMMAND(ID_TRANS_SPACE, OnTransformationSpace)
 	ON_UPDATE_COMMAND_UI(ID_TRANS_SPACE, OnUpdateTransformationSpace)
-	ON_COMMAND(ID_VIEW_ANGLE, OnViewAngle)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_ANGLE, OnUpdateViewAngle)
+	ON_COMMAND(ID_OPTIONS_PERSPECTIVECONTROL, OnViewAngle)
+	ON_COMMAND(ID_OPTIONS_MOUSESENSITIVITY, OnSensitivity)
+	ON_COMMAND(ID_OPTIONS_TESSELLATION, OnTessellation)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
@@ -472,9 +474,6 @@ void CCGWorkView::OnUpdateActionScale(CCmdUI* pCmdUI)
 	pCmdUI->SetCheck(m_nAction == ID_ACTION_SCALE);
 }
 
-
-
-
 // AXIS HANDLERS ///////////////////////////////////////////
 
 
@@ -532,7 +531,6 @@ void CCGWorkView::OnUpdateShowCalcVertNormals(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderCalcVertivesNormal());
 
 }
-
 void CCGWorkView::OnShowIritPolyNormals() {
 	m_rendermode.setRenderPolygonsNormalFromData();
 }
@@ -554,39 +552,44 @@ void CCGWorkView::OnUpdateShowBBox(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderObjBbox());
 }
 void CCGWorkView::OnNormalsColor() {
-	// Create a color dialog with the initial color set to white
-	CColorDialog colorDlg(RGB(255, 255, 255), CC_FULLOPEN | CC_RGBINIT);
+	if (!m_rendermode.getRenderOverrideNormalColor()) {
+		// Create a color dialog with the initial color set to white
+		CColorDialog colorDlg(RGB(255, 255, 255), CC_FULLOPEN | CC_RGBINIT);
 
-	// Display the color dialog
-	if (colorDlg.DoModal() == IDOK)
-	{
-		// Get the selected color
-		COLORREF color = colorDlg.GetColor();
-		m_normalColor.setRed(GetRValue(color));
-		m_normalColor.setGreen(GetGValue(color));
-		m_normalColor.setBlue(GetBValue(color));
+		// Display the color dialog
+		if (colorDlg.DoModal() == IDOK)
+		{
+			// Get the selected color
+			COLORREF color = colorDlg.GetColor();
+			m_normalColor.setRed(GetRValue(color));
+			m_normalColor.setGreen(GetGValue(color));
+			m_normalColor.setBlue(GetBValue(color));
+		}
 	}
+	m_rendermode.setRenderOverrideNormalColor();
 }
 void CCGWorkView::OnUpdateNormalsColor(CCmdUI* pCmdUI) {
-
-
+	pCmdUI->SetCheck(m_rendermode.getRenderOverrideNormalColor());
 }
 void CCGWorkView::OnWireframeColor() {
 	// Create a color dialog with the initial color set to white
-	CColorDialog colorDlg(RGB(255, 255, 255), CC_FULLOPEN | CC_RGBINIT);
+	if (!m_rendermode.getRenderOverrideWireColor()) {
+		CColorDialog colorDlg(RGB(255, 255, 255), CC_FULLOPEN | CC_RGBINIT);
 
-	// Display the color dialog
-	if (colorDlg.DoModal() == IDOK)
-	{
-		// Get the selected color
-		COLORREF color = colorDlg.GetColor();
-		m_wireframe.setRed(GetRValue(color));
-		m_wireframe.setGreen(GetGValue(color));
-		m_wireframe.setBlue(GetBValue(color));
+		// Display the color dialog
+		if (colorDlg.DoModal() == IDOK)
+		{
+			// Get the selected color
+			COLORREF color = colorDlg.GetColor();
+			m_wireframe.setRed(GetRValue(color));
+			m_wireframe.setGreen(GetGValue(color));
+			m_wireframe.setBlue(GetBValue(color));
+		}
 	}
+	m_rendermode.setRenderOverrideWireColor();
 }
 void CCGWorkView::OnUpdateWireframeColor(CCmdUI* pCmdUI) {
-
+	pCmdUI->SetCheck(m_rendermode.getRenderOverrideWireColor());
 }
 void CCGWorkView::OnBgColor() {
 	// Create a color dialog with the initial color set to white
@@ -601,7 +604,6 @@ void CCGWorkView::OnBgColor() {
 		m_bg_color.setGreen(GetGValue(color));
 		m_bg_color.setBlue(GetBValue(color));
 	}
-    m_scene.executeCommand(&createRenderingCommand());
 }
 void CCGWorkView::OnUpdateBgColor(CCmdUI* pCmdUI) {
 	// do nothing
@@ -614,10 +616,34 @@ void CCGWorkView::OnUpdateTransformationSpace(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_tSpace == ID_OBJECT_SPACE);
 }
 void CCGWorkView::OnViewAngle() {
-
+	float min = 0;
+	float max = 160;
+	float tickWidth = 0.01;
+	CDynamicSliderDialog dlg("Set Perspective View Angle", min, max, tickWidth);
+	if (dlg.DoModal() == IDOK)
+	{
+		m_perspectiveAngle = dlg.GetSliderPos();
+	}
 }
-void CCGWorkView::OnUpdateViewAngle(CCmdUI* pCmdUI) {
-
+void CCGWorkView::OnSensitivity() {
+	float min = 0.1;
+	float max = 2;
+	float tickWidth = 0.01;
+	CDynamicSliderDialog dlg("Set Mouse Sensitivity", min, max, tickWidth);
+	if (dlg.DoModal() == IDOK)
+	{
+		m_sensitivity = dlg.GetSliderPos();
+	}
+}
+void CCGWorkView::OnTessellation() {
+	float min = 2;
+	float max = 50;
+	float tickWidth = 1;
+	CDynamicSliderDialog dlg("Set Polygon Tessellation", min, max, tickWidth);
+	if (dlg.DoModal() == IDOK)
+	{
+		CGSkelSetTes((int)dlg.GetSliderPos());
+	}
 }
 
 // OPTIONS HANDLERS ///////////////////////////////////////////
@@ -703,7 +729,7 @@ void CCGWorkView::OnMouseMove(UINT nFlags, CPoint point) {
 			Vector3(m_ref_point.x, m_ref_point.y, 0),
 			Vector3(point.x, point.y, 0) ,
 			m_AspectRatio, m_nAction, m_nAxis,
-			m_tSpace, 1);
+			m_tSpace, m_sensitivity);
 		m_scene.executeCommand(command);
 		delete command;
 		m_ref_point = point;

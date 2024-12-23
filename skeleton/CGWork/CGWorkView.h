@@ -38,6 +38,7 @@ private:
 	int m_nAction;				// Rotate, Translate, Scale
 	int m_nView;				// Orthographic, perspective
 	float m_sensitivity; 
+	float m_perspectiveAngle;
 	bool m_bIsPerspective;			// is the view perspective
 	int m_tSpace;
 	CString m_strItdFileName;		// file name of IRIT data
@@ -138,6 +139,8 @@ protected:
 	afx_msg void OnUpdateTransformationSpace(CCmdUI* pCmdUI);
 	afx_msg void OnViewAngle();
 	afx_msg void OnUpdateViewAngle(CCmdUI* pCmdUI);
+	afx_msg void OnTessellation();
+	afx_msg void OnSensitivity();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);

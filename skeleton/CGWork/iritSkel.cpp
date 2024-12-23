@@ -57,7 +57,7 @@ private:
 	std::vector<Model*>* m_models;
 };
 
-
+int tessellation = 20;
 IPFreeformConvStateStruct CGSkelFFCState = {
 	FALSE,          /* Talkative */
 	FALSE,          /* DumpObjsAsPolylines */
@@ -98,7 +98,9 @@ bool CGSkelProcessIritDataFilesToContainer(CString& FileNames, int NumFiles, std
 	SavingModel::getInstance().release();
 	return res;
 }
-
+void CGSkelSetTes(int tes) {
+	tessellation = tes;
+}
 //CGSkelProcessIritDataFiles(argv + 1, argc - 1);
 
 /*****************************************************************************
@@ -130,7 +132,7 @@ bool CGSkelProcessIritDataFiles(CString& FileNames, int NumFiles)
 		IRIT_GEN_COPY(CrntViewMat, IPViewMat, sizeof(IrtHmgnMatType));
 
 	/* Here some useful parameters to play with in tesselating freeforms: */
-	CGSkelFFCState.FineNess = 20;   /* Res. of tesselation, larger is finer. */
+	CGSkelFFCState.FineNess = tessellation;   /* Res. of tesselation, larger is finer. */
 	CGSkelFFCState.ComputeUV = TRUE;   /* Wants UV coordinates for textures. */
 	CGSkelFFCState.FourPerFlat = TRUE;/* 4 poly per ~flat patch, 2 otherwise.*/
 	CGSkelFFCState.LinearOnePolyFlag = TRUE;    /* Linear srf gen. one poly. */
@@ -221,17 +223,19 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 	uint8_t red =255;//green
 	uint8_t green =165;//red
 	uint8_t blue =0;//a
+	ColorGC color = ColorGC::defaultColor();
 	if (!CGSkelGetObjectColor(PObj_src, RGB))
 	{
-		AfxMessageBox(_T("No color for the polygon"));
+		AfxMessageBox(_T("No color for the object"));
 	}
 	else
 	{
-		
 		//NORMOLAZING
 		 red = static_cast<uint8_t>(RGB[0] * 255.0);
 		 green = static_cast<uint8_t>(RGB[1] * 255.0);
 		 blue = static_cast<uint8_t>(RGB[2] * 255.0);
+		 color = ColorGC(red, green, blue);
+
 	}
 
 
@@ -278,10 +282,10 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 		PolygonGC* newPoly;
 		if (IP_HAS_PLANE_POLY(PPolygon)) {
 			const Vector3 polygon_normal = Vector3(PPolygon->Plane[0], PPolygon->Plane[1], PPolygon->Plane[2]);
-			newPoly = new PolygonGC(polygon_normal, ColorGC(red, green, blue));
+			newPoly = new PolygonGC(polygon_normal, color);
 		}
 		else
-			newPoly = new PolygonGC(ColorGC(red, green, blue));
+			newPoly = new PolygonGC(color);
 		do {			     /* Assume at least one edge in polygon! */
 			/* code handeling all vertex/normal/texture coords */
 			std::shared_ptr<Vertex> newVert;

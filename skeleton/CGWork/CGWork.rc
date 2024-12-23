@@ -50,7 +50,7 @@ BEGIN
     SEPARATOR
     BUTTON      ID_VIEW_ORTHOGRAPHIC
     BUTTON      ID_VIEW_PERSPECTIVE
-    BUTTON      ID_VIEW_ANGLE
+    BUTTON      ID_OPTIONS_PERSPECTIVECONTROL
     SEPARATOR
     BUTTON      ID_TRANS_SPACE
     BUTTON      ID_ACTION_ROTATE
@@ -109,6 +109,7 @@ BEGIN
     BEGIN
         MENUITEM "Perspective Control...",      ID_OPTIONS_PERSPECTIVECONTROL
         MENUITEM "Mouse Sensitivity...",        ID_OPTIONS_MOUSESENSITIVITY
+        MENUITEM "Set Tessellation...",         ID_OPTIONS_TESSELLATION
     END
     POPUP "&Light"
     BEGIN
@@ -239,6 +240,18 @@ BEGIN
     GROUPBOX        "Texture Mapping",IDC_STATIC,118,7,182,91
 END
 
+IDD_DIALOG1 DIALOGEX 0, 0, 255, 56
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,148,35,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,198,35,50,14
+    CONTROL         "",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,46,14,161,15
+    LTEXT           "Static",IDC_STATIC1,19,18,19,8
+    LTEXT           "Static",IDC_STATIC2,217,18,19,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -309,6 +322,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 131
     END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 248
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 49
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -330,6 +351,17 @@ BEGIN
 0x6956, 0x7765, "\000" 
     IDC_LIGHT_SPACE, 0x403, 6, 0
 0x6f4c, 0x6163, 0x006c, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DIALOG1 AFX_DIALOG_LAYOUT
+BEGIN
     0
 END
 
@@ -455,6 +487,10 @@ BEGIN
     ID_AXIS_X               "X Axis\nX Axis"
     ID_AXIS_Y               "Y Axis\nY Axis"
     ID_AXIS_Z               "Z Axis\nZ Axis"
+END
+
+STRINGTABLE
+BEGIN
     ID_CALC_P_NORMALS       "Normals\nCalculated Polygon Normals"
     ID_CALC_V_NORMALS       "Normals\nCalculated Vertex Normals"
     ID_TRANS_SPACE          "Transformation Space/nObject space"
@@ -463,15 +499,18 @@ BEGIN
     ID_IRIT_V_NORMALS       "Normals\nIrit Vertex Normals"
     ID_NORMAL_COLOR         "Colors\nNormal Color"
     ID_VIEW_ANGLE           "View Perspective projection\nChange Perspective View Angle"
+END
+
+STRINGTABLE
+BEGIN
     ID_WIREFRAME_COLOR      "Color\nWireframe Color"
     ID_BG_COLOR             "Colors\nBackground Color"
 END
 
-
-
 STRINGTABLE
 BEGIN
     ID_BUTTON_SUBDIVIDE     "Run Subdivision Scheme\nSubdivide"
+    ID_OPTIONS_PERSPECTIVECONTROL "Perspective Control"
 END
 
 #endif    // English (United States) resources

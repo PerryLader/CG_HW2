@@ -32,7 +32,7 @@ void BBox::updateBBox(const BBox& box)
     updateBBox(box.m_maxBounds);
     updateBBox(box.m_minBounds);
 }
-std::vector<Line> BBox::getLinesOfBbox( const ColorGC& bBoxColor)
+std::vector<Line> BBox::getLinesOfBbox(const ColorGC& bBoxColor) const
 {
     Vector3 corners[8] = {
        {m_minBounds.x, m_minBounds.y, m_minBounds.z},
@@ -66,18 +66,6 @@ std::vector<Line> BBox::getLinesOfBbox( const ColorGC& bBoxColor)
     return lines;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Update min and max bounds
 void PolygonGC::updateBounds(const Vertex& vert) {
@@ -247,17 +235,18 @@ PolygonGC* PolygonGC::applySoftTransformation(const Matrix4& transformation) con
     }
     return newPoly;
 }
-std::vector<Line> PolygonGC::getPolyBboxLine(const ColorGC& bBoxColor)
+std::vector<Line> PolygonGC::getPolyBboxLine(const ColorGC* overridingColor)
 {
-    return m_bbox.getLinesOfBbox(bBoxColor);
+    return m_bbox.getLinesOfBbox(overridingColor == nullptr ? m_color : *overridingColor);
 }
 
-std::vector<Line>* PolygonGC::getEdges() const {
+std::vector<Line>* PolygonGC::getEdges(const ColorGC* overridingColor) const {
     std::vector<Line>* edges = new std::vector<Line>();
+    ColorGC line_color = overridingColor == nullptr ? m_color : *overridingColor;
     for (size_t i = 0; i < m_vertices.size(); ++i) {
         std::shared_ptr<Vertex> v1 = m_vertices[i];
         std::shared_ptr<Vertex> v2 = m_vertices[(i + 1) % m_vertices.size()];
-        edges->push_back(Line(*v1, *v2, m_color));
+        edges->push_back(Line(*v1, *v2, line_color));
     }
     return edges;
 }
@@ -280,7 +269,7 @@ Vector3 PolygonGC::getDataNormal() const
 bool PolygonGC::hasDataNormal() const{
     return m_hasDataNormal;
 }
-Line PolygonGC::calcNormalLine(ColorGC normalColor) const
+Line PolygonGC::calcNormalLine(const ColorGC* overridingColor) const
 {
     Vector3 centerPoint(0, 0, 0);
     for (auto t : m_vertices)
@@ -288,10 +277,10 @@ Line PolygonGC::calcNormalLine(ColorGC normalColor) const
         centerPoint = centerPoint + t->loc();
     }
     centerPoint = centerPoint * (1.0 / m_vertices.size());
-    return Line(centerPoint, centerPoint + (m_calcNormal.normalized() * 0.25), normalColor);
+    return Line(centerPoint, centerPoint + (m_calcNormal.normalized() * 0.25), overridingColor == nullptr ? m_color : *overridingColor);
 }
 
-Line PolygonGC::getNormalLineFromData(ColorGC normalColor) const
+Line PolygonGC::getNormalLineFromData(const ColorGC* overridingColor) const
 {
     if (!hasDataNormal())
     {
@@ -304,7 +293,7 @@ Line PolygonGC::getNormalLineFromData(ColorGC normalColor) const
         centerPoint = centerPoint + t->loc();
     }
     centerPoint = centerPoint * (1 / m_vertices.size());
-    return Line(centerPoint, centerPoint + m_dataNormal.normalized(), normalColor);
+    return Line(centerPoint, centerPoint + m_dataNormal.normalized(), overridingColor == nullptr ? m_color : *overridingColor);
 
 }
 Vector3 PolygonGC::calculateNormal() const {

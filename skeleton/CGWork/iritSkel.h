@@ -27,6 +27,7 @@ int CGSkelGetObjectColor(IPObjectStruct* PObj, double RGB[3]);
 const char* CGSkelGetObjectTexture(IPObjectStruct* PObj);
 const char* CGSkelGetObjectPTexture(IPObjectStruct* PObj);
 int CGSkelGetObjectTransp(IPObjectStruct* PObj, double* Transp);
+void CGSkelSetTes(int tes);
 
 bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest);
 #endif // IRIT_SKEL_H
