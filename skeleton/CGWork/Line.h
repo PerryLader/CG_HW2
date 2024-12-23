@@ -18,8 +18,7 @@ public:
     float length()const;
 
     // Check if two lines intersect, and return the intersection point if they do
-    static bool findIntersection(const Line& line1, const Line& line2, Vector3& interVertex);
-    bool clip(Line &newLine);
+    bool clip();
     void draw(uint32_t* m_Buffer, int width, int hight);
     // Print the line
     void print();

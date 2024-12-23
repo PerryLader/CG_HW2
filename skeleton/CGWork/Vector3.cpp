@@ -208,37 +208,3 @@ const float& Vector3::operator[](std::size_t index) const {
 bool Vector3::operator==(const Vector3& other) const {
     return x == other.x && y == other.y && z == other.z;
 }
-
-bool Vector3::intersectPointInClipVolume(Vector3 rayVector, Vector3 rayPoint, Vector3 planeNormal, Vector3 planePoint,Vector3& intersectPoint) {
-    Vector3 diff = rayPoint - planePoint;
-    double prod1 = Vector3::dot(diff, planeNormal);
-    double prod2 = Vector3::dot(rayVector, planeNormal);
-    if (prod2 == 0)
-    {
-        return false;
-    }
-    double prod3 = prod1 / prod2;
-    intersectPoint= rayPoint - rayVector * prod3;
-    if (intersectPoint.isInsideClipVolume()  )
-    {
-      //  float epsilon = 0.01;
-        Vector3 diff1 = intersectPoint - rayPoint;
-        float dot = Vector3::dot(rayVector, diff1);
-        float d = diff1.length();
-        float r = rayVector.length();
-        if(d <= r && dot >= 0)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool Vector3::isInsideClipVolume()
-{
-    
-    return x >= -1 && x <= 1 &&
-           y >= -1 && y <= 1 &&
-           z >= -1 && z <= 1;
-
-}

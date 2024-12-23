@@ -1,4 +1,5 @@
 #include "Polygon.h"
+#include <afxwin.h>
 
 /////////////////////////////
 //  do youw want us        //
@@ -13,12 +14,12 @@ void BBox::toPrint() const{
 }
 
 void BBox::updateBBox(const Vector3& vert) {
-    m_minBounds.x = std::min(m_minBounds.x, vert.x);
-    m_minBounds.y = std::min(m_minBounds.y, vert.y);
-    m_minBounds.z = std::min(m_minBounds.z, vert.z);
-    m_maxBounds.x = std::max(m_maxBounds.x, vert.x);
-    m_maxBounds.y = std::max(m_maxBounds.y, vert.y);
-    m_maxBounds.z = std::max(m_maxBounds.z, vert.z);
+    m_minBounds.x = min(m_minBounds.x, vert.x);
+    m_minBounds.y = min(m_minBounds.y, vert.y);
+    m_minBounds.z = min(m_minBounds.z, vert.z);
+    m_maxBounds.x = max(m_maxBounds.x, vert.x);
+    m_maxBounds.y = max(m_maxBounds.y, vert.y);
+    m_maxBounds.z = max(m_maxBounds.z, vert.z);
 }
 
 bool BBox::bboxCollide(const BBox& bbox) const{
@@ -46,11 +47,11 @@ BBox BBox::transformBBox(const Matrix4& tmat) const {
     res.updateBBox(transformedMax);
     return res;
 }
-//void BBox::updateBBox(const BBox& box)
-//{
-//    updateBBox(box.m_maxBounds);
-//    updateBBox(box.m_minBounds);
-//}
+void BBox::updateBBox(const BBox& box)
+{
+    updateBBox(box.m_maxBounds);
+    updateBBox(box.m_minBounds);
+}
 std::vector<Line> BBox::getLinesOfBbox(const ColorGC& bBoxColor) const
 {
     Vector3 corners[8] = {
@@ -90,7 +91,9 @@ std::vector<Line> BBox::getLinesOfBbox(const ColorGC& bBoxColor) const
 void PolygonGC::updateBounds(const Vertex& vert) {
     m_bbox.updateBBox(vert.loc());
 }
-
+bool PolygonGC::isClippedByBBox(const Matrix4& tMat) const {
+    return !BBox::bboxCollide(getBbox().transformBBox(tMat), BBox::unitBBox());
+}
 // reset min and max bounds
 void PolygonGC::resetBounds() {
     if (m_vertices.empty()) {
@@ -249,10 +252,7 @@ PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const
     return newPoly;
 }
 
-std::vector<Line> PolygonGC::getPolyBboxLine(const ColorGC* overridingColor)
-{
-    return m_bbox.getLinesOfBbox(overridingColor == nullptr ? m_color : *overridingColor);
-}
+
 static bool ifEdgeBBOXCutUnitCube(const Vertex& v1, const Vertex& v2) {
     BBox b;
     b.updateBBox(v1.loc());
@@ -260,16 +260,49 @@ static bool ifEdgeBBOXCutUnitCube(const Vertex& v1, const Vertex& v2) {
     BBox unit = BBox::unitBBox();
     return BBox::bboxCollide(b, unit);
 }
-std::vector<Line>* PolygonGC::getEdges(const ColorGC* overridingColor) const {
-    std::vector<Line>* edges = new std::vector<Line>();
+void PolygonGC::loadEdgesToContainer(std::vector<Line>& container, const ColorGC* overridingColor) const {
     ColorGC line_color = overridingColor == nullptr ? m_color : *overridingColor;
     for (size_t i = 0; i < m_vertices.size(); ++i) {
         std::shared_ptr<Vertex> v1 = m_vertices[i];
         std::shared_ptr<Vertex> v2 = m_vertices[(i + 1) % m_vertices.size()];
         if(ifEdgeBBOXCutUnitCube(*v1, *v2))
-            edges->push_back(Line(v1->loc(), v2->loc(), line_color));
+            container.push_back(Line(v1->loc(), v2->loc(), line_color));
     }
-    return edges;
+}
+
+void PolygonGC::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* wfClrOverride,
+    const ColorGC* nrmClrOverride, RenderMode& renderMode) const {
+
+    //std::vector<Line> bBoxLines = this->getBBox().getLinesOfBbox(*wireColor);
+    if (renderMode.getRenderShape()) loadEdgesToContainer(lines[LineVectorIndex::SHAPES], wfClrOverride);
+    if (renderMode.getRenderDataVertivesNormal())
+    {
+        try {
+            loadVertNLinesFromData(lines[LineVectorIndex::VERTICES_DATA_NORMAL], nrmClrOverride);
+        }
+        catch (...) {
+            renderMode.setRenderDataVertivesNormal();
+            lines[LineVectorIndex::VERTICES_DATA_NORMAL].clear();
+            if (!renderMode.getRenderCalcVertivesNormal())
+                renderMode.setRenderCalcVertivesNormal();
+            AfxMessageBox(_T("This Object wasnt provided with vertice normals!"));
+        }
+    }
+    if (renderMode.getRenderCalcVertivesNormal()) loadVertNLinesFromCalc(lines[LineVectorIndex::VERTICES_CALC_NORMAL], nrmClrOverride);
+    if (renderMode.getRenderPolygonsBbox()) loadBboxLinesToContainer(lines[LineVectorIndex::POLY_BBOX], wfClrOverride);
+    if (renderMode.getRenderPolygonsNormalFromData()){
+        try {
+            lines[LineVectorIndex::POLY_DATA_NORNAL].push_back(getDataNormalLine(nrmClrOverride));
+        }
+        catch (...) {
+            renderMode.setRenderPolygonsNormalFromData();
+            lines[LineVectorIndex::POLY_DATA_NORNAL].clear();
+            if (!renderMode.getRenderPolygonsCalcNormal())
+                renderMode.setRenderPolygonsCalcNormal();
+            AfxMessageBox(_T("This Object wasnt provided with polygon normals!"));
+        }
+    }
+    if (renderMode.getRenderPolygonsCalcNormal()) lines[LineVectorIndex::POLY_CALC_NORNAL].push_back(getCalcNormalLine(nrmClrOverride));
 }
 
 // get polygon Bbox
@@ -298,28 +331,29 @@ bool PolygonGC::hasDataNormalLine() const{
 }
 
 
-std::vector<Line>* PolygonGC::getVertNormLinesFromData(const ColorGC* overridingColor)const {
-    std::vector<Line>* normalLines = new std::vector<Line>();
+void PolygonGC::loadVertNLinesFromData(std::vector<Line>& container, const ColorGC* overridingColor)const {
     for (const auto& vert : m_vertices) {
         try {
-            normalLines->push_back(vert->getDataNormalLine());
+            container.push_back(vert->getDataNormalLine());
         }
         catch (...) {
-            normalLines->clear();
-            delete normalLines;
+            container.clear();
             throw std::exception();
         }
     }
-    return normalLines;
-}
-std::vector<Line>* PolygonGC::getVertNormLinesFromCalc(const ColorGC* overridingColor) const {
-    std::vector<Line>* normalLines = new std::vector<Line>();
-    for (const auto& vert : m_vertices) {
-        normalLines->push_back(vert->getCalcNormalLine());
-    }
-    return normalLines;
 }
 
+void PolygonGC::loadVertNLinesFromCalc(std::vector<Line>&container, const ColorGC* overridingColor) const {
+    for (const auto& vert : m_vertices) {
+        container.push_back(vert->getCalcNormalLine());
+    }
+}
+
+void PolygonGC::loadBboxLinesToContainer(std::vector<Line>& container, const ColorGC* overridingColor) const
+{
+    std::vector<Line> bboxLines = m_bbox.getLinesOfBbox(overridingColor == nullptr ? m_color : *overridingColor);
+    container.insert(container.end(), bboxLines.begin(), bboxLines.end());
+}
 Vector3 PolygonGC::calculateNormal() const {
     if (m_vertices.size() < 3)
     {

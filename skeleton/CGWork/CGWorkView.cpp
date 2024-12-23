@@ -414,7 +414,6 @@ void CCGWorkView::OnViewPerspective()
 void CCGWorkView::OnUpdateViewPerspective(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_nView == ID_VIEW_PERSPECTIVE);
-	Invalidate();
 }
 
 // ACTION HANDLERS ///////////////////////////////////////////
@@ -423,7 +422,6 @@ void CCGWorkView::OnActionRotate()
 {
 	m_nAction = ID_ACTION_ROTATE;
 	m_nAxis = (m_nAxis == ID_AXIS_XY || m_nAxis == ID_AXIS_XYZ) ? ID_AXIS_X : m_nAxis;
-	Invalidate();
 }
 
 void CCGWorkView::OnUpdateActionRotate(CCmdUI* pCmdUI)
@@ -435,7 +433,6 @@ void CCGWorkView::OnActionTranslate()
 {
 	m_nAction = ID_ACTION_TRANSLATE;
 	m_nAxis = (m_nAxis == ID_AXIS_XYZ) ? ID_AXIS_X : m_nAxis;
-	Invalidate();
 }
 
 void CCGWorkView::OnUpdateActionTranslate(CCmdUI* pCmdUI)
@@ -446,7 +443,6 @@ void CCGWorkView::OnUpdateActionTranslate(CCmdUI* pCmdUI)
 void CCGWorkView::OnActionScale()
 {
 	m_nAction = ID_ACTION_SCALE;
-	Invalidate();
 }
 
 void CCGWorkView::OnUpdateActionScale(CCmdUI* pCmdUI)
@@ -520,6 +516,7 @@ void CCGWorkView::OnUpdateAxisXYZ(CCmdUI* pCmdUI)
 
 void CCGWorkView::OnShowCalcPolyNormals() {
 	m_rendermode.setRenderPolygonsCalcNormal();
+	Invalidate();
 }
 void CCGWorkView::OnUpdateShowCalcPolyNormals(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsCalcNormal());
@@ -527,6 +524,7 @@ void CCGWorkView::OnUpdateShowCalcPolyNormals(CCmdUI* pCmdUI) {
 }
 void CCGWorkView::OnShowCalcVertNormals() {
 	m_rendermode.setRenderCalcVertivesNormal();
+	Invalidate();
 }
 void CCGWorkView::OnUpdateShowCalcVertNormals(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderCalcVertivesNormal());
@@ -534,6 +532,7 @@ void CCGWorkView::OnUpdateShowCalcVertNormals(CCmdUI* pCmdUI) {
 }
 void CCGWorkView::OnShowIritPolyNormals() {
 	m_rendermode.setRenderPolygonsNormalFromData();
+	Invalidate();
 }
 void CCGWorkView::OnUpdateShowIritPolyNormals(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderPolygonsNormalFromData());
@@ -541,6 +540,7 @@ void CCGWorkView::OnUpdateShowIritPolyNormals(CCmdUI* pCmdUI) {
 }
 void CCGWorkView::OnShowIritVertNormals() {
 	m_rendermode.setRenderDataVertivesNormal();
+	Invalidate();
 }
 void CCGWorkView::OnUpdateShowIritVertNormals(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderDataVertivesNormal());
@@ -548,6 +548,7 @@ void CCGWorkView::OnUpdateShowIritVertNormals(CCmdUI* pCmdUI) {
 }
 void CCGWorkView::OnShowBBox(){
 	m_rendermode.setRenderObjBbox();
+	Invalidate();
 }
 void CCGWorkView::OnUpdateShowBBox(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderObjBbox());
@@ -568,6 +569,7 @@ void CCGWorkView::OnNormalsColor() {
 		}
 	}
 	m_rendermode.setRenderOverrideNormalColor();
+	Invalidate();
 }
 void CCGWorkView::OnUpdateNormalsColor(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderOverrideNormalColor());
@@ -588,6 +590,7 @@ void CCGWorkView::OnWireframeColor() {
 		}
 	}
 	m_rendermode.setRenderOverrideWireColor();
+	Invalidate();
 }
 void CCGWorkView::OnUpdateWireframeColor(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_rendermode.getRenderOverrideWireColor());
@@ -605,6 +608,7 @@ void CCGWorkView::OnBgColor() {
 		m_bg_color.setGreen(GetGValue(color));
 		m_bg_color.setBlue(GetBValue(color));
 	}
+	Invalidate();
 }
 void CCGWorkView::OnUpdateBgColor(CCmdUI* pCmdUI) {
 	// do nothing
@@ -735,5 +739,6 @@ void CCGWorkView::OnMouseMove(UINT nFlags, CPoint point) {
 		delete command;
 		m_ref_point = point;
 	}
+	Invalidate();
 	CView::OnMouseMove(nFlags, point);
 }

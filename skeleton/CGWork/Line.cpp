@@ -1,6 +1,6 @@
 #include "Line.h"
 
-
+#include <vector>
 
 
 Line::Line(const Vector3& a, const Vector3& b, ColorGC color): m_a(a), m_b(b), m_color(color) {}
@@ -11,7 +11,6 @@ Vector3 Line::direction() const {
 
 Line Line::getTransformedLine(const Matrix4& transformation) const
 {
-    
     return Line((transformation * Vector4::extendOne(m_a)).toVector3(),
         (transformation * Vector4::extendOne(m_b)).toVector3(),
         m_color);
@@ -22,133 +21,83 @@ float Line::length() const {
     return (m_b - m_a).length();
 }
 
-// Check if two lines intersect, and return the intersection point if they do
-bool Line::findIntersection(const Line& line1, const Line& line2, Vector3& interVector) {
-    
-    double epsilon = 0.005;
-    Vector3 crossD1D2 = Vector3::cross(line1.m_b,line2.m_b);
-    double crossNorm = crossD1D2.normalized().length();
-
-    // Check if the lines are parallel
-    if (crossNorm < epsilon) {
-        // Check if the lines are collinear
-        Vector3 P2P1 = line2.m_a - line1.m_a;
-        if (Vector3::cross(line1.m_b,P2P1).normalized().length() < epsilon) {
-            throw ; // Lines are collinear
-        }
-        throw; // Lines are parallel but not intersecting
-    }
-
-    // Compute the intersection parameters t and s
-    Vector3 P2P1 = line1.m_a - line2.m_a;
-    double t = Vector3::dot(Vector3::cross(P2P1,line2.m_b),crossD1D2) / Vector3::dot(crossD1D2,crossD1D2);
-    double s = Vector3::dot(Vector3::cross(P2P1,line1.m_b),crossD1D2) / Vector3::dot(crossD1D2,crossD1D2);
-
-    // Intersection point
-    Vector3 intersection1 = line1.m_a + line1.m_b * t;
-    Vector3 intersection2 = line2.m_a + line2.m_b * s;
-
-    // Verify if the intersection points match
-    if ((intersection1 - intersection2).normalized().length() < epsilon) {
-        interVector = intersection1;
-        return true; // The lines intersect
-    }
-
-    return false; // The lines are skew (not intersecting)
+static void adjustForNumericalErrors(Vector3& point, float eps) {
+    if (fabs(point.x - -1) < eps) point.x = -1;
+    if (fabs(point.x - 1) < eps) point.x = 1;
+    if (fabs(point.y - -1) < eps) point.y = -1;
+    if (fabs(point.y - 1) < eps) point.y = 1;
+    if (fabs(point.z - -1) < eps) point.z = -1;
+    if (fabs(point.z - 1) < eps) point.z = 1;
+}
+static bool isPointInUnitCube(const Vector3& point) {
+    return (point.x >= -1 && point.x <= 1 &&
+        point.y >= -1 && point.y <= 1 &&
+        point.z >= -1 && point.z <= 1);
 }
 
-bool Line::clip(Line& newLine)
-{
-    bool v1In = m_a.isInsideClipVolume();
-    bool v2In = m_b.isInsideClipVolume();
-    std::pair<bool,Vector3> planIntersectPoint[6];
-    uint8_t intesectPlanCount = 0;
-    if (!v1In&&!v2In)
-    {
-        //pos x
-        intesectPlanCount+= planIntersectPoint[0].first= (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(1, 0, 0), Vector3(1, 0, 0), planIntersectPoint[0].second));
-        //neg x
-        intesectPlanCount += planIntersectPoint[1].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(-1, 0, 0), Vector3(-1, 0, 0), planIntersectPoint[1].second) );
-        //pos y
-        intesectPlanCount += planIntersectPoint[2].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 1, 0), Vector3(0, 1, 0), planIntersectPoint[2].second) );
-        //neg y
-        intesectPlanCount += planIntersectPoint[3].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, -1, 0), Vector3(0, -1, 0), planIntersectPoint[3].second) );
-        //pos z
-        intesectPlanCount += planIntersectPoint[4].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, 1), Vector3(0, 0, 1), planIntersectPoint[4].second) );
-        //neg z
-        intesectPlanCount += planIntersectPoint[5].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, -1), Vector3(0, 0, -1), planIntersectPoint[5].second) );
-        if (intesectPlanCount ==2)
-        {
-            Vector3 tempV1, tempV2;
-            bool firstFilled = false;
-            for (auto t:planIntersectPoint)
-            {
-                if (t.first) {
-                    if (!firstFilled)
-                    {
-                        tempV1 = t.second;
-                        firstFilled = true;
-                    }
-                    else
-                    {
-                        tempV2 = t.second;
-                    }
-                }
-            }
-            newLine = Line(tempV1, tempV2, this->m_color);
-            return true;
-        }
+static bool isPointOnLineBetween(const Line& line, const Vector3& point) {
+    return (point.x >= std::min(line.m_a.x, line.m_b.x) && point.x <= std::max(line.m_a.x, line.m_b.x)) &&
+        (point.y >= std::min(line.m_a.y, line.m_b.y) && point.y <= std::max(line.m_a.y, line.m_b.y)) &&
+        (point.z >= std::min(line.m_a.z, line.m_b.z) && point.z <= std::max(line.m_a.z, line.m_b.z));
+}
 
+std::pair<bool, Vector3> linePlaneIntercetion(const Line& line, const Vector3& planeNormal, const Vector3& planePoint) {
+    float nominator = Vector3::dot(planeNormal, (planePoint - line.m_a));
+    const Vector3 d = (line.m_b - line.m_a).normalized();
+    float denom = Vector3::dot(planeNormal, d);
+    if (denom == 0) return std::pair<bool, Vector3>(false, Vector3::zero());
+    Vector3 intersectionPoint = line.m_a + d * (nominator / denom);
+    return  std::pair<bool, Vector3>(isPointOnLineBetween(line, intersectionPoint), intersectionPoint);
+}
+
+bool Line::clip()
+{
+    bool v1In = isPointInUnitCube(m_a);
+    bool v2In = isPointInUnitCube(m_b);
+    if (v1In && v2In)
+        return true;
+    std::pair<bool,Vector3> planeIntersectPoint[6];
+    Vector3 Intersects[2];
+    int intersectionCount = 0;
+    Vector3 planeNormals[6] = { {-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1} };
+    Vector3 planePoints[6] = { {-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1} };
+    for (int i = 0; i < 6; i++) {
+        planeIntersectPoint[i] = linePlaneIntercetion(*this, planeNormals[i], planePoints[i]);
+        adjustForNumericalErrors(planeIntersectPoint[i].second, 0.01);
+        planeIntersectPoint[i].first = planeIntersectPoint[i].first && isPointOnLineBetween(*this, planeIntersectPoint[i].second) && isPointInUnitCube(planeIntersectPoint[i].second);
+        if (planeIntersectPoint[i].first){
+            if (intersectionCount < 2) {
+                Intersects[intersectionCount++] = planeIntersectPoint[i].second; 
+            }
+            else
+                break;
+        }
+    }
+    if (intersectionCount == 0) {
         return false;
     }
-    if(v1In&&v2In)
-    {
-        newLine = *this;
+    else if (intersectionCount == 1) {
+        if (v1In)
+            m_b = Intersects[0];
+        else if (v2In)
+            m_a = Intersects[0];
+        else return false;
         return true;
     }
-  
-    Vector3 temp;
-    //pos x
-    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(1, 0, 0), Vector3(1, 0, 0),temp))
-    { 
-        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
+    else if (intersectionCount == 2) {
+        if (Vector3::dot(Intersects[1] - Intersects[0], m_b - m_a) > 0) {
+            m_b = Intersects[1];
+            m_a = Intersects[0];
+        }
+        else {
+            m_a = Intersects[1];
+            m_b = Intersects[0];
+        }
         return true;
     }
-    //neg x
-    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(-1, 0, 0), Vector3(-1, 0, 0),temp))
-    {
-        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
-        return true;
-    }
-    //pos y
-    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 1, 0), Vector3(0, 1, 0),temp))
-    {
-        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
-        return true;
-    }
-    //neg y
-    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, -1, 0), Vector3(0, -1, 0),temp))
-    {
-        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
-        return true;
-    }
-    //pos z
-    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, 1), Vector3(0, 0, 1),temp))
-    {
-        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
-        return true;
-    }
-    //neg z
-    if (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, -1), Vector3(0, 0, -1),temp))
-    {
-        newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
-        return true;
-    }
-    //newLine = *this;
     return false;
-
-
 }
+
 void Line::draw(uint32_t* m_Buffer,int width,int hight)
 {
     // Calculate differences
@@ -200,8 +149,8 @@ void Line::print() {
         " -> (" << m_b << ")" << "]";
 
 }
-
-bool Line::isInClip()
-{
-    return m_a.isInsideClipVolume()&&m_b.isInsideClipVolume();
-}
+//
+//bool Line::isInClip()
+//{
+//    return m_a.isInsideClipVolume()&&m_b.isInsideClipVolume();
+//}

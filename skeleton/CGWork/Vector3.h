@@ -87,8 +87,7 @@ public:
     const float& operator[](std::size_t index) const;
     
     bool operator==(const Vector3& other) const;
-    static bool intersectPointInClipVolume(Vector3 rayVector, Vector3 rayPoint, Vector3 planeNormal, Vector3 planePoint,Vector3 &intersectPoint);
-    bool isInsideClipVolume(); 
+
 };
 
 #endif // VECTOR3_H
