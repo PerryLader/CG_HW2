@@ -51,7 +51,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, 0, -1, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 0, 1, 1)).toVector3(), ColorGC(0, 0, 255)));
     //the Final draw
     for (std::vector<Line>& singleTypeLine : lines) {
-        for (Line line : singleTypeLine){
+        for (Line& line : singleTypeLine){
             // if (edge.isVisible()) {          
             if (line.clip(line))
             {

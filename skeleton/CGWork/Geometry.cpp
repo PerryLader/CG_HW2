@@ -36,13 +36,18 @@ Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
 	}
 	return res;
 }
+
 std::vector<Line>* Geometry::getEdges(const ColorGC* overridingColor) const {
-	
+	const BBox unit = BBox::unitBBox();
 	std::vector<Line>* res = new std::vector<Line>;
-	for (const auto& poly : m_polygons) {
-		const std::vector<Line>* edges = poly->getEdges(overridingColor);
-		res->insert(res->end(), edges->begin(), edges->end());
-		delete edges;
+	if (BBox::bboxCollide(getBBox(), unit)) {
+		for (const auto& poly : m_polygons) {
+			if (BBox::bboxCollide(poly->getBbox(), unit)) {
+				const std::vector<Line>* edges = poly->getEdges(overridingColor);
+				res->insert(res->end(), edges->begin(), edges->end());
+				delete edges;
+			}
+		}
 	}
 	return res;
 }

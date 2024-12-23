@@ -298,69 +298,39 @@ uint32_t RGBAtoBGRA(uint32_t rgba) {
 
 void CCGWorkView::OnDraw(CDC* pDC)
 {
-
-	static float theta = 0.0f;
-	CCGWorkDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)
-		return;
-
-	// Get client rectangle dimensions
 	CRect r;
 	GetClientRect(&r);
-
-	// Get the width and height of the rendering area
 	int width = r.Width();
 	int height = r.Height();
-
-	// Retrieve the buffer from getBuffer()
-	
-	m_scene.executeCommand(&createRenderingCommand());
-
-	uint32_t* buffer=m_scene.getBuffer();
-
-	
-
-	// Create a DIB section to render the pixel data
+	// Create a bitmap info header
 	BITMAPINFO bmi;
 	ZeroMemory(&bmi, sizeof(BITMAPINFO));
 	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bmi.bmiHeader.biWidth = width;
-	bmi.bmiHeader.biHeight = -height; // Negative to make the image top-down
+	bmi.bmiHeader.biHeight = -height; // Negative height to indicate a top-down DIB
 	bmi.bmiHeader.biPlanes = 1;
-	bmi.bmiHeader.biBitCount = 32;    // 32 bits for RGBA (8 bits per channel)
+	bmi.bmiHeader.biBitCount = 32;
 	bmi.bmiHeader.biCompression = BI_RGB;
 
-	// Allocate pixel data buffer
-	void* dibPixels = nullptr;
-	HBITMAP hBitmap = CreateDIBSection(pDC->GetSafeHdc(), &bmi, DIB_RGB_COLORS, &dibPixels, nullptr, 0);
-	if (!hBitmap || !dibPixels) {
-		pDC->FillSolidRect(&r, RGB(255, 0, 0)); // Red error background
-		return;
-	}
-
-	// Convert the float buffer to 32-bit packed ARGB and store in the DIB section
-	uint32_t* dibBuffer = (uint32_t*)dibPixels;
-	for (int y = 0; y < height; ++y) {
-		for (int x = 0; x < width; ++x) {
-			
-			dibBuffer[y * width + x] =buffer[y * width + x];
-		}
-	}
-
-	// Render the DIB section to the screen
 	CDC memDC;
 	memDC.CreateCompatibleDC(pDC);
-	HBITMAP hOldBitmap = (HBITMAP)memDC.SelectObject(hBitmap);
+	CBitmap bitmap;
+	bitmap.CreateCompatibleBitmap(pDC, width, height);
 
-	// Copy the DIB section to the display context
+	// Select the bitmap into the memory DC
+	CBitmap* pOldBitmap = memDC.SelectObject(&bitmap);
+
+	m_scene.executeCommand(&createRenderingCommand());
+	uint32_t* buffer = m_scene.getBuffer();
+
+	// Set the bitmap bits from the array
+	SetDIBits(memDC, bitmap, 0, height, buffer, &bmi, DIB_RGB_COLORS);
+
+	// BitBlt the bitmap to the screen DC
 	pDC->BitBlt(0, 0, width, height, &memDC, 0, 0, SRCCOPY);
 
-	// Cleanup
-	memDC.SelectObject(hOldBitmap);
-	DeleteObject(hBitmap);
-
-	theta += 5; // Update theta if used for animations
+	// Clean up
+	memDC.SelectObject(pOldBitmap);
 }
 
 
@@ -444,6 +414,7 @@ void CCGWorkView::OnViewPerspective()
 void CCGWorkView::OnUpdateViewPerspective(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_nView == ID_VIEW_PERSPECTIVE);
+	Invalidate();
 }
 
 // ACTION HANDLERS ///////////////////////////////////////////
@@ -452,6 +423,7 @@ void CCGWorkView::OnActionRotate()
 {
 	m_nAction = ID_ACTION_ROTATE;
 	m_nAxis = (m_nAxis == ID_AXIS_XY || m_nAxis == ID_AXIS_XYZ) ? ID_AXIS_X : m_nAxis;
+	Invalidate();
 }
 
 void CCGWorkView::OnUpdateActionRotate(CCmdUI* pCmdUI)
@@ -463,6 +435,7 @@ void CCGWorkView::OnActionTranslate()
 {
 	m_nAction = ID_ACTION_TRANSLATE;
 	m_nAxis = (m_nAxis == ID_AXIS_XYZ) ? ID_AXIS_X : m_nAxis;
+	Invalidate();
 }
 
 void CCGWorkView::OnUpdateActionTranslate(CCmdUI* pCmdUI)
@@ -473,6 +446,7 @@ void CCGWorkView::OnUpdateActionTranslate(CCmdUI* pCmdUI)
 void CCGWorkView::OnActionScale()
 {
 	m_nAction = ID_ACTION_SCALE;
+	Invalidate();
 }
 
 void CCGWorkView::OnUpdateActionScale(CCmdUI* pCmdUI)
@@ -727,9 +701,9 @@ void CCGWorkView::OnLightConstants()
 void CCGWorkView::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: Add your message handler code here and/or call default
-	CView::OnTimer(nIDEvent);
-	if (nIDEvent == 1)
-		Invalidate();
+	//CView::OnTimer(nIDEvent);
+	//if (nIDEvent == 1)
+	//	Invalidate();
 }
 
 RenderCommand CCGWorkView::createRenderingCommand() {

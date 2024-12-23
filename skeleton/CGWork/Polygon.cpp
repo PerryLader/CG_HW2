@@ -25,7 +25,17 @@ bool BBox::bboxCollide(const BBox& bbox) const{
     return BBox::bboxCollide(*this, bbox);
 }
 bool BBox::bboxCollide(const BBox& bbox1, const BBox& bbox2) {
-    return false;//TODO
+    // Check for overlap along the x-axis
+    bool xOverlap = (bbox1.m_minBounds.x <= bbox2.m_maxBounds.x) && (bbox1.m_maxBounds.x >= bbox2.m_minBounds.x);
+
+    // Check for overlap along the y-axis
+    bool yOverlap = (bbox1.m_minBounds.y <= bbox2.m_maxBounds.y) && (bbox1.m_maxBounds.x >= bbox2.m_minBounds.x);
+
+    // Check for overlap along the z-axis
+    bool zOverlap = (bbox1.m_minBounds.z <= bbox2.m_maxBounds.z) && (bbox1.m_maxBounds.x >= bbox2.m_minBounds.x);
+
+    // Bounding boxes collide if they overlap along all three axes
+    return xOverlap && yOverlap && zOverlap;
 }
 void BBox::updateBBox(const BBox& box)
 {
@@ -235,14 +245,21 @@ std::vector<Line> PolygonGC::getPolyBboxLine(const ColorGC* overridingColor)
 {
     return m_bbox.getLinesOfBbox(overridingColor == nullptr ? m_color : *overridingColor);
 }
-
+static bool ifEdgeBBOXCutUnitCube(const Vertex& v1, const Vertex& v2) {
+    BBox b;
+    b.updateBBox(v1.loc());
+    b.updateBBox(v2.loc());
+    BBox unit = BBox::unitBBox();
+    return BBox::bboxCollide(b, unit);
+}
 std::vector<Line>* PolygonGC::getEdges(const ColorGC* overridingColor) const {
     std::vector<Line>* edges = new std::vector<Line>();
     ColorGC line_color = overridingColor == nullptr ? m_color : *overridingColor;
     for (size_t i = 0; i < m_vertices.size(); ++i) {
         std::shared_ptr<Vertex> v1 = m_vertices[i];
         std::shared_ptr<Vertex> v2 = m_vertices[(i + 1) % m_vertices.size()];
-        edges->push_back(Line(*v1, *v2, line_color));
+        if(ifEdgeBBOXCutUnitCube(*v1, *v2))
+            edges->push_back(Line(*v1, *v2, line_color));
     }
     return edges;
 }

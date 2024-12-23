@@ -13,12 +13,13 @@
 class BBox {
     Vector3 m_minBounds, m_maxBounds;
 public:
-    BBox() : m_minBounds(), m_maxBounds(){};
+    BBox() : m_minBounds(Vector3(FLT_MAX, FLT_MAX, FLT_MAX)), m_maxBounds(Vector3(-FLT_MAX, -FLT_MAX, -FLT_MAX)){};
     BBox(const Vector3& minBound, const Vector3& maxBound) : m_minBounds(minBound), m_maxBounds(maxBound) {};
     void updateBBox(const Vector3& vert);
     void updateBBox(const BBox& box);
     bool bboxCollide(const BBox& bbox) const;
     static bool bboxCollide(const BBox& bbox1, const BBox& bbox2);
+    static BBox unitBBox() { return BBox(-Vector3::one(), Vector3::one()); }
     std::vector<Line> getLinesOfBbox(const ColorGC& bBoxColor) const;
     void toPrint() const;
 };
