@@ -3,10 +3,10 @@
 
 // Constructor
 Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
-    setOrthogonal(Vector3(-1,1,0), Vector3(1, -1, 2), 0, 0);
-    lookAt(Vector3(0, 0, -1), Vector3(0, 0, 0), Vector3(0,-1,0));
-    setOrthogonal(Vector3(-1,1,0), Vector3(1, -1, 2), 0, 0);
-    lookAt(Vector3(0, 0, -1), Vector3(0, 0, 0), Vector3(0,1,0));
+    
+  //  setOrthogonal(Vector3(-1,1,0), Vector3(1, -1, 2), 0, 0);
+    setPerspective(90, 1, 1, 3);
+    lookAt(Vector3(0, 0, -2), Vector3(0, 0, 0), Vector3(0,1,0));
 }
 
 // Function to set the view transformation matrix
@@ -74,16 +74,42 @@ void Camera::setOrthogonal(const Vector3& LBN, const Vector3& RTF,float theta, f
 
 // Function to set perspective projection
 void Camera::setPerspective(float fovY, float aspect, float near, float far) {
-    //not sure about the tanHalfFovY and and aspect usage
-    const float tanHalfFovY = tan(fovY / 2);
-    double a = (near + far) / (far - near);
-    double b = ((2 * near) * far)/(near - far);
-    projectionMatrix = Matrix4(
-        1 / (aspect * tanHalfFovY), 0, 0, 0,
-        0, 1 / tanHalfFovY, 0, 0,
-        0, 0, a, b, 
-        0, 0, -1, 0
+    ////not sure about the tanHalfFovY and and aspect usage
+    //const float tanHalfFovY = tan(fovY / 2);
+    //double a = (near + far) / (far - near);
+    //double b = ((2 * near) * far)/(near - far);
+    //projectionMatrix = Matrix4(
+    //    1 / (aspect * tanHalfFovY), 0, 0, 0,
+    //    0, 1 / tanHalfFovY, 0, 0,
+    //    0, 0, a, b, 
+    //    0, 0, -1, 0
+    //);
+
+
+    double fovRad = fovY * (3.14159265358979323846 / 180.0);
+
+    // Calculate scale factors
+    double tanHalfFovY = std::tan(fovRad / 2.0);
+    double range = far - near;
+
+    // Calculate matrix elements
+    double m00 = 1.0 / (aspect * tanHalfFovY);
+    double m11 = 1.0 / tanHalfFovY;
+    double m22 = -(far + near) / range;
+    double m23 = -1.0;
+    double m32 = -(2.0 * far * near) / range;
+
+    // Create the perspective matrix using the Matrix4 constructor
+    this->projectionMatrix = Matrix4(
+        m00, 0.0, 0.0, 0.0,
+        0.0, m11, 0.0, 0.0,
+        0.0, 0.0, m22, m23,
+        0.0, 0.0, m32, 0.0
     );
+
+
+
+
 }
 
 void Camera::orientate(const Matrix4& tMat) {

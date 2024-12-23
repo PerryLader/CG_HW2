@@ -31,7 +31,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     Matrix4 aspectRatioMatrix = Matrix4::scaling(Vector3(1.0f / aspectRatio, 1.0f, 1.0f));
     Matrix4 view = camera->getViewMatrix();
     Matrix4 proj = camera->getProjectionMatrix();
-    const Matrix4 viewProjectionMatrix = aspectRatioMatrix * view *  proj;
+    const Matrix4 viewProjectionMatrix = aspectRatioMatrix  *  proj * view;
 
     // Transform and cull geometry
     std::vector<Geometry*> transformedGeometries;
@@ -48,6 +48,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
         //transformedGeometry->backFaceCulling();//there is bug here
     }
     //add axis origin for tests:
+    Vector4 e = viewProjectionMatrix * Vector4(0, 0, -1, 1);
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(-1, 0, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(1, 0, 0, 1)).toVector3(), ColorGC(255, 0, 0)));
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, -1, 0, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 1, 0, 1)).toVector3(), ColorGC(0, 255, 0)));
     lines[LineVectorIndex::SHAPES].push_back(Line((viewProjectionMatrix * Vector4(0, 0, -1, 1)).toVector3(), (viewProjectionMatrix * Vector4(0, 0, 1, 1)).toVector3(), ColorGC(0, 0, 255)));
