@@ -150,6 +150,7 @@ void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const C
 	{
 		this->createShapesLines(lines , renderMode.getRenderOverrideWireColor() ? &wireColor : &this->m_objColor);
 	}
+	//BBOX
 	if (renderMode.getRenderObjBbox())
 	{
 		this->createObjBboxLines(lines, renderMode.getRenderOverrideWireColor() ? &wireColor : &this->m_objColor);
@@ -158,6 +159,7 @@ void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const C
 	{
 		this->createPolyBboxLines(lines, renderMode.getRenderOverrideWireColor() ? &wireColor : nullptr);
 	}
+	//POLY NORMAL
 	if (renderMode.getRenderPolygonsCalcNormal())
 	{
 		this->createPolyCalcNormalLlines(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);

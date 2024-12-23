@@ -138,7 +138,7 @@ bool Line::clip(Line& newLine)
         newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
         return true;
     }
-    newLine = *this;
+    //newLine = *this;
     return false;
 
 
