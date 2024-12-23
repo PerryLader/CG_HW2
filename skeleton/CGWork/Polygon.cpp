@@ -88,9 +88,45 @@ void PolygonGC::resetBounds() {
 PolygonGC::PolygonGC(ColorGC color) : m_color(color), m_hasDataNormal(false){
     resetBounds();
 }
-PolygonGC::PolygonGC(const Vector3& normal,ColorGC color) : m_color(color),m_dataNormal(normal),m_hasDataNormal(true){
-    resetBounds();
+
+void PolygonGC::setCalcAndDataNormalLines( Vector3 dataNormal)
+{
+    Vector3 centerPoint(0, 0, 0);
+    for (const auto& v : m_vertices)
+    {
+        centerPoint += v->loc();
+    }
+    centerPoint /= m_vertices.size();
+    m_calcNormalLine= Line(centerPoint, centerPoint + (calculateNormal().normalized() * 0.25),m_color);
+    m_dataNormalLine = Line(centerPoint, centerPoint + (dataNormal.normalized() * 0.25), m_color);
 }
+
+void PolygonGC::setCalcNormalLines()
+{
+    Vector3 centerPoint(0, 0, 0);
+    for (const auto& v : m_vertices)
+    {
+        centerPoint += v->loc();
+    }
+    centerPoint /= m_vertices.size();
+    m_calcNormalLine = Line(centerPoint, centerPoint + (calculateNormal().normalized() * 0.25));
+    m_hasDataNormal = false;
+}
+
+Vector3 PolygonGC::getCalcNormalNormolized()
+{
+    return (m_calcNormalLine.m_b - m_calcNormalLine.m_a).normalized();
+}
+
+Vector3 PolygonGC::getDataNormalNormolized()
+{
+    if (!hasDataNormalLine())
+    {
+        throw std::exception();
+    }
+    return (m_dataNormalLine.m_b - m_dataNormalLine.m_a).normalized();;
+}
+
 
 
 
@@ -105,33 +141,10 @@ const ColorGC& PolygonGC::getColor() const
     return m_color;
 }
 
-// Add a vertex
-void PolygonGC::addVertexs(IPVertexStruct* vertex) {
-    while (vertex)
-    {
-        std::shared_ptr<Vertex> temp(new Vertex(Vector3(
-            vertex->Coord[0],
-            vertex->Coord[1],
-            vertex->Coord[2])));
-        m_vertices.push_back(temp);
-        updateBounds(*temp);
-        vertex = vertex->Pnext;
-    }
-    if (3>m_vertices.size())
-    {
-        throw;
-    }
-    m_calcNormal= this->calculateNormal();
-}
-
 void PolygonGC::addVertex(std::shared_ptr<Vertex> vertex) {
     if (vertex)
     {
-        m_vertices.push_back(vertex);
-        if (m_vertices.size() == 3)
-        {
-            this->m_calcNormal = this->calculateNormal();
-        }
+        m_vertices.push_back(vertex);        
         updateBounds(*vertex);
     }
 }
@@ -202,35 +215,21 @@ void PolygonGC::clip(){
     //m_vertices = inscopeVertices;
 }
 // Function to apply a transformation matrix to all vertices
-PolygonGC* PolygonGC::applyForceTransformation(const Matrix4& transformation) const
+PolygonGC* PolygonGC::applyTransformation(const Matrix4& transformation) const
 {
     PolygonGC* newPoly = new PolygonGC(this->m_color);
     for (auto vertex : m_vertices) {
         newPoly->addVertex(vertex->getTransformedVertex(transformation));
     }
 
-    newPoly->m_calcNormal = (transformation * Vector4::extendOne(newPoly->m_calcNormal)).toVector3();
+    newPoly->m_calcNormalLine = this->m_calcNormalLine.getTransformedLine(transformation);
     if (newPoly->m_hasDataNormal)
     {
-        newPoly->m_dataNormal = (transformation * Vector4::extendOne(newPoly->m_dataNormal)).toVector3();
+        newPoly->m_dataNormalLine = this->m_dataNormalLine.getTransformedLine(transformation);
     }
     return newPoly;
 }
-PolygonGC* PolygonGC::applySoftTransformation(const Matrix4& transformation) const{
-    PolygonGC* newPoly = new PolygonGC(this->m_color);
-    for ( auto vertex : m_vertices) {
-       
-            std::shared_ptr<Vertex> newVertex = vertex->getTransformedVertex(transformation);
-            newPoly->addVertex(newVertex);
-    }
 
-    newPoly->m_calcNormal = (transformation * Vector4::extendOne(newPoly->m_calcNormal)).toVector3();
-    if (newPoly->m_hasDataNormal)
-    {
-        newPoly->m_dataNormal = (transformation * Vector4::extendOne(newPoly->m_dataNormal)).toVector3();
-    }
-    return newPoly;
-}
 std::vector<Line> PolygonGC::getPolyBboxLine(const ColorGC* overridingColor)
 {
     return m_bbox.getLinesOfBbox(overridingColor == nullptr ? m_color : *overridingColor);
@@ -240,9 +239,9 @@ std::vector<Line>* PolygonGC::getEdges(const ColorGC* overridingColor) const {
     std::vector<Line>* edges = new std::vector<Line>();
     ColorGC line_color = overridingColor == nullptr ? m_color : *overridingColor;
     for (size_t i = 0; i < m_vertices.size(); ++i) {
-        std::shared_ptr<Vertex> v1 = m_vertices[i];
-        std::shared_ptr<Vertex> v2 = m_vertices[(i + 1) % m_vertices.size()];
-        edges->push_back(Line(*v1, *v2, line_color));
+        Vector3 v1 = m_vertices[i]->loc();
+        Vector3 v2 = m_vertices[(i + 1) % m_vertices.size()]->loc();
+        edges->push_back(Line(v1, v2, line_color));
     }
     return edges;
 }
@@ -252,52 +251,32 @@ BBox PolygonGC::getBbox() const{
     return m_bbox;
 }
 
-Vector3 PolygonGC::getCalcNormal() const
+Line PolygonGC::getCalcNormalLine(const ColorGC* overridingColor) const
 {
-    return m_calcNormal;
+    return Line(m_calcNormalLine.m_a, m_calcNormalLine.m_b, overridingColor == nullptr ? m_calcNormalLine.m_color : *overridingColor);
+
 }
 
-Vector3 PolygonGC::getDataNormal() const
+Line PolygonGC::getDataNormalLine(const ColorGC* overridingColor) const
 {
-    return m_dataNormal;
-}
-
-bool PolygonGC::hasDataNormal() const{
-    return m_hasDataNormal;
-}
-Line PolygonGC::getNormalLineFromCalc(const ColorGC* overridingColor) const
-{
-    Vector3 centerPoint(0, 0, 0);
-    for (const auto& v : m_vertices)
-    {
-        centerPoint += v->loc();
-    }
-    centerPoint /= m_vertices.size();
-    return Line(centerPoint, centerPoint + (m_calcNormal.normalized() * 0.25), overridingColor == nullptr ? m_color : *overridingColor);
-}
-
-Line PolygonGC::getNormalLineFromData(const ColorGC* overridingColor) const
-{
-    if (!hasDataNormal())
+    if (!hasDataNormalLine())
     {
         throw std::exception();
     }
-    Vector3 centerPoint(0, 0, 0);
-    for (const auto& v : m_vertices)
-    {
-        centerPoint = centerPoint + v->loc();
-    }
-    centerPoint = centerPoint * (1.0 / m_vertices.size());
-    return Line(centerPoint, centerPoint + m_dataNormal.normalized(), overridingColor == nullptr ? m_color : *overridingColor);
 
+    return Line(m_dataNormalLine.m_a, m_dataNormalLine.m_b, overridingColor == nullptr ? m_dataNormalLine.m_color : *overridingColor);
 }
+
+bool PolygonGC::hasDataNormalLine() const{
+    return m_hasDataNormal;
+}
+
+
 std::vector<Line>* PolygonGC::getVertNormLinesFromData(const ColorGC* overridingColor)const {
     std::vector<Line>* normalLines = new std::vector<Line>();
     for (const auto& vert : m_vertices) {
         try {
-            const Vector3 vec = vert->getDataNormal();
-            const Vector3 centerPoint = vert->loc();
-            normalLines->push_back(Line(centerPoint, centerPoint + (vec.normalized() * 0.25)));
+            normalLines->push_back(vert->getDataNormalLine());
         }
         catch (...) {
             normalLines->clear();
@@ -310,9 +289,7 @@ std::vector<Line>* PolygonGC::getVertNormLinesFromData(const ColorGC* overriding
 std::vector<Line>* PolygonGC::getVertNormLinesFromCalc(const ColorGC* overridingColor) const {
     std::vector<Line>* normalLines = new std::vector<Line>();
     for (const auto& vert : m_vertices) {
-        const Vector3 vec = vert->getCalcNormal();
-        const Vector3 centerPoint = vert->loc();
-        normalLines->push_back(Line(centerPoint, centerPoint + (vec.normalized() * 0.25)));
+        normalLines->push_back(vert->getCalcNormalLine());
     }
     return normalLines;
 }
@@ -324,6 +301,6 @@ Vector3 PolygonGC::calculateNormal() const {
     }
     const Vector3 vec1 = m_vertices.at(1)->loc() - m_vertices.at(0)->loc();
     const Vector3 vec2 = m_vertices.at(2)->loc() - m_vertices.at(1)->loc();
-    return Vector3::cross(vec1, vec2).normalized();
+    return Vector3::cross(vec2, vec1).normalized();
 
 }

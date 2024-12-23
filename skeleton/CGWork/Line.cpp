@@ -3,12 +3,18 @@
 
 
 
-
-Line::Line(const Vertex& a, const Vertex& b, ColorGC color) : m_a(a.loc()), m_b(b.loc()),m_color(color) {}
 Line::Line(const Vector3& a, const Vector3& b, ColorGC color): m_a(a), m_b(b), m_color(color) {}
 // Calculate the direction vector of the line
 Vector3 Line::direction() const {
     return (m_b - m_a).normalized();
+}
+
+Line Line::getTransformedLine(const Matrix4& transformation) const
+{
+    
+    return Line((transformation * Vector4::extendOne(m_a)).toVector3(),
+        (transformation * Vector4::extendOne(m_b)).toVector3(),
+        m_color);
 }
 
 // Calculate the length of the line
@@ -17,7 +23,7 @@ float Line::length() const {
 }
 
 // Check if two lines intersect, and return the intersection point if they do
-bool Line::findIntersection(const Line& line1, const Line& line2, Vertex& interVertex) {
+bool Line::findIntersection(const Line& line1, const Line& line2, Vector3& interVector) {
     
     double epsilon = 0.005;
     Vector3 crossD1D2 = Vector3::cross(line1.m_b,line2.m_b);
@@ -44,7 +50,7 @@ bool Line::findIntersection(const Line& line1, const Line& line2, Vertex& interV
 
     // Verify if the intersection points match
     if ((intersection1 - intersection2).normalized().length() < epsilon) {
-        interVertex = Vertex(intersection1);
+        interVector = intersection1;
         return true; // The lines intersect
     }
 

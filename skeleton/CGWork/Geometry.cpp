@@ -25,16 +25,20 @@ void Geometry::addPolygon(PolygonGC* poli)
 }
 
 Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
-	for (std::pair<Vector3, std::shared_ptr<Vertex>> t : m_map)
-	{
-		t.second->setCalcNormal();		
-	}
+	
 	Geometry* res = new Geometry(m_name,this->m_objColor);
 	for (const auto& poly : m_polygons) {
 
-		res->addPolygon(poly->applySoftTransformation(tMat));
+		res->addPolygon(poly->applyTransformation(tMat));
 	}
 	return res;
+}
+void Geometry::calcVertxNormal()
+{
+	for (std::pair<Vector3, std::shared_ptr<Vertex>> t : m_map)
+	{
+		t.second->setCalcNormalLine();
+	}
 }
 std::vector<Line>* Geometry::getEdges(const ColorGC* overridingColor) const {
 	
@@ -48,16 +52,16 @@ std::vector<Line>* Geometry::getEdges(const ColorGC* overridingColor) const {
 }
 
 void Geometry::backFaceCulling() {
-    const Vector3 camera_vec = Vector3::unitZ();
+    /*const Vector3 camera_vec = Vector3::unitZ();
 	for (auto it = m_polygons.begin(); it != m_polygons.end(); ) {
 		PolygonGC* polygon = *it;
-		if (polygon->isBehindCamera() || Vector3::dot(camera_vec, polygon->getCalcNormal()) < 0) {
+		if (polygon->isBehindCamera() || Vector3::dot(camera_vec, polygon->getCalcNormalLine()) < 0) {
 			delete polygon;
 			it = m_polygons.erase(it);
 		}
 		else
 			it++;
-	}
+	}*/
 }
 
 std::vector<Line> Geometry::getPolyBboxLines(const ColorGC* overridingColor) const
@@ -76,7 +80,7 @@ std::vector<Line> Geometry::getPolyNormalLineFromCalc(const ColorGC* overridingC
 	std::vector<Line> lines;
 	for (const auto& p : m_polygons)
 	{
-		lines.push_back(p->getNormalLineFromCalc(overridingColor));
+		lines.push_back(p->getCalcNormalLine(overridingColor));
 	}
 	return lines;
 }
@@ -198,7 +202,7 @@ std::vector<Line> Geometry::getPolyNormalLineFromData(const ColorGC* overridingC
 	for (const auto& p: m_polygons)
 	{
 		try {
-			lines.push_back(p->getNormalLineFromData(overridingColor));
+			lines.push_back(p->getDataNormalLine(overridingColor));
 		}
 		catch (...) {
 			lines.clear();

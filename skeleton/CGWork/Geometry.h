@@ -53,7 +53,6 @@ OBJ_BBOX=5,
 POLY_BBOX=6,
 LAST=7
 };
-	
 struct KeyHash {
 	std::size_t operator()(const Vector3 key) const {
 
@@ -61,7 +60,6 @@ struct KeyHash {
 		return hasher(key.x) ^ (hasher(key.y) << 1) ^ (hasher(key.z) << 2);
 	}
 };
-
 struct KeyEqual {
 	bool operator()(const Vector3& lhs,
 		const Vector3& rhs) const {
@@ -100,7 +98,7 @@ public:
 	void loadLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode& renderMode) const;
 	void Geometry::addPolygon(PolygonGC* poli);
 	Geometry* applyTransformation(const Matrix4& tMat) const;
-	
+	void calcVertxNormal();
 	void backFaceCulling();
 	void clip();
 	void print() const;
