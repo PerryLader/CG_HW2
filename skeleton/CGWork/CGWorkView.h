@@ -114,6 +114,10 @@ protected:
 	afx_msg void OnUpdateAxisY(CCmdUI* pCmdUI);
 	afx_msg void OnAxisZ();
 	afx_msg void OnUpdateAxisZ(CCmdUI* pCmdUI);
+	afx_msg void OnAxisXY();
+	afx_msg void OnUpdateAxisXY(CCmdUI* pCmdUI);
+	afx_msg void OnAxisXYZ();
+	afx_msg void OnUpdateAxisXYZ(CCmdUI* pCmdUI);
 	afx_msg void OnLightShadingFlat();
 	afx_msg void OnUpdateLightShadingFlat(CCmdUI* pCmdUI);
 	afx_msg void OnLightShadingGouraud();

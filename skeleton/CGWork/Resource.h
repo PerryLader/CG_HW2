@@ -74,6 +74,7 @@
 #define ID_AXIS_XY                      32819
 #define ID_AXIS_XYZ                     32820
 
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

@@ -58,6 +58,10 @@ BEGIN_MESSAGE_MAP(CCGWorkView, CView)
 	ON_UPDATE_COMMAND_UI(ID_AXIS_Y, OnUpdateAxisY)
 	ON_COMMAND(ID_AXIS_Z, OnAxisZ)
 	ON_UPDATE_COMMAND_UI(ID_AXIS_Z, OnUpdateAxisZ)
+	ON_COMMAND(ID_AXIS_XY, OnAxisXY)
+	ON_UPDATE_COMMAND_UI(ID_AXIS_XY, OnUpdateAxisXY)
+	ON_COMMAND(ID_AXIS_XYZ, OnAxisXYZ)
+	ON_UPDATE_COMMAND_UI(ID_AXIS_XYZ, OnUpdateAxisXYZ)
 	ON_COMMAND(ID_LIGHT_SHADING_FLAT, OnLightShadingFlat)
 	ON_UPDATE_COMMAND_UI(ID_LIGHT_SHADING_FLAT, OnUpdateLightShadingFlat)
 	ON_COMMAND(ID_LIGHT_SHADING_GOURAUD, OnLightShadingGouraud)
@@ -447,6 +451,7 @@ void CCGWorkView::OnUpdateViewPerspective(CCmdUI* pCmdUI)
 void CCGWorkView::OnActionRotate()
 {
 	m_nAction = ID_ACTION_ROTATE;
+	m_nAxis = (m_nAxis == ID_AXIS_XY || m_nAxis == ID_AXIS_XYZ) ? ID_AXIS_X : m_nAxis;
 }
 
 void CCGWorkView::OnUpdateActionRotate(CCmdUI* pCmdUI)
@@ -457,6 +462,7 @@ void CCGWorkView::OnUpdateActionRotate(CCmdUI* pCmdUI)
 void CCGWorkView::OnActionTranslate()
 {
 	m_nAction = ID_ACTION_TRANSLATE;
+	m_nAxis = (m_nAxis == ID_AXIS_XYZ) ? ID_AXIS_X : m_nAxis;
 }
 
 void CCGWorkView::OnUpdateActionTranslate(CCmdUI* pCmdUI)
@@ -515,6 +521,27 @@ void CCGWorkView::OnAxisZ()
 void CCGWorkView::OnUpdateAxisZ(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(m_nAxis == ID_AXIS_Z);
+}
+
+void CCGWorkView::OnAxisXY()
+{
+	m_nAxis = ID_AXIS_XY;
+}
+
+void CCGWorkView::OnUpdateAxisXY(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(m_nAction != ID_ACTION_ROTATE);
+	pCmdUI->SetCheck(m_nAxis == ID_AXIS_XY);
+}
+void CCGWorkView::OnAxisXYZ()
+{
+	m_nAxis = ID_AXIS_XYZ;
+}
+
+void CCGWorkView::OnUpdateAxisXYZ(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(m_nAction == ID_ACTION_SCALE);
+	pCmdUI->SetCheck(m_nAxis == ID_AXIS_XYZ);
 }
 
 void CCGWorkView::OnShowCalcPolyNormals() {
