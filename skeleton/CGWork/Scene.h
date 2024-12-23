@@ -23,7 +23,7 @@ public:
     // Function to add a camera to the scene
     void addCamera(Camera* camera);
     // Function to render the scene
-    void render(int width, int height, RenderMode renderMode, ColorGC bg_color, ColorGC normalColor, ColorGC bBoxColor) const;
+    void render(int width, int height, RenderMode& renderMode, ColorGC bg_color, ColorGC normalColor, ColorGC bBoxColor) const;
     uint32_t* getBuffer();
     void executeCommand(ScreenCommand* command);
 

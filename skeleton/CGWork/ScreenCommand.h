@@ -13,7 +13,7 @@ public:
 class RenderCommand : public ScreenCommand {
 public:
     virtual ~RenderCommand() {}
-    RenderCommand(int width, int height, const RenderMode& rd_mode, const ColorGC& bgColor, const ColorGC& normColor,
+    RenderCommand(int width, int height, RenderMode& rd_mode, const ColorGC& bgColor, const ColorGC& normColor,
         const ColorGC& wireColor) : screenWidth(width), screenHeigth(height), rd_mode(rd_mode), bg(bgColor),
         normals(normColor), wireframe(wireColor){}
     virtual void execute(Scene& scene) override {
@@ -22,7 +22,7 @@ public:
 protected:
     int screenWidth;
     int screenHeigth;
-    RenderMode rd_mode;
+    RenderMode& rd_mode;
     ColorGC bg;
     ColorGC normals;
     ColorGC wireframe;
@@ -30,7 +30,7 @@ protected:
 
 class TransformationCommand : public RenderCommand {
 public:
-    TransformationCommand(int width, int height, const RenderMode& rd_mode, const ColorGC& bgColor,
+    TransformationCommand(int width, int height, RenderMode& rd_mode, const ColorGC& bgColor,
         const ColorGC& normColor, const ColorGC& wireColor,
         const Vector3& ref_point, const Vector3& movement,
         float aspectRatio,int action, int axis,int tSpace, 
@@ -39,7 +39,7 @@ public:
         , ref_point(ref_point), movement(movement), aspectRatio(aspectRatio),
         action(action), axis(axis), tSpace(tSpace), sensitivity(sensitivity) {}
 
-    TransformationCommand(const RenderCommand& rc, const Vector3& ref_point, const Vector3& movement,
+    TransformationCommand(RenderCommand& rc, const Vector3& ref_point, const Vector3& movement,
         float aspectRatio, int action, int axis, int tSpace, float sensitivity)
         : RenderCommand(rc), ref_point(ref_point), movement(movement), aspectRatio(aspectRatio),
         action(action), axis(axis), tSpace(tSpace), sensitivity(sensitivity) {}

@@ -15,7 +15,7 @@ Renderer::~Renderer() {
     clear(true);
 }
 
-void Renderer::render(const Camera* camera, int width, int height,const std::vector<Model*> models,  RenderMode renderMode,
+void Renderer::render(const Camera* camera, int width, int height,const std::vector<Model*> models,  RenderMode& renderMode,
     const ColorGC& bgColor, const ColorGC& normalColor, const ColorGC& wireColor) {
     const char* debuging = bgColor.toHex().c_str();
 

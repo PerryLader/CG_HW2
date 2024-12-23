@@ -22,7 +22,7 @@ void Scene::addCamera(Camera* camera) {
 }
 
 // Function to render the scene
-void Scene::render(int width, int height, RenderMode renderMode, ColorGC bg_color, ColorGC normalColor, ColorGC bBoxColor) const {
+void Scene::render(int width, int height, RenderMode& renderMode, ColorGC bg_color, ColorGC normalColor, ColorGC bBoxColor) const {
     m_renderer->render(m_cameras[0], width, height, m_models, renderMode, bg_color, normalColor,bBoxColor);//default camera
 }
 uint32_t* Scene::getBuffer() {

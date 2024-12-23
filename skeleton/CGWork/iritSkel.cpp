@@ -215,7 +215,6 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 		return true;
 	}
 
-	Geometry* shape= new Geometry(PObj_src->ObjName);
 
 
 	//bgra argb
@@ -259,6 +258,8 @@ bool CGSkelStoreData(IPObjectStruct* PObj_src, Geometry** PGeom_dest)
 			Attrs = AttrTraceAttributes(Attrs, NULL);
 		}
 	}
+	Geometry* shape = new Geometry(PObj_src->ObjName, color);
+
 	
 	for (PPolygon = PObj_src->U.Pl; PPolygon != NULL; PPolygon = PPolygon->Pnext)
 	{

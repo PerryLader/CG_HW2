@@ -163,10 +163,6 @@ bool PolygonGC::isBehindCamera() const{
             return false;
     return true;
 }
-std::vector<std::shared_ptr<Vertex>> PolygonGC::getVertexVector() 
-{    
-    return m_vertices;
-}
 // Print polygon color
 void PolygonGC::printColor() const{
     std::cout << m_color.toHex();   
@@ -269,14 +265,14 @@ Vector3 PolygonGC::getDataNormal() const
 bool PolygonGC::hasDataNormal() const{
     return m_hasDataNormal;
 }
-Line PolygonGC::calcNormalLine(const ColorGC* overridingColor) const
+Line PolygonGC::getNormalLineFromCalc(const ColorGC* overridingColor) const
 {
     Vector3 centerPoint(0, 0, 0);
-    for (auto t : m_vertices)
+    for (const auto& v : m_vertices)
     {
-        centerPoint = centerPoint + t->loc();
+        centerPoint += v->loc();
     }
-    centerPoint = centerPoint * (1.0 / m_vertices.size());
+    centerPoint /= m_vertices.size();
     return Line(centerPoint, centerPoint + (m_calcNormal.normalized() * 0.25), overridingColor == nullptr ? m_color : *overridingColor);
 }
 
@@ -284,18 +280,43 @@ Line PolygonGC::getNormalLineFromData(const ColorGC* overridingColor) const
 {
     if (!hasDataNormal())
     {
-        std::cout << "U cant to ittt!!!!!!!!";
-        throw;
+        throw std::exception();
     }
     Vector3 centerPoint(0, 0, 0);
-    for (auto t : m_vertices)
+    for (const auto& v : m_vertices)
     {
-        centerPoint = centerPoint + t->loc();
+        centerPoint = centerPoint + v->loc();
     }
-    centerPoint = centerPoint * (1 / m_vertices.size());
+    centerPoint = centerPoint * (1.0 / m_vertices.size());
     return Line(centerPoint, centerPoint + m_dataNormal.normalized(), overridingColor == nullptr ? m_color : *overridingColor);
 
 }
+std::vector<Line>* PolygonGC::getVertNormLinesFromData(const ColorGC* overridingColor)const {
+    std::vector<Line>* normalLines = new std::vector<Line>();
+    for (const auto& vert : m_vertices) {
+        try {
+            const Vector3 vec = vert->getDataNormal();
+            const Vector3 centerPoint = vert->loc();
+            normalLines->push_back(Line(centerPoint, centerPoint + (vec.normalized() * 0.25)));
+        }
+        catch (...) {
+            normalLines->clear();
+            delete normalLines;
+            throw std::exception();
+        }
+    }
+    return normalLines;
+}
+std::vector<Line>* PolygonGC::getVertNormLinesFromCalc(const ColorGC* overridingColor) const {
+    std::vector<Line>* normalLines = new std::vector<Line>();
+    for (const auto& vert : m_vertices) {
+        const Vector3 vec = vert->getCalcNormal();
+        const Vector3 centerPoint = vert->loc();
+        normalLines->push_back(Line(centerPoint, centerPoint + (vec.normalized() * 0.25)));
+    }
+    return normalLines;
+}
+
 Vector3 PolygonGC::calculateNormal() const {
     if (m_vertices.size() < 3)
     {

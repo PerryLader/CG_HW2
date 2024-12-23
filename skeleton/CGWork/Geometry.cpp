@@ -1,8 +1,8 @@
 #include "Geometry.h"
+#include <afxwin.h>
 
-Geometry::Geometry(std::string name) : m_name(name) ,m_bBox(){}
+Geometry::Geometry(const std::string& name, const ColorGC& color) : m_name(name) ,m_bBox(), m_objColor(color){}
 
-Geometry::Geometry(std::string name, std::unordered_map<Vector3, std::shared_ptr<Vertex>, KeyHash, KeyEqual> map) : m_name(name), m_bBox(),m_map(map){}
 // Destructor
 Geometry::~Geometry() {
 	for (PolygonGC* polygon : m_polygons) {
@@ -14,7 +14,7 @@ Geometry::~Geometry() {
 BBox Geometry::getBBox() const{
 	return m_bBox;
 }
-std::string Geometry::getName() {
+std::string Geometry::getName() const{
 	return this->m_name;
 }
 
@@ -29,7 +29,7 @@ Geometry* Geometry::applyTransformation(const Matrix4& tMat) const{
 	{
 		t.second->setCalcNormal();		
 	}
-	Geometry* res = new Geometry(m_name,this->m_map);
+	Geometry* res = new Geometry(m_name,this->m_objColor);
 	for (const auto& poly : m_polygons) {
 
 		res->addPolygon(poly->applySoftTransformation(tMat));
@@ -63,9 +63,9 @@ void Geometry::backFaceCulling() {
 std::vector<Line> Geometry::getPolyBboxLines(const ColorGC* overridingColor) const
 {
 	std::vector<Line> lines;
-	for (auto t : m_polygons)
+	for (const auto& p : m_polygons)
 	{
-		std::vector<Line> polyLines=t->getPolyBboxLine(overridingColor);
+		std::vector<Line> polyLines=p->getPolyBboxLine(overridingColor);
 		lines.insert(lines.end(), polyLines.begin(), polyLines.end());
 	}
 	return lines;
@@ -74,9 +74,9 @@ std::vector<Line> Geometry::getPolyBboxLines(const ColorGC* overridingColor) con
 std::vector<Line> Geometry::getPolyNormalLineFromCalc(const ColorGC* overridingColor) const
 {
 	std::vector<Line> lines;
-	for (auto t : m_polygons)
+	for (const auto& p : m_polygons)
 	{
-		lines.push_back(t->calcNormalLine(overridingColor));
+		lines.push_back(p->getNormalLineFromCalc(overridingColor));
 	}
 	return lines;
 }
@@ -96,9 +96,9 @@ void Geometry::createShapesLines(std::vector<Line> lines[LineVectorIndex::LAST],
 #endif // APPLE_ALGO
 
 }
-void Geometry::createObjBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& wireColor) const
+void Geometry::createObjBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* wireColor) const
 {
-	std::vector<Line> bBoxLines = this->getBBox().getLinesOfBbox(wireColor);
+	std::vector<Line> bBoxLines = this->getBBox().getLinesOfBbox(*wireColor);
 	lines[LineVectorIndex::OBJ_BBOX].insert(lines[LineVectorIndex::OBJ_BBOX].end(), bBoxLines.begin(), bBoxLines.end());	
 }
 void Geometry::createPolyBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const
@@ -112,7 +112,7 @@ void Geometry::createPolyNormalLlinesFromData(std::vector<Line> lines[LineVector
 {
 	std::vector<Line> normalLines = this->getPolyNormalLineFromData(overridingColor);
 	lines[LineVectorIndex::POLY_DATA_NORNAL].insert(lines[LineVectorIndex::POLY_DATA_NORNAL].end(), normalLines.begin(), normalLines.end());
-	
+
 }
 void Geometry::createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const
 {	
@@ -121,48 +121,38 @@ void Geometry::createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorInde
 }
 void Geometry::createVertCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const
 {
-	std::vector<Line> normalLines;
-	for (auto poly : this->m_polygons)
+	for (const auto& poly : this->m_polygons)
 	{
-		for (auto vert : poly->getVertexVector())
-		{
-			Vector3 vec = vert->getCalcNormal();
-			Vector3 centerPoint = vert->loc();
-			normalLines.push_back(Line(centerPoint, centerPoint + (vec.normalized() * 0.25)));
+		std::vector<Line>* normalLines = poly->getVertNormLinesFromCalc(overridingColor);
+		if (normalLines != nullptr) {
+			lines[LineVectorIndex::VERTICES_CALC_NORMAL].insert(lines[LineVectorIndex::VERTICES_CALC_NORMAL].end(), normalLines->begin(), normalLines->end());
+			delete normalLines;
 		}
 	}
-	
-	lines[LineVectorIndex::VERTICES_CALC_NORMAL].insert(lines[LineVectorIndex::VERTICES_CALC_NORMAL].end(), normalLines.begin(), normalLines.end());
-
 }
 void Geometry::createVertDataNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const
 {
-	std::vector<Line> normalLines;
-	for (auto poly : this->m_polygons)
+	for (const auto& poly : this->m_polygons)
 	{
-		for (auto vert : poly->getVertexVector())
-		{
-			Vector3 vec = vert->getDataNormal();
-			Vector3 centerPoint = vert->loc();
-			normalLines.push_back(Line(centerPoint, centerPoint + (vec.normalized() * 0.25)));
+		std::vector<Line>* normalLines = poly->getVertNormLinesFromData(overridingColor);
+		if (normalLines != nullptr) {
+			lines[LineVectorIndex::VERTICES_DATA_NORMAL].insert(lines[LineVectorIndex::VERTICES_DATA_NORMAL].end(), normalLines->begin(), normalLines->end());
+			delete normalLines;
 		}
 	}
-
-	lines[LineVectorIndex::VERTICES_DATA_NORMAL].insert(lines[LineVectorIndex::VERTICES_DATA_NORMAL].end(), normalLines.begin(), normalLines.end());
-
 }
 
 
 
-void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& wireColor, const ColorGC& normalColor, RenderMode renderMode)
+void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& wireColor, const ColorGC& normalColor, RenderMode& renderMode) const
 {
 	if (renderMode.getRenderShape())
 	{
-		this->createShapesLines(lines , renderMode.getRenderOverrideWireColor() ? &wireColor : nullptr);
+		this->createShapesLines(lines , renderMode.getRenderOverrideWireColor() ? &wireColor : &this->m_objColor);
 	}
 	if (renderMode.getRenderObjBbox())
 	{
-		this->createObjBboxLines(lines, renderMode.getRenderOverrideWireColor() ? wireColor : ColorGC::defaultColor());
+		this->createObjBboxLines(lines, renderMode.getRenderOverrideWireColor() ? &wireColor : &this->m_objColor);
 	}
 	if (renderMode.getRenderPolygonsBbox())
 	{
@@ -174,7 +164,14 @@ void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const C
 	}
 	if (renderMode.getRenderPolygonsNormalFromData())
 	{
-		this->createPolyNormalLlinesFromData(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);
+		try {
+			this->createPolyNormalLlinesFromData(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);
+		}
+		catch (...) {
+			renderMode.setRenderPolygonsNormalFromData();
+			lines[LineVectorIndex::POLY_DATA_NORNAL].clear();
+			AfxMessageBox(_T("This Object wasnt provided with polygon normals!"));
+		}
 	}
 	if (renderMode.getRenderCalcVertivesNormal())
 	{
@@ -182,18 +179,29 @@ void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const C
 	}
 	if (renderMode.getRenderDataVertivesNormal())
 	{
-		
+		try {
 		this->createVertDataNormalLlines(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);
-		
+		}
+		catch (...) {
+			renderMode.setRenderDataVertivesNormal();
+			lines[LineVectorIndex::VERTICES_DATA_NORMAL].clear();
+			AfxMessageBox(_T("This Object wasnt provided with vertice normals!"));
+		}
 	}
 }
 
 std::vector<Line> Geometry::getPolyNormalLineFromData(const ColorGC* overridingColor) const
 {
 	std::vector<Line> lines;
-	for (auto t : m_polygons)
+	for (const auto& p: m_polygons)
 	{
-		lines.push_back( t->getNormalLineFromData(overridingColor));
+		try {
+			lines.push_back(p->getNormalLineFromData(overridingColor));
+		}
+		catch (...) {
+			lines.clear();
+			throw std::exception();
+		}
 	}
 	return lines;
 }

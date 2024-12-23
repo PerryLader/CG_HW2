@@ -46,8 +46,10 @@ public:
     Vector3 getCalcNormal() const;
     Vector3 getDataNormal() const;
     Line getNormalLineFromData(const ColorGC* overridingColor) const;
-    Line calcNormalLine(const ColorGC* overridingColor) const;
-   
+    Line getNormalLineFromCalc(const ColorGC* overridingColor) const;
+    std::vector<Line>* getVertNormLinesFromData(const ColorGC* overridingColor) const;
+    std::vector<Line>* getVertNormLinesFromCalc(const ColorGC* overridingColor) const;
+
     void setColor(const ColorGC& newColor);
     const ColorGC& getColor() const;
     
@@ -56,7 +58,6 @@ public:
     
     void clip();
     bool isBehindCamera() const;
-    std::vector<std::shared_ptr<Vertex>> getVertexVector();
     size_t vertexCount() const;
     void printVertices() const;
     void printBounds() const;

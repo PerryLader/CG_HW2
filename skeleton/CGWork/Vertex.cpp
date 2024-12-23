@@ -56,6 +56,8 @@ Vector3 Vertex::loc() const    // Get location
     return m_point;
 }
 Vector3 Vertex::getDataNormal() const {
+    if (!m_hasDataNormal)
+        throw std::exception();
     return m_dataNormal;
 }
 bool Vertex::hasDataNormal() const {

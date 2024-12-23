@@ -20,15 +20,15 @@ class RenderMode {
 private:
 	uint32_t flags =1;
 public:
-	bool getRenderShape() { return RENDER_SHAPE & flags; }
-	bool getRenderPolygonsCalcNormal() { return RENDER_POLYGONS_CALC_NORMALS & flags; }
-	bool getRenderPolygonsNormalFromData() { return RENDER_POLYGONS_NORMALS_FROM_DATA & flags; }
-	bool getRenderCalcVertivesNormal() { return RENDER_CALC_VETICES_NORMALS & flags; }
-	bool getRenderDataVertivesNormal() { return RENDER_DATA_VETICES_NORMALS & flags; }
-	bool getRenderObjBbox() { return RENDER_OBJ_BBOX & flags; }
-	bool getRenderPolygonsBbox() { return RENDER_POLYGONS_BBOX & flags; }
-	bool getRenderOverrideWireColor() { return RENDER_OVERRIDER_WIRE_COLOR & flags; }
-	bool getRenderOverrideNormalColor() { return RENDER_OVERRIDER_NORMAL_COLOR & flags; }
+	bool getRenderShape() const { return RENDER_SHAPE & flags; }
+	bool getRenderPolygonsCalcNormal() const { return RENDER_POLYGONS_CALC_NORMALS & flags; }
+	bool getRenderPolygonsNormalFromData() const { return RENDER_POLYGONS_NORMALS_FROM_DATA & flags; }
+	bool getRenderCalcVertivesNormal() const { return RENDER_CALC_VETICES_NORMALS & flags; } 
+	bool getRenderDataVertivesNormal() const { return RENDER_DATA_VETICES_NORMALS & flags; } 
+	bool getRenderObjBbox() const { return RENDER_OBJ_BBOX & flags; } 
+	bool getRenderPolygonsBbox()  const { return RENDER_POLYGONS_BBOX & flags; } 
+	bool getRenderOverrideWireColor() const { return RENDER_OVERRIDER_WIRE_COLOR & flags; } 
+	bool getRenderOverrideNormalColor() const { return RENDER_OVERRIDER_NORMAL_COLOR & flags; } 
 
 	void setRenderShape() { flags ^= RENDER_SHAPE; }
 	void setRenderPolygonsCalcNormal() { flags ^= RENDER_POLYGONS_CALC_NORMALS; }
@@ -53,10 +53,6 @@ OBJ_BBOX=5,
 POLY_BBOX=6,
 LAST=7
 };
-
-
-
-	
 	
 struct KeyHash {
 	std::size_t operator()(const Vector3 key) const {
@@ -79,14 +75,14 @@ private:
 	std::vector<PolygonGC*> m_polygons;
 	std::string m_name;
 	BBox m_bBox;
-	
+	ColorGC m_objColor;
 
 	std::vector<Line>* getEdges(const ColorGC* overridingColor) const;
 	std::vector<Line> getPolyBboxLines(const ColorGC* overridingColor) const;
 	std::vector<Line> getPolyNormalLineFromData(const ColorGC* overridingColor) const;
 	std::vector<Line> getPolyNormalLineFromCalc(const ColorGC* overridingColor) const;
 	void createShapesLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC* overridingColor) const;
-	void createObjBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC& wireColor) const;
+	void createObjBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* wireColor) const;
 	void createPolyBboxLines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const;
 	void createPolyNormalLlinesFromData(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const;
 	void createPolyCalcNormalLlines(std::vector<Line> lines[LineVectorIndex::LAST], const ColorGC* overridingColor) const;
@@ -97,13 +93,11 @@ private:
 public:
 	std::unordered_map<Vector3, std::shared_ptr<Vertex>, KeyHash, KeyEqual> m_map;
 
-	std::string getName();
-	Geometry(std::string name);
-	Geometry::Geometry(std::string name, std::unordered_map<Vector3, std::shared_ptr<Vertex>, KeyHash, KeyEqual> map);
+	std::string getName() const;
+	Geometry(const std::string& name, const ColorGC& color);
 	BBox getBBox() const;
 	
-	
-	void loadLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode renderMode);
+	void loadLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode& renderMode) const;
 	void Geometry::addPolygon(PolygonGC* poli);
 	Geometry* applyTransformation(const Matrix4& tMat) const;
 	
