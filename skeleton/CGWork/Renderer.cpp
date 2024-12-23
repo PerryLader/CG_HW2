@@ -36,12 +36,30 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     // Transform and cull geometry
     std::vector<Geometry*> transformedGeometries;
     std::vector<Line> lines[LineVectorIndex::LAST];
+    int i = 0;
     for (const auto& model : models) {
-        Geometry* transformedGeometry = model->onDraw(viewProjectionMatrix);
+        Geometry* transformedGeometry;
+       // if (i == 0)
+      //  {
+          //  transformedGeometry = model->onDraw(aspectRatioMatrix );
+
+      //  }
+      //  else
+      //  {
+            transformedGeometry = model->onDraw(viewProjectionMatrix);
+
+      //  }
+        //Geometry* transformedGeometry = model->onDraw(viewProjectionMatrix);
         if (transformedGeometry) {
             transformedGeometry->loadLines(lines, wireColor, normalColor, renderMode);
             transformedGeometries.push_back(transformedGeometry);
         }
+
+        
+       /* transformedGeometry->loadLines(lines, wireColor, normalColor, renderMode);
+        transformedGeometries.push_back(transformedGeometry);*/
+        i++;
+
         // Clipping
      //   transformedGeometry->clip();
         // Backface culling
@@ -58,7 +76,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
             // if (edge.isVisible()) {          
             if (line.clip())
             {
-            line.draw(m_Buffer, this->m_width, this->m_height);
+                line.draw(m_Buffer, this->m_width, this->m_height);
             }
         // }
         }

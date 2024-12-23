@@ -4,9 +4,9 @@
 // Constructor
 Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
     
-  //  setOrthogonal(Vector3(-1,1,0), Vector3(1, -1, 2), 0, 0);
-    setPerspective(90, 1, 1, 3);
-    lookAt(Vector3(0, 0, -2), Vector3(0, 0, 0), Vector3(0,1,0));
+    //setOrthogonal(Vector3(-1,1,0), Vector3(1, -1, 2), 0, 0);
+    setPerspective(60, 1, 1, 5);
+    lookAt(Vector3(0, 0,-3), Vector3(0, 0, 0), Vector3(0,1,0));
 }
 
 // Function to set the view transformation matrix

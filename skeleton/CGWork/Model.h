@@ -22,7 +22,7 @@ public:
 	}
 	
 	void modifiyTransformation(const Matrix4& tMat){
-		mTransform = mTransform*tMat;
+		mTransform = tMat*mTransform;
 	}
 	
 	void virtual print() = 0;

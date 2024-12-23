@@ -64,7 +64,7 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
     float X_mag, Y_mag; 
     calculateTransformationMagnitude(X_mag, Y_mag,ref_point, movement, aspectRatio, sensitivity, width, height);
     Vector3 axisVector;
-    Matrix4 Trasformation;
+    Matrix4 invTrasformation;
     switch(axis){
     case ID_AXIS_X:
         axisVector = Vector3::unitX();
@@ -86,18 +86,18 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
     }
     switch (action) {
     case ID_ACTION_ROTATE:
-        Trasformation = Matrix4::rotation(X_mag+Y_mag, axis);
+        invTrasformation = Matrix4::rotation(X_mag+Y_mag, axis).inverse();
         break;
     case ID_ACTION_SCALE:
-        Trasformation = Matrix4::scaling(Vector3::one() + axisVector * (X_mag + Y_mag));
+        invTrasformation = Matrix4::scaling(Vector3::one() + axisVector * (X_mag + Y_mag)).inverse();
         break;
     case ID_ACTION_TRANSLATE:
-        Trasformation = Matrix4::translate(axisVector.scale(X_mag, Y_mag, 0));
+        invTrasformation = Matrix4::translate(axisVector.scale(X_mag, Y_mag, 0)).inverse();
         break;
     default:
-        Trasformation = Matrix4::rotation(X_mag + Y_mag, axis);
+        invTrasformation = Matrix4::rotation(X_mag + Y_mag, axis).inverse();
     }
-    tSpace == ID_OBJECT_SPACE ? applyToObjectSpace(Trasformation) : applyToCamera(Trasformation); // should be a comparison between tSpace and some definition of what is ObjectSpace
+    tSpace == ID_OBJECT_SPACE ? applyToObjectSpace(invTrasformation) : applyToCamera(invTrasformation); // should be a comparison between tSpace and some definition of what is ObjectSpace
 }
 
 void Scene::print() const {
