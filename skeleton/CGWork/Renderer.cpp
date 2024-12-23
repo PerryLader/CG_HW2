@@ -53,7 +53,7 @@ void Renderer::render(const Camera* camera, int width, int height,const std::vec
     for (std::vector<Line>& singleTypeLine : lines) {
         for (Line line : singleTypeLine){
             // if (edge.isVisible()) {          
-         //   if (line.clip(line))
+            if (line.clip(line))
             {
             line.draw(m_Buffer, this->m_width, this->m_height);
             }

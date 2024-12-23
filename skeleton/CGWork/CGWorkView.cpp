@@ -336,7 +336,7 @@ void CCGWorkView::OnDraw(CDC* pDC)
 	}
 
 	// Convert the float buffer to 32-bit packed ARGB and store in the DIB section
-	uint32_t* dibBuffer = (uint32_t*)dibPixels; // DIB buffer as 32-bit ARGB values
+	uint32_t* dibBuffer = (uint32_t*)dibPixels;
 	for (int y = 0; y < height; ++y) {
 		for (int x = 0; x < width; ++x) {
 			
@@ -706,7 +706,7 @@ void CCGWorkView::OnTimer(UINT_PTR nIDEvent)
 }
 
 RenderCommand CCGWorkView::createRenderingCommand() {
-	return RenderCommand(m_WindowWidth, m_WindowWidth, m_rendermode, m_bg_color, m_normalColor, m_wireframe);
+	return RenderCommand(m_WindowWidth, m_WindowHeight, m_rendermode, m_bg_color, m_normalColor, m_wireframe);
 }
 void CCGWorkView::OnLButtonDown(UINT nFlags, CPoint point) {
 	// Handle the left button down event here
