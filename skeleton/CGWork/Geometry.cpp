@@ -41,7 +41,7 @@ void Geometry::calcVertxNormal()
 	}
 }
 std::vector<Line>* Geometry::getEdges(const ColorGC* overridingColor) const {
-	
+	const BBox unit = BBox::unitBBox();
 	std::vector<Line>* res = new std::vector<Line>;
 	if (BBox::bboxCollide(getBBox(), unit)) {
 		for (const auto& poly : m_polygons) {
@@ -224,7 +224,10 @@ void Geometry::clip() {
 	for (PolygonGC* temp : m_polygons)
 		temp->clip();
 }
+bool Geometry::isClippedByBBox(const Matrix4& tMat) const {
+	return BBox::bboxCollide(getBBox().transformBBox(tMat), BBox::unitBBox());
 
+}
 void Geometry::print() const
 {
 	int i = 0;

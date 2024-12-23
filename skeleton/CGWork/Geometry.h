@@ -101,6 +101,7 @@ public:
 	void calcVertxNormal();
 	void backFaceCulling();
 	void clip();
+	bool isClippedByBBox(const Matrix4& tMat) const;
 	void print() const;
 	~Geometry();
 };

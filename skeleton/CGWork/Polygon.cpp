@@ -24,6 +24,7 @@ void BBox::updateBBox(const Vector3& vert) {
 bool BBox::bboxCollide(const BBox& bbox) const{
     return BBox::bboxCollide(*this, bbox);
 }
+
 bool BBox::bboxCollide(const BBox& bbox1, const BBox& bbox2) {
     // Check for overlap along the x-axis
     bool xOverlap = (bbox1.m_minBounds.x <= bbox2.m_maxBounds.x) && (bbox1.m_maxBounds.x >= bbox2.m_minBounds.x);
@@ -37,11 +38,19 @@ bool BBox::bboxCollide(const BBox& bbox1, const BBox& bbox2) {
     // Bounding boxes collide if they overlap along all three axes
     return xOverlap && yOverlap && zOverlap;
 }
-void BBox::updateBBox(const BBox& box)
-{
-    updateBBox(box.m_maxBounds);
-    updateBBox(box.m_minBounds);
+BBox BBox::transformBBox(const Matrix4& tmat) const {
+    Vector3 transformedMin = (tmat * Vector4::extendOne(m_minBounds)).toVector3();
+    Vector3 transformedMax = (tmat * Vector4::extendOne(m_maxBounds)).toVector3();
+    BBox res;
+    res.updateBBox(transformedMin);
+    res.updateBBox(transformedMax);
+    return res;
 }
+//void BBox::updateBBox(const BBox& box)
+//{
+//    updateBBox(box.m_maxBounds);
+//    updateBBox(box.m_minBounds);
+//}
 std::vector<Line> BBox::getLinesOfBbox(const ColorGC& bBoxColor) const
 {
     Vector3 corners[8] = {
@@ -258,7 +267,7 @@ std::vector<Line>* PolygonGC::getEdges(const ColorGC* overridingColor) const {
         std::shared_ptr<Vertex> v1 = m_vertices[i];
         std::shared_ptr<Vertex> v2 = m_vertices[(i + 1) % m_vertices.size()];
         if(ifEdgeBBOXCutUnitCube(*v1, *v2))
-            edges->push_back(Line(*v1, *v2, line_color));
+            edges->push_back(Line(v1->loc(), v2->loc(), line_color));
     }
     return edges;
 }

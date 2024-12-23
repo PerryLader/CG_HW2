@@ -18,6 +18,7 @@ public:
     void updateBBox(const Vector3& vert);
     void updateBBox(const BBox& box);
     bool bboxCollide(const BBox& bbox) const;
+    BBox transformBBox(const Matrix4& tmat) const;
     static bool bboxCollide(const BBox& bbox1, const BBox& bbox2);
     static BBox unitBBox() { return BBox(-Vector3::one(), Vector3::one()); }
     std::vector<Line> getLinesOfBbox(const ColorGC& bBoxColor) const;

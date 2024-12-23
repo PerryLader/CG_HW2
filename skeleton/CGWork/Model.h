@@ -17,7 +17,8 @@ public:
 
 	Geometry* onDraw(const Matrix4 viewProjectionMatrix)
 	{
-		return T->applyTransformation(mTransform* viewProjectionMatrix);
+		const Matrix4 fTransform = mTransform * viewProjectionMatrix;
+		return (T->isClippedByBBox(fTransform)) ? T->applyTransformation(fTransform) : nullptr;
 	}
 	
 	void modifiyTransformation(const Matrix4& tMat){
