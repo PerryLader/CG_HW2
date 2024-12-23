@@ -158,10 +158,6 @@ void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const C
 	{
 		this->createPolyBboxLines(lines, renderMode.getRenderOverrideWireColor() ? &wireColor : nullptr);
 	}
-	if (renderMode.getRenderPolygonsCalcNormal())
-	{
-		this->createPolyCalcNormalLlines(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);
-	}
 	if (renderMode.getRenderPolygonsNormalFromData())
 	{
 		try {
@@ -170,24 +166,33 @@ void Geometry::loadLines(std::vector<Line> lines[LineVectorIndex::LAST], const C
 		catch (...) {
 			renderMode.setRenderPolygonsNormalFromData();
 			lines[LineVectorIndex::POLY_DATA_NORNAL].clear();
+			if (!renderMode.getRenderPolygonsCalcNormal())
+				renderMode.setRenderPolygonsCalcNormal();
 			AfxMessageBox(_T("This Object wasnt provided with polygon normals!"));
+		}
+	}
+	if (renderMode.getRenderPolygonsCalcNormal())
+	{
+		this->createPolyCalcNormalLlines(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);
+	}
+	if (renderMode.getRenderDataVertivesNormal())
+	{
+		try {
+			this->createVertDataNormalLlines(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);
+		}
+		catch (...) {
+			renderMode.setRenderDataVertivesNormal();
+			lines[LineVectorIndex::VERTICES_DATA_NORMAL].clear();
+			if (!renderMode.getRenderCalcVertivesNormal())
+				renderMode.setRenderCalcVertivesNormal();
+			AfxMessageBox(_T("This Object wasnt provided with vertice normals!"));
 		}
 	}
 	if (renderMode.getRenderCalcVertivesNormal())
 	{
 		this->createVertCalcNormalLlines(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);
 	}
-	if (renderMode.getRenderDataVertivesNormal())
-	{
-		try {
-		this->createVertDataNormalLlines(lines, renderMode.getRenderOverrideNormalColor() ? &normalColor : nullptr);
-		}
-		catch (...) {
-			renderMode.setRenderDataVertivesNormal();
-			lines[LineVectorIndex::VERTICES_DATA_NORMAL].clear();
-			AfxMessageBox(_T("This Object wasnt provided with vertice normals!"));
-		}
-	}
+
 }
 
 std::vector<Line> Geometry::getPolyNormalLineFromData(const ColorGC* overridingColor) const

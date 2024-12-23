@@ -60,6 +60,8 @@ BEGIN
     BUTTON      ID_AXIS_X
     BUTTON      ID_AXIS_Y
     BUTTON      ID_AXIS_Z
+    BUTTON      ID_AXIS_XY
+    BUTTON      ID_AXIS_XYZ
     SEPARATOR
     BUTTON      ID_CALC_P_NORMALS
     BUTTON      ID_CALC_V_NORMALS
@@ -505,6 +507,8 @@ STRINGTABLE
 BEGIN
     ID_WIREFRAME_COLOR      "Color\nWireframe Color"
     ID_BG_COLOR             "Colors\nBackground Color"
+    ID_AXIS_XY              "XY Axis\nXY Axis"
+    ID_AXIS_XYZ             "XYZ Axis\nXYZ Axis"
 END
 
 STRINGTABLE
