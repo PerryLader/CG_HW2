@@ -71,7 +71,7 @@ bool Line::clip(Line& newLine)
         intesectPlanCount += planIntersectPoint[4].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, 1), Vector3(0, 0, 1), planIntersectPoint[4].second) );
         //neg z
         intesectPlanCount += planIntersectPoint[5].first = (Vector3::intersectPointInClipVolume(m_b - m_a, m_a, Vector3(0, 0, -1), Vector3(0, 0, -1), planIntersectPoint[5].second) );
-        if (intesectPlanCount >0)
+        if (intesectPlanCount ==2)
         {
             Vector3 tempV1, tempV2;
             bool firstFilled = false;
@@ -90,7 +90,6 @@ bool Line::clip(Line& newLine)
                 }
             }
             newLine = Line(tempV1, tempV2, this->m_color);
-
             return true;
         }
 
@@ -139,7 +138,8 @@ bool Line::clip(Line& newLine)
         newLine = Line(v1In ? m_a : temp, v2In ? m_b : temp, this->m_color);
         return true;
     }
-    throw;
+    newLine = *this;
+    return false;
 
 
 }

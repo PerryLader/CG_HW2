@@ -117,9 +117,9 @@ float Vector3::dot(const Vector3& v1, const Vector3& v2) {
 // Cross product
 Vector3 Vector3::cross(const Vector3& v1, const Vector3& v2) {
     return Vector3(
-        v1.y * v2.z - v1.z * v2.y,
-        v1.z * v2.x - v1.x * v2.z,
-        v1.x * v2.y - v1.y * v2.x
+        (v1.y * v2.z) - (v1.z * v2.y),
+        (v1.z * v2.x) - (v1.x * v2.z),
+        (v1.x * v2.y) - (v1.y * v2.x)
     );
 }
 
@@ -219,9 +219,17 @@ bool Vector3::intersectPointInClipVolume(Vector3 rayVector, Vector3 rayPoint, Ve
     }
     double prod3 = prod1 / prod2;
     intersectPoint= rayPoint - rayVector * prod3;
-    if (intersectPoint.isInsideClipVolume())
+    if (intersectPoint.isInsideClipVolume()  )
     {
-        return true;
+      //  float epsilon = 0.01;
+        Vector3 diff1 = intersectPoint - rayPoint;
+        float dot = Vector3::dot(rayVector, diff);
+        float d = diff1.length();
+        float r = rayVector.length();
+        if(d <= r && dot >= 0)
+        {
+            return true;
+        }
     }
     return false;
 }
