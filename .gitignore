@@ -1,15 +1,3 @@
-
-skeleton/CGWork/.vs
-# VSCode settings
-
-
-# Build directories and files
-skeleton/bin/
-skeleton/obj/
-skeleton/CGWork/Debug
-skeleton/CGWork/Release
-
-# User-specific Visual Studio settings
 *.obj
 *.user
 *.userosscache
@@ -21,15 +9,7 @@ skeleton/CGWork/Release
 *.ilk
 *.tlog
 *.idb
-*.ilk
+*.command.1.tlog
+skeleton/CGWork/.vs/
+skeleton/CGWork/Debug/CGWork.tlog/
 
-
-# Logs and temporary files
-*.log
-
-
-# Windows-specific files
-Thumbs.db
-
-# JetBrains IDE files (if applicable)
-.idea/

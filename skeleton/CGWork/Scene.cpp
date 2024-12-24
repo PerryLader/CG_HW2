@@ -3,9 +3,15 @@
 
 // Constructor
 Scene::Scene():m_renderer(new Renderer()) {
-    Camera* cam = new Camera();
-    m_cameras.push_back(cam);
-    m_primaryCameraIndex = 0;
+    Camera* camOrtho = new Camera();   
+    camOrtho->setOrthogonal(Vector3(-1, 1, 1), Vector3(1, -1, 5), 0, 0);
+    m_cameras.push_back(camOrtho);
+
+    Camera* camPrespective = new Camera();
+    camPrespective->setPerspective(45, 1, 1, 5);
+    m_cameras.push_back(camPrespective);
+
+    m_primaryCameraIndex = CAMERA_TYPE::ORTHOGONAL;
 }
 // Function to add a model to the scene
 void Scene::addModel(Model* model) {
@@ -13,17 +19,44 @@ void Scene::addModel(Model* model) {
 }
 
 void Scene::addModels(const std::vector<Model*>& models) {
+    
+    
+    BBox sceneBbox(Vector3(FLT_MAX, FLT_MAX, FLT_MAX), Vector3(-FLT_MAX, -FLT_MAX, -FLT_MAX));
+
+    for (auto& m : models)
+    {
+
+        sceneBbox.updateBBox(m->getGeormetryBbox());
+    }
+
+    Vector3 max = sceneBbox.getMax();
+    Vector3 min = sceneBbox.getMin();
+    //scale
+    //scale the scene into 2,-2 cube
+    float scaleFactor = 1 / (std::max(max.x - min.x, std::max(max.y - min.y, max.z - min.z))/2);
+    Matrix4 scaleMatrix= Matrix4::scaling(Vector3(scaleFactor, scaleFactor, scaleFactor));
+
+    //centerized
+    Vector3 oldCenter = (max + min) * 0.5;
+    Vector3 diff = -oldCenter;
+    Matrix4 trans = Matrix4::translate(diff);
+    for (auto& m : models)
+    {        
+        m->modifiyTransformation(trans);
+        m->modifiyTransformation(scaleMatrix);
+    }
     m_models.insert(m_models.end(), models.begin(), models.end());
 }
 
 // Function to add a camera to the scene
 void Scene::addCamera(Camera* camera) {
+    
     m_cameras.push_back(camera);
 }
 
 // Function to render the scene
 void Scene::render(int width, int height, RenderMode& renderMode, ColorGC bg_color, ColorGC normalColor, ColorGC bBoxColor) const {
-    m_renderer->render(m_cameras[0], width, height, m_models, renderMode, bg_color, normalColor,bBoxColor);//default camera
+    m_renderer->render(m_cameras[m_primaryCameraIndex], width, height, m_models, renderMode, bg_color, normalColor,bBoxColor);//default camera
 }
 uint32_t* Scene::getBuffer() {
     return m_renderer->getBuffer();
@@ -49,7 +82,15 @@ void Scene::applyToObjectSpace(const Matrix4& tMat) {
     }
 }
 void Scene::applyToCamera(const Matrix4& tMat) {
-    m_cameras[m_primaryCameraIndex]->translate(tMat);
+    for (auto& c : m_cameras)
+    {
+        c->translate(tMat);
+    }
+}
+
+void Scene::setCamera(CAMERA_TYPE cameraType)
+{
+    this->m_primaryCameraIndex = cameraType;
 }
 
 void Scene::handleTransformationAction(const Vector3& ref_point,

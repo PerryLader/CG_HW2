@@ -13,6 +13,15 @@ void BBox::toPrint() const{
     std::cout << "Boudning Box: " << m_minBounds <<", " << m_maxBounds << std::endl;
 }
 
+Vector3 BBox::getMax() const
+{
+    return m_maxBounds;
+}
+Vector3 BBox::getMin() const
+{
+    return m_minBounds;
+}
+
 void BBox::updateBBox(const Vector3& vert) {
     m_minBounds.x = min(m_minBounds.x, vert.x);
     m_minBounds.y = min(m_minBounds.y, vert.y);

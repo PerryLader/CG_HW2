@@ -29,7 +29,7 @@ public:
 
     void applyToObjectSpace(const Matrix4& tMat);
     void applyToCamera(const Matrix4& tMat);
-
+    void setCamera(CAMERA_TYPE cameraType);
     void handleTransformationAction(const Vector3& ref_point,
          const Vector3& movement,
          float aspectRatio,

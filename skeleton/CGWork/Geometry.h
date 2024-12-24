@@ -33,10 +33,13 @@ private:
 public:
 	std::unordered_map<Vector3, std::shared_ptr<Vertex>, KeyHash, KeyEqual> m_map;
 
-	std::string getName() const;
+	//CONTRUCTOR
 	Geometry(const std::string& name, const ColorGC& color);
+	~Geometry();
+	//GETTERS AND SETTERS
+	std::string getName() const;
 	BBox getBBox() const;
-	
+	//UTILS
 	void loadLines(std::vector<Line> lines[LineVectorIndex::LAST],const ColorGC& bBoxColor, const ColorGC& normalColor, RenderMode& renderMode) const;
 	void Geometry::addPolygon(PolygonGC* poli);
 	Geometry* applyTransformation(const Matrix4& tMat) const;
@@ -45,7 +48,7 @@ public:
 	void clip();
 	bool isClippedByBBox(const Matrix4& tMat) const;
 	void print() const;
-	~Geometry();
+	
 };
 
 #endif

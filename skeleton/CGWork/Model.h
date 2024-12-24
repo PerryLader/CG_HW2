@@ -17,14 +17,19 @@ public:
 
 	Geometry* onDraw(const Matrix4 viewProjectionMatrix)
 	{
-		const Matrix4 fTransform = mTransform * viewProjectionMatrix;
+		const Matrix4 fTransform = viewProjectionMatrix*mTransform ;
 		return (!T->isClippedByBBox(fTransform)) ? T->applyTransformation(fTransform) : nullptr;
 	}
 	
 	void modifiyTransformation(const Matrix4& tMat){
 		mTransform = tMat*mTransform;
 	}
-	
+
+	BBox getGeormetryBbox()
+	{
+		return this->T->getBBox();
+		
+	}
 	void virtual print() = 0;
 };
 

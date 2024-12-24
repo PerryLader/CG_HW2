@@ -23,6 +23,7 @@ public:
 	static bool pushGeom(Geometry* Geom) {
 		if(Geom && getInstance().m_models){
 			StaticModel* model = new StaticModel(Geom);
+			//model->centerizedGeometry();
 			getInstance().m_models->push_back(model);
 			return true;
 		}

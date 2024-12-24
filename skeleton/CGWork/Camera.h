@@ -5,6 +5,12 @@
 #include "Matrix4.h"
 #include "Vector4.h"
 
+enum CAMERA_TYPE
+{
+    ORTHOGONAL = 0,
+    PRESPECTIVE = 1,
+    COUNT = 2
+};
 class Camera {
 public:
     // Constructor
@@ -34,6 +40,8 @@ public:
     void Camera::orientate(const Matrix4& tMat);
 
     void Camera::translate(const Matrix4& tMat);
+    
+    
 
 private:
     Matrix4 viewMatrix;

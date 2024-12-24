@@ -25,6 +25,8 @@ class BBox {
 public:
     BBox() : m_minBounds(Vector3(FLT_MAX, FLT_MAX, FLT_MAX)), m_maxBounds(Vector3(-FLT_MAX, -FLT_MAX, -FLT_MAX)){};
     BBox(const Vector3& minBound, const Vector3& maxBound) : m_minBounds(minBound), m_maxBounds(maxBound) {};
+    Vector3 getMax()const;
+    Vector3 getMin() const;
     void updateBBox(const Vector3& vert);
     void updateBBox(const BBox& box);
     bool bboxCollide(const BBox& bbox) const;

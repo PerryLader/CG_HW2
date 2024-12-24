@@ -18,12 +18,9 @@ using std::endl;
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-
 #include "PngWrapper.h"
 #include "iritSkel.h"
-
 #include <algorithm>
-// For Status Bar access
 #include "MainFrm.h"
 
 // Use this macro to display text messages in the status bar.
@@ -375,9 +372,9 @@ void CCGWorkView::OnFileLoad()
 		PngWrapper p;
 		std::vector<Model*> container;
 		if(CGSkelProcessIritDataFilesToContainer(m_strItdFileName, 1, container)){
-			m_scene.addModels(container);
-		//	m_scene.print();
+			m_scene.addModels(container);		
 		}
+
 		Invalidate();	// force a WM_PAINT for drawing.
 	}
 
@@ -396,6 +393,7 @@ void CCGWorkView::OnViewOrthographic()
 {
 	m_nView = ID_VIEW_ORTHOGRAPHIC;
 	m_bIsPerspective = false;
+	m_scene.setCamera(CAMERA_TYPE::ORTHOGONAL);
 	Invalidate();		// redraw using the new view.
 }
 
@@ -408,6 +406,7 @@ void CCGWorkView::OnViewPerspective()
 {
 	m_nView = ID_VIEW_PERSPECTIVE;
 	m_bIsPerspective = true;
+	m_scene.setCamera(CAMERA_TYPE::PRESPECTIVE);
 	Invalidate();
 }
 

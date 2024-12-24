@@ -4,8 +4,8 @@
 // Constructor
 Camera::Camera() : viewMatrix(Matrix4::identity()), projectionMatrix(Matrix4::identity()) {
     
-    //setOrthogonal(Vector3(-1,1,0), Vector3(1, -1, 2), 0, 0);
-    setPerspective(60, 1, 1, 5);
+   // setOrthogonal(Vector3(-1,1,0), Vector3(1, -1, 5), 0, 0);
+    //setPerspective(60, 1, 1, 5);
     lookAt(Vector3(0, 0,-3), Vector3(0, 0, 0), Vector3(0,1,0));
 }
 
@@ -102,7 +102,7 @@ void Camera::setPerspective(float fovY, float aspect, float near, float far) {
     // Create the perspective matrix using the Matrix4 constructor
     this->projectionMatrix = Matrix4(
         m00, 0.0, 0.0, 0.0,
-        0.0, m11, 0.0, 0.0,
+        0.0, -m11, 0.0, 0.0,
         0.0, 0.0, m22, m23,
         0.0, 0.0, m32, 0.0
     );
