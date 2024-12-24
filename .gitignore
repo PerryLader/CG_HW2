@@ -8,7 +8,7 @@
 *.log
 *.ilk
 *.tlog
-*.idb
+*.exe
 *.command.1.tlog
 skeleton/CGWork/.vs/
 skeleton/CGWork/Debug/CGWork.tlog/

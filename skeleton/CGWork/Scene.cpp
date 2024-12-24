@@ -46,6 +46,12 @@ void Scene::addModels(const std::vector<Model*>& models) {
         m->modifiyTransformation(scaleMatrix);
     }
     m_models.insert(m_models.end(), models.begin(), models.end());
+    for (auto& c : m_cameras)
+    {
+        c->lookAt(Vector3(0, 0, -3), Vector3(0, 0, 0), Vector3(0, 1, 0));
+    }
+    
+
 }
 
 // Function to add a camera to the scene
@@ -127,13 +133,13 @@ void Scene::handleTransformationAction(const Vector3& ref_point,
     }
     switch (action) {
     case ID_ACTION_ROTATE:
-        invTrasformation = Matrix4::rotation(X_mag+Y_mag, axis).inverse();
+        invTrasformation = Matrix4::rotation(X_mag + Y_mag, axis);
         break;
     case ID_ACTION_SCALE:
-        invTrasformation = Matrix4::scaling(Vector3::one() + axisVector * (X_mag + Y_mag)).inverse();
+        invTrasformation = Matrix4::scaling(Vector3::one() + axisVector * (X_mag + Y_mag));
         break;
     case ID_ACTION_TRANSLATE:
-        invTrasformation = Matrix4::translate(axisVector.scale(X_mag, Y_mag, 0)).inverse();
+        invTrasformation = Matrix4::translate(axisVector.scale(X_mag, Y_mag, 0));
         break;
     default:
         invTrasformation = Matrix4::rotation(X_mag + Y_mag, axis).inverse();
