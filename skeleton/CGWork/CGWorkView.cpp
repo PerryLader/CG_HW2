@@ -620,13 +620,13 @@ void CCGWorkView::OnUpdateTransformationSpace(CCmdUI* pCmdUI) {
 	pCmdUI->SetCheck(m_tSpace == ID_OBJECT_SPACE);
 }
 void CCGWorkView::OnViewAngle() {
-	float min = 0;
-	float max = 160;
+	float min = 0.1;
+	float max = 20;
 	float tickWidth = 0.01;
-	CDynamicSliderDialog dlg("Set Perspective View Angle", min, max, tickWidth);
+	CDynamicSliderDialog dlg("Set d(far) values", min, max, tickWidth);
 	if (dlg.DoModal() == IDOK)
 	{
-		m_perspectiveAngle = dlg.GetSliderPos();
+		this->m_scene.getPerspectiveCamera()->setFar( dlg.GetSliderPos());
 	}
 }
 void CCGWorkView::OnSensitivity() {

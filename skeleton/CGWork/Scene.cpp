@@ -3,12 +3,13 @@
 
 // Constructor
 Scene::Scene():m_renderer(new Renderer()) {
-    Camera* camOrtho = new Camera();   
-    camOrtho->setOrthogonal(Vector3(-1, 1, 1), Vector3(1, -1, 5), 0, 0);
+
+    Camera* camOrtho = new OrthogonalCamera(Vector3(-1, 1, 1), Vector3(1, -1, 5), 0, 0);
+    camOrtho->setOrthogonal();
     m_cameras.push_back(camOrtho);
 
-    Camera* camPrespective = new Camera();
-    camPrespective->setPerspective(45, 1, 1, 5);
+    Camera* camPrespective = new PerspectiveCamera(45, 1, 1, 5);
+    camPrespective->setPerspective();
     m_cameras.push_back(camPrespective);
 
     m_primaryCameraIndex = CAMERA_TYPE::ORTHOGONAL;
@@ -97,6 +98,11 @@ void Scene::applyToCamera(const Matrix4& tMat) {
 void Scene::setCamera(CAMERA_TYPE cameraType)
 {
     this->m_primaryCameraIndex = cameraType;
+}
+
+Camera* Scene::getPerspectiveCamera()
+{
+    return m_cameras[CAMERA_TYPE::PRESPECTIVE];
 }
 
 void Scene::handleTransformationAction(const Vector3& ref_point,
